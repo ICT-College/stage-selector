@@ -1,7 +1,7 @@
 {
-    "name": "cakephp/app",
-    "description": "CakePHP skeleton app",
-    "homepage": "http://cakephp.org",
+    "name": "ictcollege/stage-selector",
+    "description": "Stage Selector",
+    "homepage": "http://stage.ictcollege.eu",
     "type": "project",
     "license": "MIT",
     "require": {
