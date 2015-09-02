@@ -24,7 +24,7 @@ if (!Configure::read('debug')):
     throw new NotFoundException();
 endif;
 
-$cakeDescription = 'Stage Selector';
+$cakeDescription = 'Stage Selector - V1';
 ?>
 <!DOCTYPE html>
 <html>
