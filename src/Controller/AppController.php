@@ -27,6 +27,8 @@ use Cake\Controller\Controller;
 class AppController extends Controller
 {
 
+    use \Crud\Controller\ControllerTrait;
+
     /**
      * Initialization hook method.
      *
@@ -37,6 +39,16 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
+
         $this->loadComponent('Flash');
+        $this->loadComponent('Crud.Crud', [
+            'actions' => [
+                'Crud.Index',
+                'Crud.Add',
+                'Crud.Edit',
+                'Crud.View',
+                'Crud.Delete'
+            ]
+        ]);
     }
 }
