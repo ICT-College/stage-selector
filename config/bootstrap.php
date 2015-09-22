@@ -192,6 +192,7 @@ if (Configure::read('debug')) {
 /**
  * Connect middleware/dispatcher filters.
  */
+DispatcherFactory::add('Shard');
 DispatcherFactory::add('Asset');
 DispatcherFactory::add('Routing');
 DispatcherFactory::add('ControllerFactory');
