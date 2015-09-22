@@ -135,6 +135,7 @@ if (!Configure::read('App.fullBaseUrl')) {
 
 Cache::config(Configure::consume('Cache'));
 ConnectionManager::config(Configure::consume('Datasources'));
+ConnectionManager::config(Configure::consume('Webservices'));
 Email::configTransport(Configure::consume('EmailTransport'));
 Email::config(Configure::consume('Email'));
 Log::config(Configure::consume('Log'));
@@ -180,6 +181,7 @@ Request::addDetector('tablet', function ($request) {
  *
  */
 
+Plugin::load('Muffin/Webservice');
 Plugin::load('Migrations');
 Plugin::load('Crud');
 

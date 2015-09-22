@@ -11,7 +11,8 @@
         "cakephp/migrations": "~1.0",
         "cakephp/plugin-installer": "*",
         "phpunit/phpunit": "4.1.*",
-        "friendsofcake/crud": "dev-master"
+        "friendsofcake/crud": "dev-master",
+        "muffin/webservice": "dev-master"
     },
     "require-dev": {
         "psy/psysh": "@stable",
