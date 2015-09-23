@@ -45,6 +45,10 @@ class Search extends SoapClient implements Webservice
                 if (isset($conditions['id'])) {
                     $parameters['CodeLeerbedrijf'] = $conditions['id'];
                 }
+                if (isset($conditions['name'])) {
+                    $parameters['LeerbedrijfNaam'] = $conditions['name'];
+                    $parameters['LeerbedrijfNaamExact'] = ((substr($conditions['name'], 0, 1) !== '%') && (substr($conditions['name'], -1, 1) !== '%'));
+                }
 
                 break;
         }

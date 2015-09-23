@@ -9,6 +9,14 @@ use Stagemarkt\WebserviceQuery;
 class CompaniesRepository extends Repository
 {
 
+    use SearchableTrait;
+
+    public $filterArgs = array(
+        'name' => array(
+            'type' => 'like'
+        ),
+    );
+
     public function initialize(array $config)
     {
         parent::initialize($config);
