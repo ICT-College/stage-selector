@@ -1,4 +1,5 @@
-<?= $this->Html->script('select.js', ['block' => true]) ?>
+<?= $this->Html->script(['select.js', 'awesomplete.min.js'], ['block' => true]) ?>
+<?= $this->Html->css(['awesomplete.css'], ['block' => true]) ?>
 <?= $this->start('header') ?>
 <div class="header clearfix">
     <div class="row">
