@@ -219,7 +219,7 @@ class Search extends StagemarktService
             throw new \BadMethodCallException;
         }
 
-        if (($query->conditions()['id'])) {
+        if (isset($query->conditions()['id'])) {
             return $this->stagemarktClient()->detailsClient()->execute($query);
             switch ($query->conditions()['type']) {
                 case 'company':
