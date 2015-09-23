@@ -225,13 +225,6 @@ class Search extends StagemarktService
 
         if (isset($query->conditions()['id'])) {
             return $this->stagemarktClient()->detailsClient()->execute($query);
-            switch ($query->conditions()['type']) {
-                case 'company':
-                    return new ResultSet([$this->stagemarktClient()->detailsForCompany($query->conditions()['id'])], 1);
-                case 'position':
-                    return new ResultSet([$this->stagemarktClient()->detailsForPosition($query->conditions()['id'])], 1);
-            }
-
         }
 
         $response = $this->search($query->conditions(), $query->getOptions());
