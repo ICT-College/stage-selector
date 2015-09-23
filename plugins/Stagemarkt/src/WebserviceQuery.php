@@ -39,6 +39,15 @@ class WebserviceQuery
      */
     const OVERWRITE = true;
 
+    /**
+     * Indicates whether internal state of this query was changed, this is used to
+     * discard internal cached objects such as the transformed query or the reference
+     * to the executed statement.
+     *
+     * @var bool
+     */
+    protected $_dirty = false;
+
     private $__action = WebserviceQuery::ACTION_READ;
     private $__conditions = [];
 
