@@ -62,6 +62,18 @@ class Search extends SoapWebservice
                     $parameters['LeerbedrijfNaam'] = $conditions['company_name'];
                     $parameters['LeerbedrijfNaamExact'] = ((substr($conditions['company_name'], 0, 1) !== '%') && (substr($conditions['company_name'], -1, 1) !== '%'));
                 }
+                if (isset($conditions['company_address_address'])) {
+                    $parameters['Vestigingsadres']['Straat'] = $conditions['company_address_address'];
+                }
+                if (isset($conditions['company_address_postcode'])) {
+                    $parameters['PostcodeRange'] = $conditions['company_address_postcode'] . $conditions['company_address_postcode'];
+                }
+                if (isset($conditions['company_address_city'])) {
+                    $parameters['Vestigingsadres']['Plaats'] = $conditions['company_address_city'];
+                }
+                if (isset($conditions['company_address_country'])) {
+                    $parameters['Vestigingsadres']['Land'] = $conditions['company_address_country'];
+                }
                 if (isset($conditions['study_program_id'])) {
                     $parameters['Crebonummer'] = $conditions['study_program_id'];
                 }

@@ -18,6 +18,18 @@ class PositionsRepository extends Repository
         'company_name' => array(
             'type' => 'like'
         ),
+        'company_address_address' => array(
+            'type' => 'value'
+        ),
+        'company_address_postcode' => array(
+            'type' => 'value'
+        ),
+        'company_address_city' => array(
+            'type' => 'like'
+        ),
+        'company_address_country' => array(
+            'type' => 'value'
+        ),
         'study_program_id' => array(
             'type' => 'value'
         ),

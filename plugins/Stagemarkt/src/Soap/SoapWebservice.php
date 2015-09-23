@@ -31,7 +31,16 @@ abstract class SoapWebservice extends SoapClient implements WebserviceInterface
     {
         $query = new LoggedQuery;
         $query->query = $function_name;
-        $query->params = $arguments;
+        foreach ($arguments as $key => $value) {
+            if (is_array($value)) {
+                $query->params[$key] = print_r($value, true);
+
+                continue;
+            }
+
+            $query->params[$key] = $value;
+
+        }
 
         DebugTimer::start('stagemarkt-' . $function_name);
 
