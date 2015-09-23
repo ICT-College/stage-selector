@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "795702a96514aa145821f1377691a235",
+    "hash": "2668aa6d413c077e5acf245c01b7b95d",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -124,6 +124,57 @@
                 "localization"
             ],
             "time": "2014-08-24 00:00:00"
+        },
+        {
+            "name": "cakedc/search",
+            "version": "3.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CakeDC/search.git",
+                "reference": "c6e49e6f0e70e226181f41beaebfb295de60b65d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CakeDC/search/zipball/c6e49e6f0e70e226181f41beaebfb295de60b65d",
+                "reference": "c6e49e6f0e70e226181f41beaebfb295de60b65d",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/plugin-installer": "*",
+                "php": ">=5.4.16"
+            },
+            "require-dev": {
+                "cakephp/cakephp": "~3.0",
+                "phpunit/phpunit": "*"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Search\\": "src",
+                    "Search\\Test\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cake Development Corporation",
+                    "email": "team@cakedc.com",
+                    "homepage": "http://cakedc.com"
+                }
+            ],
+            "description": "Search Plugin for CakePHP",
+            "homepage": "http://github.com/CakeDC/search",
+            "keywords": [
+                "cakephp",
+                "filter",
+                "post-redirect-get",
+                "prg",
+                "search"
+            ],
+            "time": "2015-04-15 18:47:32"
         },
         {
             "name": "cakephp/cakephp",
@@ -2060,6 +2111,7 @@
     "stability-flags": {
         "friendsofcake/crud": 20,
         "muffin/webservice": 20,
+        "cakedc/search": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
