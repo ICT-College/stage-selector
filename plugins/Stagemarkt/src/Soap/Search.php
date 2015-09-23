@@ -118,7 +118,7 @@ class Search extends SoapWebservice
                         'company' => new Company([
                             'id' => $result->CodeLeerbedrijf,
                             'address' => new AddressCompany([
-                                'address_line' => $result->Vestigingsadres->Straat,
+                                'address' => $result->Vestigingsadres->Straat,
                                 'postcode' => $result->Vestigingsadres->Postcode,
                                 'city' => $result->Vestigingsadres->Plaats,
                                 'country' => $result->Vestigingsadres->Land,
