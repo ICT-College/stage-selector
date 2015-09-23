@@ -44,6 +44,7 @@ class Stagemarkt
     {
         if (!$this->__searchClient) {
             $this->__searchClient = new Search($this->config());
+            $this->__searchClient->stagemarktClient($this);
         }
 
         return $this->__searchClient;

@@ -9,6 +9,7 @@ use Stagemarkt\Entity\Position;
 use Stagemarkt\Entity\StudyProgram;
 use Stagemarkt\Response\SearchResponse;
 use Stagemarkt\ResultSet;
+use Stagemarkt\Stagemarkt;
 use Stagemarkt\Webservice;
 use Stagemarkt\WebserviceQuery;
 
@@ -18,7 +19,7 @@ use Stagemarkt\WebserviceQuery;
  *
  * @method SearchResponse Zoeken(array $parameters)
  */
-class Search extends SoapWebservice
+class Search extends StagemarktService
 {
 
     public function search(array $conditions, array $options = [])
