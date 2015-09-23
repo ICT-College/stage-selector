@@ -77,6 +77,11 @@ Router::scope('/', function (\Cake\Routing\RouteBuilder $routes) {
     });
 });
 
+Router::scope('/api', function (\Cake\Routing\RouteBuilder $routes) {
+    $routes->extensions(['json', 'xml']);
+    $routes->resources('Companies');
+});
+
 /**
  * Load all plugin routes.  See the Plugin documentation on
  * how to customize the loading of plugin routes.

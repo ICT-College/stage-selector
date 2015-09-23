@@ -15,12 +15,15 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Crud\Controller\Component\CrudComponent;
 
 /**
  * Application Controller
  *
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
+ *
+ * @property CrudComponent Crud
  *
  * @link http://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
@@ -41,6 +44,7 @@ class AppController extends Controller
         parent::initialize();
 
         $this->loadComponent('Flash');
+        $this->loadComponent('RequestHandler');
         $this->loadComponent('Crud.Crud', [
             'actions' => [
                 'Crud.Index',
@@ -48,7 +52,13 @@ class AppController extends Controller
                 'Crud.Edit',
                 'Crud.View',
                 'Crud.Delete'
+            ],
+            'listeners' => [
+                'Crud.Api',
+                'Crud.ApiPagination',
+                'Crud.ApiQueryLog'
             ]
         ]);
+        $this->loadComponent('Search.Prg');
     }
 }
