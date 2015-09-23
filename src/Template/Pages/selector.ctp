@@ -105,8 +105,8 @@
     <thead>
     <tr>
         <th></th>
-        <th><?= __('Job name') ?></th>
-        <th><?= __('Company name') ?></th>
+        <th><?= __('Job') ?></th>
+        <th><?= __('Company') ?></th>
         <th><?= __('Address') ?></th>
         <th>&nbsp;</th>
     </tr>
