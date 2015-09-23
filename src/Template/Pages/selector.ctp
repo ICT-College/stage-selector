@@ -1,4 +1,5 @@
 <?= $this->Html->script('select.js', ['block' => true]) ?>
+<?= $this->start('header') ?>
 <div class="header clearfix">
     <div class="row">
         <div class="col-md-3">
@@ -29,6 +30,7 @@
         </div>
     </div>
 </div>
+<?= $this->end() ?>
 
 <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="footersHeading">

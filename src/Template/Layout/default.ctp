@@ -1,3 +1,14 @@
+<?php
+if (!$this->exists('header')) {
+    $this->start('header');
+        ?>
+        <div class="header clearfix">
+            <h3 class="text-muted">Stage Selector</h3>
+        </div>
+        <?php
+    $this->end();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +31,7 @@
 </head>
 <body>
     <div class="container">
+        <?= $this->fetch('header') ?>
         <?= $this->fetch('content') ?>
 
         <footer class="footer">
