@@ -30,6 +30,10 @@ class Search extends StagemarktService
         ];
         $options = array_merge($defaultOptions, $options);
 
+        if ($options['limit'] > 25) {
+            throw new \InvalidArgumentException('The limit should not be higher than 25');
+        }
+
         $parameters = [
             'AantalResultatenPerPagina' => $options['limit'],
             'Pagina' => $options['page'],
