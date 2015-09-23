@@ -58,6 +58,16 @@ class WebserviceQuery
         $this->repository($repository);
     }
 
+    public function aliasField($field)
+    {
+        return [$field => $field];
+    }
+
+    public function where($conditions = null, $types = [], $overwrite = false)
+    {
+        $this->conditions($conditions, !$overwrite);
+    }
+
     public function action($action = null)
     {
         if ($action === null) {

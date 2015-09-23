@@ -4,6 +4,7 @@ namespace Stagemarkt;
 
 use Cake\Core\InstanceConfigTrait;
 use Cake\Database\Log\QueryLogger;
+use Stagemarkt\Soap\Details;
 use Stagemarkt\Soap\Search;
 
 class Stagemarkt
@@ -22,6 +23,11 @@ class Stagemarkt
      */
     private $__searchClient;
 
+    /**
+     * @var Details
+     */
+    private $__detailsClient;
+
     public function __construct(array $options)
     {
         $this->config($options);
@@ -30,6 +36,14 @@ class Stagemarkt
     public function logger(QueryLogger $logger = null)
     {
         $this->searchClient()->logger($logger);
+        $this->detailsClient()->logger($logger);
+    }
+
+    public function detailsForPosition($position)
+    {
+        return $this->detailsClient()->details([
+            'position' => $position
+        ]);
     }
 
     public function search()
@@ -48,5 +62,18 @@ class Stagemarkt
         }
 
         return $this->__searchClient;
+    }
+
+    /**
+     * @return Details
+     */
+    public function detailsClient()
+    {
+        if (!$this->__detailsClient) {
+            $this->__detailsClient = new Details($this->config());
+            $this->__detailsClient->stagemarktClient($this);
+        }
+
+        return $this->__detailsClient;
     }
 }
