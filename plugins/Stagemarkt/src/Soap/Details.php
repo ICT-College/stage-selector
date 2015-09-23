@@ -122,7 +122,12 @@ class Details extends StagemarktService
 
         $qualificationParts = [];
         foreach ($soapResponse->Kwalificatieonderdelen->Kwalificatieonderdeel as $qualificationPart) {
-            $qualificationParts[] = new QualificationPart([
+            $index = substr($qualificationPart->Omschrijving, 0, 2);
+            if (!is_numeric($index)) {
+                $index = mt_rand(1, 9999);
+            }
+
+            $qualificationParts[(int) $index] = new QualificationPart([
                 'type' => $qualificationPart->Type,
                 'description' => $qualificationPart->Omschrijving
             ], [
@@ -130,7 +135,9 @@ class Details extends StagemarktService
                 'markNew' => false,
             ]);
         }
-        $position['qualification_parts'] = $qualificationParts;
+        ksort($qualificationParts);
+
+        $position['qualification_parts'] = array_values($qualificationParts);
 
         $response = new DetailsResponse();
         $response->setCode($soapResponse->Signaalcode)
