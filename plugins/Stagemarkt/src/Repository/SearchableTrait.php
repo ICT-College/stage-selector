@@ -29,8 +29,13 @@ trait SearchableTrait
                 continue;
             }
 
-            if ($field['type'] === 'like') {
-                $query = $query->conditions([$field['name'] => '%' . $data[$field['name']] . '%']);
+            switch ($field['type']) {
+                case 'like':
+                    $query = $query->conditions([$field['name'] => '%' . $data[$field['name']] . '%']);
+
+                    break;
+                case 'value':
+                    $query = $query->conditions([$field['name'] => $data[$field['name']]]);
             }
         }
         return $query;
