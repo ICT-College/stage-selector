@@ -182,6 +182,7 @@ Request::addDetector('tablet', function ($request) {
  */
 
 Plugin::load('Muffin/Webservice');
+Plugin::load('Stagemarkt');
 Plugin::load('Migrations');
 Plugin::load('Crud');
 
