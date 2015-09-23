@@ -29,8 +29,6 @@ abstract class SoapClient extends \SoapClient
 
     abstract public function liveUrl();
 
-    abstract public function resultProperty();
-
     public function __call($function_name, $arguments)
     {
         array_unshift($arguments, $function_name);
@@ -40,6 +38,7 @@ abstract class SoapClient extends \SoapClient
         return $response->{$this->resultProperty()};
     }
 
+    abstract public function resultProperty();
 
     /**
      * {@inheritDoc}

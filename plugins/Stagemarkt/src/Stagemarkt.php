@@ -3,6 +3,7 @@
 namespace Stagemarkt;
 
 use Cake\Core\InstanceConfigTrait;
+use Cake\Database\Log\QueryLogger;
 use Stagemarkt\Soap\Search;
 
 class Stagemarkt
@@ -14,11 +15,21 @@ class Stagemarkt
         'testing' => false
     ];
 
-    private $_searchClient;
+    protected $_logger;
+
+    /**
+     * @var Search
+     */
+    private $__searchClient;
 
     public function __construct(array $options)
     {
         $this->config($options);
+    }
+
+    public function logger(QueryLogger $logger = null)
+    {
+        $this->searchClient()->logger($logger);
     }
 
     public function search()
@@ -31,10 +42,10 @@ class Stagemarkt
      */
     public function searchClient()
     {
-        if (!$this->_searchClient) {
-            $this->_searchClient = new Search($this->config());
+        if (!$this->__searchClient) {
+            $this->__searchClient = new Search($this->config());
         }
 
-        return $this->_searchClient;
+        return $this->__searchClient;
     }
 }

@@ -43,7 +43,7 @@ class WebserviceQuery
     private $__conditions = [];
 
     /**
-     * @var \Stagemarkt\Webservice
+     * @var \Stagemarkt\WebserviceInterface
      */
     protected $_webservice;
 
@@ -52,13 +52,14 @@ class WebserviceQuery
      */
     protected $_resultSet;
 
-    public function __construct(Webservice $webservice, RepositoryInterface $repository)
+    public function __construct(WebserviceInterface $webservice, RepositoryInterface $repository)
     {
         $this->_webservice = $webservice;
         $this->repository($repository);
     }
 
-    public function action($action = null) {
+    public function action($action = null)
+    {
         if ($action === null) {
             return $this->__action;
         }

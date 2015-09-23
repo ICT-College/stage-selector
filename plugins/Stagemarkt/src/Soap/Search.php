@@ -2,7 +2,6 @@
 
 namespace Stagemarkt\Soap;
 
-use Cake\Utility\Hash;
 use Stagemarkt\Entity\Accreditation;
 use Stagemarkt\Entity\AddressCompany;
 use Stagemarkt\Entity\Company;
@@ -19,7 +18,7 @@ use Stagemarkt\WebserviceQuery;
  *
  * @method SearchResponse Zoeken(array $parameters)
  */
-class Search extends SoapClient implements Webservice
+class Search extends SoapWebservice
 {
 
     public function search(array $conditions, array $options = [])
@@ -48,6 +47,26 @@ class Search extends SoapClient implements Webservice
                 if (isset($conditions['name'])) {
                     $parameters['LeerbedrijfNaam'] = $conditions['name'];
                     $parameters['LeerbedrijfNaamExact'] = ((substr($conditions['name'], 0, 1) !== '%') && (substr($conditions['name'], -1, 1) !== '%'));
+                }
+
+                break;
+            case 'position':
+                $parameters += [
+                    'LeerplaatsErkenningAanduiding' => 'L'
+                ];
+
+                if (isset($conditions['company_id'])) {
+                    $parameters['CodeLeerbedrijf'] = $conditions['company_id'];
+                }
+                if (isset($conditions['company_name'])) {
+                    $parameters['LeerbedrijfNaam'] = $conditions['company_name'];
+                    $parameters['LeerbedrijfNaamExact'] = ((substr($conditions['company_name'], 0, 1) !== '%') && (substr($conditions['company_name'], -1, 1) !== '%'));
+                }
+                if (isset($conditions['study_program_id'])) {
+                    $parameters['Crebonummer'] = $conditions['study_program_id'];
+                }
+                if (isset($conditions['learning_pathway'])) {
+                    $parameters['Leerweg'] = $conditions['learning_pathway'];
                 }
 
                 break;
@@ -192,6 +211,10 @@ class Search extends SoapClient implements Webservice
         switch ($query->conditions()['type']) {
             case 'company':
                 $entities = $response->companies();
+
+                break;
+            case 'position':
+                $entities = $response->positions();
 
                 break;
         }

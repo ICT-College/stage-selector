@@ -53,24 +53,27 @@ class ResultSet implements ResultSetInterface
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
-     * Move forward to next element
-     * @link http://php.net/manual/en/iterator.next.php
+     * Rewind the Iterator to the first element
+     * @link http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
      */
-    public function next()
+    public function rewind()
     {
-        $this->_index++;
+        $this->_index = 0;
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Return the key of the current element
-     * @link http://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
      */
-    public function key()
+    public function serialize()
     {
-        return $this->_index;
+        while ($this->valid()) {
+            $this->next();
+        }
+        return serialize($this->_results);
     }
 
     /**
@@ -93,27 +96,24 @@ class ResultSet implements ResultSetInterface
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
-     * Rewind the Iterator to the first element
-     * @link http://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
+     * Return the key of the current element
+     * @link http://php.net/manual/en/iterator.key.php
+     * @return mixed scalar on success, or null on failure.
      */
-    public function rewind()
+    public function key()
     {
-        $this->_index = 0;
+        return $this->_index;
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * String representation of object
-     * @link http://php.net/manual/en/serializable.serialize.php
-     * @return string the string representation of the object or null
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Move forward to next element
+     * @link http://php.net/manual/en/iterator.next.php
+     * @return void Any returned value is ignored.
      */
-    public function serialize()
+    public function next()
     {
-        while ($this->valid()) {
-            $this->next();
-        }
-        return serialize($this->_results);
+        $this->_index++;
     }
 
     /**

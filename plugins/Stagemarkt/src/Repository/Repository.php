@@ -5,6 +5,7 @@ namespace Stagemarkt\Repository;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\RepositoryInterface;
 use Stagemarkt\Webservice;
+use Stagemarkt\WebserviceInterface;
 use Stagemarkt\WebserviceQuery;
 
 abstract class Repository implements RepositoryInterface
@@ -94,10 +95,10 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
-     * @param Webservice|null $webservice
-     * @return $this|Webservice
+     * @param WebserviceInterface|null $webservice
+     * @return $this|WebserviceInterface
      */
-    public function webservice(Webservice $webservice = null)
+    public function webservice(WebserviceInterface $webservice = null)
     {
         if ($webservice === null) {
             return $this->_webservice;
@@ -393,7 +394,8 @@ abstract class Repository implements RepositoryInterface
      *
      * @return \Stagemarkt\WebserviceQuery
      */
-    public function query() {
+    public function query()
+    {
         return new WebserviceQuery($this->webservice(), $this);
     }
 

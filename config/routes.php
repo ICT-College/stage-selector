@@ -80,6 +80,7 @@ Router::scope('/', function (\Cake\Routing\RouteBuilder $routes) {
 Router::scope('/api', function (\Cake\Routing\RouteBuilder $routes) {
     $routes->extensions(['json', 'xml']);
     $routes->resources('Companies');
+    $routes->resources('Positions');
 });
 
 /**

@@ -15,7 +15,8 @@ trait SearchableTrait
      *
      * @return WebserviceQuery
      */
-    public function findSearchable(WebserviceQuery $query, $data) {
+    public function findSearchable(WebserviceQuery $query, $data)
+    {
         $this->setupFilterArgs();
 
         foreach ($this->filterArgs as $field) {
@@ -42,7 +43,8 @@ trait SearchableTrait
      *
      * @return bool|array
      */
-    public function setupFilterArgs() {
+    public function setupFilterArgs()
+    {
         if (method_exists($this, 'getFilterArgs')) {
             $this->getFilterArgs();
         }

@@ -34,6 +34,23 @@ class Stagemarkt extends AbstractDriver
     public function initialize()
     {
         $this->_client = new \Stagemarkt\Stagemarkt($this->config());
+        $this->_client->logger($this->logger());
+    }
+
+    public function logger($instance = null)
+    {
+        if ($instance === null) {
+            if ($this->_logger === null) {
+                $this->_logger = new QueryLogger;
+            }
+            return $this->_logger;
+        }
+
+        if ($this->_client) {
+            $this->_client->logger($instance);
+        }
+
+        $this->_logger = $instance;
     }
 
     public function configName()
@@ -50,16 +67,5 @@ class Stagemarkt extends AbstractDriver
             return $this->_logQueries;
         }
         $this->_logQueries = $enable;
-    }
-
-    public function logger($instance = null)
-    {
-        if ($instance === null) {
-            if ($this->_logger === null) {
-                $this->_logger = new QueryLogger;
-            }
-            return $this->_logger;
-        }
-        $this->_logger = $instance;
     }
 }
