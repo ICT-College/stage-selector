@@ -1,3 +1,6 @@
+var requestData = null;
+var isFadingOut = true;
+
 $(function() {
 
     // Update icon when toggling the #filters collapse
@@ -18,22 +21,21 @@ $(function() {
     $('#filter').submit(function(e) {
         e.preventDefault();
 
-        //Hide and set spinning icon
-        $('#filters').collapse('hide').parents('.panel').find('.panel-title').append('<span class="glyphicon glyphicon-refresh spinning pull-right"></span>');
+        $('.positions').data('page', 1);
 
-        //Receive records..
-        console.log($(this).serialize());
-
-        setTimeout(function() {
-            //Remove spinning icon
-            $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
-        }, 1000);
+        loadContent();
 
         return false;
     });
 
+    $(document).on('click', '.pagination > li > a', function() {
+        $('.positions').data('page', $(this).html());
+
+        loadContent();
+    });
+
     // Did someone click a add or remove button? Catch it!
-    $('[data-toggle="selection"]').on('click', function() {
+    $(document).on('click', '[data-toggle="selection"]', function() {
         // Make sure the button isn't disabled..
         if ($(this).attr('disabled') == 'disabled') {
             return;
@@ -98,6 +100,68 @@ $(function() {
     }, 500);
 
 });
+
+function loadContent() {
+    //Hide collapse and set spinning icon
+    $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
+    $('#filters').collapse('hide').parents('.panel').find('.panel-title').append('<span class="glyphicon glyphicon-refresh spinning pull-right"></span>');
+
+    //Receive records and create an object with only usefull filters
+    var filters = {};
+
+    $('#filters').find('input[type!="submit"]').each(function() {
+        var filter = $(this).attr('name');
+        var value = $(this).val();
+
+        if (value != undefined && value != '' && value != 0 && value != null) {
+            filters[filter] = value;
+        }
+    });
+
+    filters['page'] = $('.positions').data('page');
+
+    $.get('/api/positions.json', filters, function(data) {
+        $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
+        $('.pagination').parent().hide();
+
+        $('.positions > tbody').hide(1000, function() {
+            $('.positions > tbody > tr').remove();
+
+            data.data.forEach(function (value, key) {
+                $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description+ '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address.address + '<br/>' + value.company.address.postcode +  ' ' + value.company.address.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="add" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span></a></td></tr>');
+            });
+
+            var currentPage = data.pagination.current_page;
+            var number = data.pagination.current_page - 4;
+            var lastSetPage = (data.pagination.page_count - 3);
+            if (number < 1) {
+                number = 1;
+            }
+            if (lastSetPage < 1) {
+                lastSetPage = 1;
+            }
+            if (currentPage <= data.pagination.page_count && currentPage >= lastSetPage) {
+                number = currentPage - (8 - (data.pagination.page_count - currentPage));
+            }
+
+            $('.pagination li').remove();
+
+            for (var i = 1; i<=9; i++) {
+                if (number > data.pagination.page_count) {
+                    break;
+                }
+
+                $('.pagination').append('<li class="' + ((currentPage == number) ? 'active' : '') + '"><a href="javascript:;">' + number + '</a></li>');
+
+                number++;
+            }
+
+            $('.pagination').parent().show();
+
+            $('.positions > tbody').show(1000);
+        });
+    });
+}
 
 /**
  * Adds a parameter to a given URL

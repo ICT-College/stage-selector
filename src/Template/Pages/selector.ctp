@@ -46,16 +46,18 @@
                 <?= $this->Form->create(false, ['type' => 'get', 'id' => 'filter']) ?>
 
                 <div class="col-md-5">
-                    <?= $this->Form->input('company_name') ?>
-                    <?= $this->Form->input('learn_route', [
+                    <?= $this->Form->input('company_name', ['label' => __('Company name')]) ?>
+                    <?= $this->Form->input('learning_pathway', [
                         'options' => [
                             'BBL',
                             'BOL',
                             'VMBO',
                             'HBO'
-                        ]
+                        ],
+                        'label' => __('Learning pathway')
                     ]); ?>
-                    <?= $this->Form->input('crebo', [
+                    <?= $this->Form->input('study_program_id', [
+                        'type' => 'text',
                         'label' => [
                             'text' => __('CREBO number/name') . ' <span class="glyphicon glyphicon-info-sign"><span>',
                             'data-toggle' => 'tooltip',
@@ -68,14 +70,14 @@
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-md-8">
-                            <?= $this->Form->input('street') ?>
+                            <?= $this->Form->input('company_address_street', ['label' => __('Street')]) ?>
                         </div>
                         <div class="col-md-4">
-                            <?= $this->Form->input('number') ?>
+                            <?= $this->Form->input('company_address_number', ['label' => __('Number')]) ?>
                         </div>
                     </div>
-                    <?= $this->Form->input('city') ?>
-                    <?= $this->Form->input('country') ?>
+                    <?= $this->Form->input('company_address_city', ['label' => __('City')]) ?>
+                    <?= $this->Form->input('company_address_country', ['label' => __('Country')]) ?>
 
                     <?= $this->Form->input('search_in_area', [
                         'type' => 'checkbox',
@@ -90,7 +92,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <?= $this->Form->input('code_company', ['label' => __('Code company')]) ?>
+                    <?= $this->Form->input('company_id', ['type' => 'text', 'label' => __('Code company')]) ?>
                     <?= $this->Form->input('brin', ['label' => __('BRIN number')]) ?>
 
                     <?= $this->Form->submit(__('Search'), ['class' => 'btn btn-primary', 'style' => 'width: 100%; margin-top: 25px;']) ?>
@@ -102,85 +104,91 @@
     </div>
 </div>
 
-<table class="table table-hover">
+<table class="table table-hover positions" data-page="1">
     <thead>
-    <tr>
-        <th></th>
-        <th><?= __('Job') ?></th>
-        <th><?= __('Company') ?></th>
-        <th><?= __('Address') ?></th>
-        <th>&nbsp;</th>
-    </tr>
+        <tr>
+            <th></th>
+            <th><?= __('Job') ?></th>
+            <th><?= __('Company') ?></th>
+            <th><?= __('Address') ?></th>
+            <th>&nbsp;</th>
+        </tr>
     </thead>
     <tbody>
-    <tr data-id="1">
-        <th scope="row">1</th>
-        <td>
-            Applicatie ontwikkelaar (BBL)<br/>
-            Richting ICT
-        </td>
-        <td>
-            0100Dev<br/>
-            Tel: 0646248664
-        </td>
-        <td>
-            Neerlandstraat 32<br/>
-            5662JC Geldrop
-        </td>
-        <td>
-            <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-1', [
-                'data-toggle' => 'selection',
-                'data-state' => 'add',
-                'class' => 'btn btn-success pull-right',
-                'escape' => false
-            ]) ?>
-        </td>
-    </tr>
-    <tr data-id="2">
-        <th scope="row">2</th>
-        <td>
-            Systeem beheerder (BOL)<br/>
-            Richting Zorg en natura
-        </td>
-        <td>
-            CVO-Technologies<br/>
-            Tel: 06132345678
-        </td>
-        <td>
-            Limburgertje 20<br/>
-            8888BB Weert
-        </td>
-        <td>
-            <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-2', [
-                'data-toggle' => 'selection',
-                'data-state' => 'add',
-                'class' => 'btn btn-success pull-right',
-                'escape' => false
-            ]) ?>
-        </td>
-    </tr>
-    <tr data-id="3">
-        <th scope="row">3</th>
-        <td>
-            Schoonmaakster (VMBO)<br/>
-            Richting Vies en was
-        </td>
-        <td>
-            CVO Computers<br/>
-            Tel: 06132345678
-        </td>
-        <td>
-            Limburgerstraat 12<br/>
-            9999AA Herten
-        </td>
-        <td>
-            <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-3', [
-                'data-toggle' => 'selection',
-                'data-state' => 'add',
-                'class' => 'btn btn-success pull-right',
-                'escape' => false
-            ]) ?>
-        </td>
-    </tr>
+        <tr data-id="1">
+            <th scope="row">1</th>
+            <td>
+                Applicatie ontwikkelaar (BBL)<br/>
+                Richting ICT
+            </td>
+            <td>
+                0100Dev<br/>
+                Tel: 0646248664
+            </td>
+            <td>
+                Neerlandstraat 32<br/>
+                5662JC Geldrop
+            </td>
+            <td>
+                <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-1', [
+                    'data-toggle' => 'selection',
+                    'data-state' => 'add',
+                    'class' => 'btn btn-success pull-right',
+                    'escape' => false
+                ]) ?>
+            </td>
+        </tr>
+        <tr data-id="2">
+            <th scope="row">2</th>
+            <td>
+                Systeem beheerder (BOL)<br/>
+                Richting Zorg en natura
+            </td>
+            <td>
+                CVO-Technologies<br/>
+                Tel: 06132345678
+            </td>
+            <td>
+                Limburgertje 20<br/>
+                8888BB Weert
+            </td>
+            <td>
+                <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-2', [
+                    'data-toggle' => 'selection',
+                    'data-state' => 'add',
+                    'class' => 'btn btn-success pull-right',
+                    'escape' => false
+                ]) ?>
+            </td>
+        </tr>
+        <tr data-id="3">
+            <th scope="row">3</th>
+            <td>
+                Schoonmaakster (VMBO)<br/>
+                Richting Vies en was
+            </td>
+            <td>
+                CVO Computers<br/>
+                Tel: 06132345678
+            </td>
+            <td>
+                Limburgerstraat 12<br/>
+                9999AA Herten
+            </td>
+            <td>
+                <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-3', [
+                    'data-toggle' => 'selection',
+                    'data-state' => 'add',
+                    'class' => 'btn btn-success pull-right',
+                    'escape' => false
+                ]) ?>
+            </td>
+        </tr>
     </tbody>
 </table>
+
+<div class="text-center">
+    <ul class="pagination">
+
+    </ul>
+</div>
