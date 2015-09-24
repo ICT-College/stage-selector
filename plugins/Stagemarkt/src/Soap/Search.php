@@ -67,8 +67,11 @@ class Search extends StagemarktService
                     $parameters['LeerbedrijfNaam'] = $conditions['company_name'];
                     $parameters['LeerbedrijfNaamExact'] = ((substr($conditions['company_name'], 0, 1) !== '%') && (substr($conditions['company_name'], -1, 1) !== '%'));
                 }
-                if (isset($conditions['company_address_address'])) {
-                    $parameters['Vestigingsadres']['Straat'] = $conditions['company_address_address'];
+                if (isset($conditions['company_address_number'])) {
+                    $parameters['Vestigingsadres']['Huisnummer'] = $conditions['company_address_number'];
+                }
+                if (isset($conditions['company_address_street'])) {
+                    $parameters['Vestigingsadres']['Straat'] = $conditions['company_address_street'];
                 }
                 if (isset($conditions['company_address_postcode'])) {
                     $parameters['PostcodeRange'] = $conditions['company_address_postcode'] . $conditions['company_address_postcode'];

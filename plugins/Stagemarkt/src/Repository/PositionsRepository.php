@@ -18,7 +18,10 @@ class PositionsRepository extends Repository
         'company_name' => array(
             'type' => 'like'
         ),
-        'company_address_address' => array(
+        'company_address_number' => array(
+            'type' => 'value'
+        ),
+        'company_address_street' => array(
             'type' => 'value'
         ),
         'company_address_postcode' => array(
