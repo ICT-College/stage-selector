@@ -1,5 +1,8 @@
 var requestData = null;
 var isFadingOut = true;
+var map = null;
+var geocoder = null;
+var marker = null;
 
 $(function() {
 
@@ -53,6 +56,13 @@ $(function() {
                 $(self).html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success pull-right').data('state', 'add');
             }
         }, 1000);
+    });
+
+    $(document).on('click', '[data-id]', function () {
+        loadModalContent($(this).data('id'));
+        console.log($(this).data('id'));
+
+        $('.position-modal').modal();
     });
 
     // Autocomplete with AJAX call for companies input
@@ -161,6 +171,69 @@ function loadContent() {
             $('.positions > tbody').show(1000);
         });
     });
+}
+
+function loadModalContent(id) {
+    var modalBody = $('.position-modal .modal-body');
+    $.get('/api/positions/' + id + '.json', function (data) {
+        modalBody.find('.company-name').text(data.data.company.name);
+        modalBody.find('.position-description').text(data.data.description);
+        modalBody.find('.qualification-parts').html('');
+        for (var qualificationPartIndex in data.data.qualification_parts) {
+            var qualificationPart = data.data.qualification_parts[qualificationPartIndex];
+
+            var listItem = $('<li>', {
+                'text': qualificationPart.description
+            });
+
+            modalBody.find('.qualification-parts').append(listItem);
+        }
+        modalBody.find('.company-address-address').text(data.data.company.address.address);
+        modalBody.find('.company-address-city').text(data.data.company.address.city);
+        modalBody.find('.company-address-postcode').text(data.data.company.address.postcode);
+        modalBody.find('.company-correspondence-address-address').text(data.data.company.correspondence_address.address);
+        modalBody.find('.company-correspondence-address-city').text(data.data.company.correspondence_address.city);
+        modalBody.find('.company-correspondence-address-postcode').text(data.data.company.correspondence_address.postcode);
+        console.log(data);
+
+        modalBody.find('.company-email').text(data.data.company.email);
+        modalBody.find('.company-website').text(data.data.company.website);
+        modalBody.find('.company-website').attr('href', 'http://' + data.data.company.website);
+        modalBody.find('.company-telephone').text(data.data.company.telephone);
+
+        loadMap(data.data.company.address.address + ' ' + data.data.company.address.postcode + ' ' + data.data.company.correspondence_address.city);
+
+    });
+}
+
+function initMap() {
+    geocoder = new google.maps.Geocoder();
+    map = new google.maps.Map(document.getElementById('company-map'), {
+        zoom: 4
+    });
+}
+
+function geocodeAddress(address, geocoder, resultsMap) {
+    geocoder.geocode({'address': address}, function(results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+            resultsMap.setCenter(results[0].geometry.location);
+            resultsMap.setZoom(10);
+            marker = new google.maps.Marker({
+                map: resultsMap,
+                position: results[0].geometry.location
+            });
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
+function loadMap(address) {
+    if (marker !== null) {
+        marker.setMap(null);
+    }
+
+    geocodeAddress(address, geocoder, map);
 }
 
 /**

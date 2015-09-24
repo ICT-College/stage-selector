@@ -65,3 +65,7 @@ body {
 .nav-selection > li > a {
     padding: 2px 10px;
 }
+
+#company-map {
+    height: 400px;
+}
