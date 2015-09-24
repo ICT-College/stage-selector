@@ -123,13 +123,16 @@ class Details extends StagemarktService
         $qualificationParts = [];
         foreach ($soapResponse->Kwalificatieonderdelen->Kwalificatieonderdeel as $qualificationPart) {
             $index = substr($qualificationPart->Omschrijving, 0, 2);
+            $description = $qualificationPart->Omschrijving;
             if (!is_numeric($index)) {
                 $index = mt_rand(1, 9999);
+            } else {
+                $description = substr($description, 3);
             }
 
             $qualificationParts[(int) $index] = new QualificationPart([
                 'type' => $qualificationPart->Type,
-                'description' => $qualificationPart->Omschrijving
+                'description' => $description
             ], [
                 'markClean' => true,
                 'markNew' => false,
