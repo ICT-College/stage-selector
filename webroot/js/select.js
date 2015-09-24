@@ -174,7 +174,7 @@ function loadContent() {
 }
 
 function loadModalContent(id) {
-    var modalBody = $('.position-modal .modal-body');
+    var modalBody = $('.position-modal');
     $.get('/api/positions/' + id + '.json', function (data) {
         modalBody.find('.company-name').text(data.data.company.name);
         modalBody.find('.position-description').text(data.data.description);
