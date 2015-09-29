@@ -9,13 +9,16 @@
 
         <div class="col-md-4">
             <ul class="nav nav-pills nav-stacked nav-selection">
-                <li class="active"><a href="#">1. 0100Dev - Webdeveloper</a></li>
-                <li class="active"><a href="#">2. CVO Computers - Schoonmaakster</a></li>
+<!--                <li class="active"><a href="#">1. 0100Dev - Webdeveloper</a></li>-->
+<!--                <li class="active"><a href="#">2. CVO Computers - Schoonmaakster</a></li>-->
+                <li><a href="#">1.</a></li>
+                <li><a href="#">2.</a></li>
             </ul>
         </div>
         <div class="col-md-4">
             <ul class="nav nav-pills nav-stacked nav-selection">
-                <li class="active"><a href="#">3. Allahagbar - Boem</a></li>
+<!--                <li class="active"><a href="#">3. Allahagbar - Boem</a></li>-->
+                <li><a href="#">3.</a></li>
                 <li><a href="#">4.</a></li>
             </ul>
         </div>
@@ -198,41 +201,42 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title company-name"></h4>
+                <h4 class="modal-title study-program-title"></h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
+                        <strong>Functie</strong>: <span class="study-program-description"></span><br/>
+                        <strong>Omschrijving</strong>: <br/>
                         <p class="position-description"></p>
-                        <ol class="qualification-parts"></ol>
+
+                        <address>
+                            <strong><?= h(__('Adres')); ?></strong><br/>
+                            <span class="company-address-address"></span><br/>
+                            <span class="company-address-postcode"></span>, <span class="company-address-city"></span>
+                        </address>
+
+                        <strong>Email</strong>: <span class="company-email"></span><br/>
+                        <strong>Website</strong>: <a class="company-website"></a><br/>
+                        <strong>Telephone</strong>: <span class="company-telephone"></span>
                     </div>
                     <div class="col-md-6">
-                        <div id="company-map"></div>
+                        <iframe style="width: 100%;"></iframe>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <address>
-                            <strong><?= h(__('Adres')); ?></strong><br>
-                            <span class="company-address-address"></span><br>
-                            <span class="company-address-postcode"></span>, <span class="company-address-city"></span>
-                        </address>
+                        <ol class="qualification-parts"></ol>
                     </div>
                     <div class="col-md-6">
-                        <ul>
-                            <li><strong>Email</strong>: <span class="company-email"></span></li>
-                            <li><strong>Website</strong>: <a class="company-website"></a></li>
-                            <li><strong>Telephone</strong>: <span class="company-telephone"></span></li>
-                        </ul>
+                        <ol class="qualification-parts"></ol>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Sluit</button>
+                <button type="button" class="btn btn-success position-select">Voeg toe</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM_5cgEClifXxyosxAELyr5eAHTieOC7I&signed_in=true&callback=initMap"></script>

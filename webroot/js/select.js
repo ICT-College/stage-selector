@@ -58,11 +58,12 @@ $(function() {
         }, 1000);
     });
 
-    $(document).on('click', '[data-id]', function () {
-        loadModalContent($(this).data('id'));
-        console.log($(this).data('id'));
+    $(document).on('click', '[data-id]', function (e) {
+        if ($(e.target).prop('tagName') == 'A' || $(e.target).prop('tagName') == 'SPAN') {
+            return;
+        }
 
-        $('.position-modal').modal();
+        loadModalContent($(this).data('id'));
     });
 
     // Autocomplete with AJAX call for companies input
@@ -101,6 +102,12 @@ $(function() {
         }, 500);
     });
 
+    $('.position-modal .position-select').on('click', function() {
+        var id = $('.position-modal').modal('hide').data('id');
+
+        $('tr[data-id=' + id + '] a[data-toggle="selection"]').click();
+    });
+
     // All tooltips are tooltips, dammit bootstrap!
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -134,12 +141,16 @@ function loadContent() {
         $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
         $('.pagination').parent().hide();
 
-        $('.positions > tbody').hide(1000, function() {
+        $('.positions > tbody').hide(50, function() {
             $('.positions > tbody > tr').remove();
 
             data.data.forEach(function (value, key) {
                 $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description+ '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address.address + '<br/>' + value.company.address.postcode +  ' ' + value.company.address.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="add" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span></a></td></tr>');
             });
+
+            if (data.data.length == 0) {
+                $('.positions > tbody').append('<tr><td colspan="5">Geen zoekresultaten</td></tr>')
+            }
 
             var currentPage = data.pagination.current_page;
             var number = data.pagination.current_page - 4;
@@ -156,84 +167,94 @@ function loadContent() {
 
             $('.pagination li').remove();
 
-            for (var i = 1; i<=9; i++) {
-                if (number > data.pagination.page_count) {
-                    break;
+            if (number >= 1 && data.data.length != 0) {
+                for (var i = 1; i <= 9; i++) {
+                    if (number > data.pagination.page_count) {
+                        break;
+                    }
+
+                    $('.pagination').append('<li class="' + ((currentPage == number) ? 'active' : '') + '"><a href="javascript:;">' + number + '</a></li>');
+
+                    number++;
                 }
 
-                $('.pagination').append('<li class="' + ((currentPage == number) ? 'active' : '') + '"><a href="javascript:;">' + number + '</a></li>');
-
-                number++;
+                $('.pagination').parent().show();
             }
 
-            $('.pagination').parent().show();
-
-            $('.positions > tbody').show(1000);
+            $('.positions > tbody').show(50);
         });
     });
 }
 
 function loadModalContent(id) {
     var modalBody = $('.position-modal');
-    $.get('/api/positions/' + id + '.json', function (data) {
-        modalBody.find('.company-name').text(data.data.company.name);
-        modalBody.find('.position-description').text(data.data.description);
-        modalBody.find('.qualification-parts').html('');
-        for (var qualificationPartIndex in data.data.qualification_parts) {
-            var qualificationPart = data.data.qualification_parts[qualificationPartIndex];
 
-            var listItem = $('<li>', {
-                'text': qualificationPart.description
+    $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
+        $.get('/api/positions/' + id + '.json', function (data) {
+            modalBody.data('id', id);
+
+            modalBody.find('.study-program-title').text(data.data.study_program.description + ' at ' + data.data.company.name);
+            modalBody.find('.study-program-description').text(data.data.study_program.description);
+            modalBody.find('.company-name').text(data.data.company.name);
+            modalBody.find('.position-description').text(((data.data.description == '') ? 'No description' : data.data.description));
+
+            modalBody.find('.qualification-parts').html('');
+            modalBody.find('.qualification-parts').last().attr('start', 0);
+            var count = 1;
+
+            for (var qualificationPartIndex in data.data.qualification_parts) {
+                var qualificationPart = data.data.qualification_parts[qualificationPartIndex];
+
+                var listItem = $('<li>', {
+                    'text': qualificationPart.description + '.'
+                });
+
+                if ((data.data.qualification_parts.length/2) > count) {
+                    console.log('links');
+                    modalBody.find('.qualification-parts').first().append(listItem);
+                } else {
+                    console.log('rechts');
+                    if (modalBody.find('.qualification-parts').last().attr('start') == 0) {
+                        modalBody.find('.qualification-parts').last().attr('start', count);
+                    }
+
+                    modalBody.find('.qualification-parts').last().append(listItem)
+                }
+
+                count++;
+            }
+
+            modalBody.find('.company-address-address').text(data.data.company.address.address);
+            modalBody.find('.company-address-city').text(data.data.company.address.city);
+            modalBody.find('.company-address-postcode').text(data.data.company.address.postcode);
+            modalBody.find('.company-correspondence-address-address').text(data.data.company.correspondence_address.address);
+            modalBody.find('.company-correspondence-address-city').text(data.data.company.correspondence_address.city);
+            modalBody.find('.company-correspondence-address-postcode').text(data.data.company.correspondence_address.postcode);
+            console.log(data);
+
+            modalBody.find('.company-email').text(data.data.company.email);
+            modalBody.find('.company-website').text(data.data.company.website);
+            modalBody.find('.company-website').attr('href', 'http://' + data.data.company.website);
+            modalBody.find('.company-telephone').text(data.data.company.telephone);
+
+            modalBody.find('iframe').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + data.data.company.address.address + ' ' + data.data.company.address.postcode + ' ' + data.data.company.correspondence_address.city + '&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI');
+
+            var state = $('tr[data-id=' + id + '] a[data-toggle="selection"]').data('state');
+
+            if (state == 'add') {
+                modalBody.find('.position-select').removeClass('btn-danger').addClass('btn-success').text('Add to selection');
+            } else {
+
+                modalBody.find('.position-select').addClass('btn-danger').removeClass('btn-success').text('Delete from selection');
+            }
+
+            $('.loading-modal').modal('unlock').modal('hide').one('hidden.bs.modal', function() {
+                $('.position-modal').modal('show').one('shown.bs.modal', function() {
+                    modalBody.find('iframe').height(modalBody.find('.col-md-6').first().height());
+                });
             });
-
-            modalBody.find('.qualification-parts').append(listItem);
-        }
-        modalBody.find('.company-address-address').text(data.data.company.address.address);
-        modalBody.find('.company-address-city').text(data.data.company.address.city);
-        modalBody.find('.company-address-postcode').text(data.data.company.address.postcode);
-        modalBody.find('.company-correspondence-address-address').text(data.data.company.correspondence_address.address);
-        modalBody.find('.company-correspondence-address-city').text(data.data.company.correspondence_address.city);
-        modalBody.find('.company-correspondence-address-postcode').text(data.data.company.correspondence_address.postcode);
-        console.log(data);
-
-        modalBody.find('.company-email').text(data.data.company.email);
-        modalBody.find('.company-website').text(data.data.company.website);
-        modalBody.find('.company-website').attr('href', 'http://' + data.data.company.website);
-        modalBody.find('.company-telephone').text(data.data.company.telephone);
-
-        loadMap(data.data.company.address.address + ' ' + data.data.company.address.postcode + ' ' + data.data.company.correspondence_address.city);
-
+        });
     });
-}
-
-function initMap() {
-    geocoder = new google.maps.Geocoder();
-    map = new google.maps.Map(document.getElementById('company-map'), {
-        zoom: 4
-    });
-}
-
-function geocodeAddress(address, geocoder, resultsMap) {
-    geocoder.geocode({'address': address}, function(results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-            resultsMap.setCenter(results[0].geometry.location);
-            resultsMap.setZoom(10);
-            marker = new google.maps.Marker({
-                map: resultsMap,
-                position: results[0].geometry.location
-            });
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
-}
-
-function loadMap(address) {
-    if (marker !== null) {
-        marker.setMap(null);
-    }
-
-    geocodeAddress(address, geocoder, map);
 }
 
 /**
@@ -268,3 +289,22 @@ function setParameter (url, param, paramVal){
         return baseUrl;
     }
 }
+
+/**
+ * Add ability to lock a modal
+ */
+var _hide = $.fn.modal.Constructor.prototype.hide;
+
+$.extend($.fn.modal.Constructor.prototype, {
+    lock: function() {
+        this.options.locked = true;
+    },
+    unlock: function() {
+        this.options.locked = false;
+    },
+    hide: function() {
+        if (this.options.locked) return;
+
+        _hide.apply(this, arguments);
+    }
+});
