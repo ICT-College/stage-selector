@@ -114,6 +114,8 @@ $(function() {
     // Open the filters collapse after 500ms has passed. This gives an awesome effect.
     setTimeout(function() {
         $('#filters').collapse('show');
+
+        loadContent();
     }, 500);
 
 });

@@ -118,79 +118,11 @@
         </tr>
     </thead>
     <tbody>
-        <tr data-id="1">
-            <th scope="row">1</th>
-            <td>
-                Applicatie ontwikkelaar (BBL)<br/>
-                Richting ICT
-            </td>
-            <td>
-                0100Dev<br/>
-                Tel: 0646248664
-            </td>
-            <td>
-                Neerlandstraat 32<br/>
-                5662JC Geldrop
-            </td>
-            <td>
-                <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-1', [
-                    'data-toggle' => 'selection',
-                    'data-state' => 'add',
-                    'class' => 'btn btn-success pull-right',
-                    'escape' => false
-                ]) ?>
-            </td>
-        </tr>
-        <tr data-id="2">
-            <th scope="row">2</th>
-            <td>
-                Systeem beheerder (BOL)<br/>
-                Richting Zorg en natura
-            </td>
-            <td>
-                CVO-Technologies<br/>
-                Tel: 06132345678
-            </td>
-            <td>
-                Limburgertje 20<br/>
-                8888BB Weert
-            </td>
-            <td>
-                <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-2', [
-                    'data-toggle' => 'selection',
-                    'data-state' => 'add',
-                    'class' => 'btn btn-success pull-right',
-                    'escape' => false
-                ]) ?>
-            </td>
-        </tr>
-        <tr data-id="3">
-            <th scope="row">3</th>
-            <td>
-                Schoonmaakster (VMBO)<br/>
-                Richting Vies en was
-            </td>
-            <td>
-                CVO Computers<br/>
-                Tel: 06132345678
-            </td>
-            <td>
-                Limburgerstraat 12<br/>
-                9999AA Herten
-            </td>
-            <td>
-                <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span>', '#toggle-3', [
-                    'data-toggle' => 'selection',
-                    'data-state' => 'add',
-                    'class' => 'btn btn-success pull-right',
-                    'escape' => false
-                ]) ?>
-            </td>
-        </tr>
+        <tr><td colspan="5">Geen zoekresultaten</td></tr>
     </tbody>
 </table>
 
-<div class="text-center">
+<div class="text-center" style="display: none;">
     <ul class="pagination">
 
     </ul>
