@@ -90,7 +90,7 @@ $(function() {
             $.get('/api/study_programs.json', { limit: 5, q: search }, function(data) {
                 if (data.success) {
                     var results = data.data.map(function(e) {
-                        return e.name;
+                        return e.id + ' - ' e.description;
                     });
 
                     studyProgramAwesomplete.list = results;
