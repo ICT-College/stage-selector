@@ -149,7 +149,7 @@
                         </address>
 
                         <strong>Email</strong>: <span class="company-email"></span><br/>
-                        <strong>Website</strong>: <a class="company-website"></a><br/>
+                        <strong>Website</strong>: <a class="company-website" target="_blank"></a><br/>
                         <strong>Telephone</strong>: <span class="company-telephone"></span>
                     </div>
                     <div class="col-md-6">

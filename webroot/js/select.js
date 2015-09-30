@@ -122,7 +122,7 @@ $(function() {
 
 function loadContent() {
     //Hide collapse and set spinning icon
-    $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
+    $('#filters').parents('.panel').find('.panel-title .glyphicon .spinning').last().remove();
     $('#filters').collapse('hide').parents('.panel').find('.panel-title').append('<span class="glyphicon glyphicon-refresh spinning pull-right"></span>');
 
     //Receive records and create an object with only usefull filters
@@ -211,7 +211,7 @@ function loadModalContent(id) {
                     'text': qualificationPart.description + '.'
                 });
 
-                if ((data.data.qualification_parts.length/2) > count) {
+                if ((data.data.qualification_parts.length/2) >= count) {
                     console.log('links');
                     modalBody.find('.qualification-parts').first().append(listItem);
                 } else {
