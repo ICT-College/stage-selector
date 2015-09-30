@@ -113,6 +113,10 @@ class WebserviceQuery
 
     public function count()
     {
+        if (!$this->_resultSet) {
+            $this->_execute();
+        }
+
         return $this->_resultSet->total();
     }
 
