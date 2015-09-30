@@ -139,51 +139,55 @@ function loadContent() {
 
     filters['page'] = $('.positions').data('page');
 
-    $.get('/api/positions.json', filters, function(data) {
-        $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
-        $('.pagination').parent().hide();
+    $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
+        $.get('/api/positions.json', filters, function (data) {
+            $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
+            $('.pagination').parent().hide();
 
-        $('.positions > tbody').hide(50, function() {
-            $('.positions > tbody > tr').remove();
+            $('.positions > tbody').hide(50, function () {
+                $('.positions > tbody > tr').remove();
 
-            data.data.forEach(function (value, key) {
-                $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description+ '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address.address + '<br/>' + value.company.address.postcode +  ' ' + value.company.address.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="add" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span></a></td></tr>');
-            });
+                data.data.forEach(function (value, key) {
+                    $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description + '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address.address + '<br/>' + value.company.address.postcode + ' ' + value.company.address.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="add" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span></a></td></tr>');
+                });
 
-            if (data.data.length == 0) {
-                $('.positions > tbody').append('<tr><td colspan="5">Geen zoekresultaten</td></tr>')
-            }
-
-            var currentPage = data.pagination.current_page;
-            var number = data.pagination.current_page - 4;
-            var lastSetPage = (data.pagination.page_count - 3);
-            if (number < 1) {
-                number = 1;
-            }
-            if (lastSetPage < 1) {
-                lastSetPage = 1;
-            }
-            if (currentPage <= data.pagination.page_count && currentPage >= lastSetPage) {
-                number = currentPage - (8 - (data.pagination.page_count - currentPage));
-            }
-
-            $('.pagination li').remove();
-
-            if (number >= 1 && data.data.length != 0) {
-                for (var i = 1; i <= 9; i++) {
-                    if (number > data.pagination.page_count) {
-                        break;
-                    }
-
-                    $('.pagination').append('<li class="' + ((currentPage == number) ? 'active' : '') + '"><a href="javascript:;">' + number + '</a></li>');
-
-                    number++;
+                if (data.data.length == 0) {
+                    $('.positions > tbody').append('<tr><td colspan="5">Geen zoekresultaten</td></tr>')
                 }
 
-                $('.pagination').parent().show();
-            }
+                var currentPage = data.pagination.current_page;
+                var number = data.pagination.current_page - 4;
+                var lastSetPage = (data.pagination.page_count - 3);
+                if (number < 1) {
+                    number = 1;
+                }
+                if (lastSetPage < 1) {
+                    lastSetPage = 1;
+                }
+                if (currentPage <= data.pagination.page_count && currentPage >= lastSetPage) {
+                    number = currentPage - (8 - (data.pagination.page_count - currentPage));
+                }
 
-            $('.positions > tbody').show(50);
+                $('.pagination li').remove();
+
+                if (number >= 1 && data.data.length != 0) {
+                    for (var i = 1; i <= 9; i++) {
+                        if (number > data.pagination.page_count) {
+                            break;
+                        }
+
+                        $('.pagination').append('<li class="' + ((currentPage == number) ? 'active' : '') + '"><a href="javascript:;">' + number + '</a></li>');
+
+                        number++;
+                    }
+
+                    $('.pagination').parent().show();
+                }
+
+                $('.loading-modal').modal('unlock').modal('hide');
+
+                $('.positions > tbody').show(50);
+            });
         });
     });
 }
