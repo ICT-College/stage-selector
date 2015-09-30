@@ -112,7 +112,7 @@ class Details extends StagemarktService
                 'markClean' => true,
                 'markNew' => false,
             ]),
-            'description' => $soapResponse->Omschrijving,
+            'description' => ($soapResponse->Omschrijving) ? $soapResponse->Omschrijving : null,
             'start' => new Time($soapResponse->Startdatum, new \DateTimeZone('Europe/Amsterdam')),
             'end' => new Time($soapResponse->Einddatum, new \DateTimeZone('Europe/Amsterdam')),
         ], [

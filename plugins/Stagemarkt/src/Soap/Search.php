@@ -160,7 +160,7 @@ class Search extends StagemarktService
                         ]),
                         'learning_pathway' => $result->Leerweg,
                         'kind' => $result->LeerplaatsSoort,
-                        'description' => $result->VacatureLeerplaatsOmschrijving,
+                        'description' => ($result->VacatureLeerplaatsOmschrijving) ? $result->VacatureLeerplaatsOmschrijving : null,
                         'amount' => $result->LeerplaatsAantal
                     ], [
                         'markClean' => true,
