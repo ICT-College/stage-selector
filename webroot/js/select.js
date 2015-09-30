@@ -102,7 +102,7 @@ $(function() {
     });
 
     // Autocomplete with AJAX call for companies input
-    var companyInput = document.getElementById("company-name");
+    var companyInput = document.getElementById('company-name');
     var companyTimeoutTimer;
 
     var companyInputAwesomplete = new Awesomplete(companyInput, {
@@ -134,7 +134,7 @@ $(function() {
                     companyInputAwesomplete.list = [];
                 }
             });
-        }, 500);
+        }, 50);
     });
 
     $('.position-modal .position-select').on('click', function() {
