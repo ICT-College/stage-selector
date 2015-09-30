@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <?= $this->Form->input('company_id', ['type' => 'text', 'label' => __('Code company')]) ?>
+                    <?= $this->Form->input('stagemarkt_id', ['type' => 'text', 'label' => __('Code company')]) ?>
                     <?= $this->Form->input('brin', ['label' => __('BRIN number')]) ?>
 
                     <?= $this->Form->submit(__('Search'), ['class' => 'btn btn-primary', 'style' => 'width: 100%; margin-top: 25px;']) ?>
