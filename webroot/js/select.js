@@ -66,6 +66,41 @@ $(function() {
         loadModalContent($(this).data('id'));
     });
 
+    var studyProgramInput = document.getElementById('study-program-id');
+    var studyProgramTimer;
+
+    var studyProgramAwesomplete = new Awesomplete(studyProgramInput, {
+        autoFirst: true
+    });
+
+    $(studyProgramInput).on('keyup', function(e) {
+        if ([13, 40, 38].indexOf(e.keyCode) != -1) {
+            return;
+        }
+
+        if (studyProgramTimer != null) {
+            clearTimeout(studyProgramTimer);
+        }
+
+        studyProgramAwesomplete.list = [];
+
+        studyProgramTimer = setTimeout(function() {
+            var search = $(studyProgramInput).val();
+
+            $.get('/api/study_programs.json', { limit: 5, q: search }, function(data) {
+                if (data.success) {
+                    var results = data.data.map(function(e) {
+                        return e.name;
+                    });
+
+                    studyProgramAwesomplete.list = results;
+                } else {
+                    studyProgramAwesomplete.list = [];
+                }
+            });
+        }, 50);
+    });
+
     // Autocomplete with AJAX call for companies input
     var companyInput = document.getElementById("company-name");
     var companyTimeoutTimer;
@@ -136,6 +171,10 @@ function loadContent() {
             filters[filter] = value;
         }
     });
+
+    if (filters['study_program_id']) {
+        filters['study_program_id'] = filters['study_program_id'].split('-')[0].replace(/\D/g,'');
+    }
 
     filters['page'] = $('.positions').data('page');
 
