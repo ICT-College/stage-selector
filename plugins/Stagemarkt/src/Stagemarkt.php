@@ -39,6 +39,11 @@ class Stagemarkt
         $this->detailsClient()->logger($logger);
     }
 
+    public function search(array $conditions, array $options = [])
+    {
+        return $this->searchClient()->search($conditions, $options);
+    }
+
     public function detailsForPosition($position)
     {
         return $this->detailsClient()->details([
@@ -46,9 +51,11 @@ class Stagemarkt
         ]);
     }
 
-    public function search()
+    public function detailsForCompany($company)
     {
-        return $this->searchClient()->search();
+        return $this->detailsClient()->details([
+            'company' => $company
+        ]);
     }
 
     /**
