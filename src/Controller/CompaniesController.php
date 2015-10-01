@@ -13,10 +13,6 @@ class CompaniesController extends AppController
     {
         parent::initialize();
 
-        $this->modelFactory('Repository', [new RepositoryLocator, 'get']);
-
-        $this->loadModel('Stagemarkt.Companies', 'Repository');
-
         $this->Crud->config('actions.index', [
             'className' => 'SearchIndex'
         ]);
