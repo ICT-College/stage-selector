@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Controller;
+
+use Cake\Event\Event;
+use Cake\Network\Response;
+use Stagemarkt\Locator\RepositoryLocator;
+
+class StudyProgramsController extends AppController
+{
+
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->Crud->config('actions.index', [
+            'className' => 'SearchIndex'
+        ]);
+    }
+}
