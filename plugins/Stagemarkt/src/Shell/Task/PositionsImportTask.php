@@ -6,13 +6,10 @@ use App\Model\Entity\Company;
 use App\Model\Entity\Position;
 use App\Model\Entity\StudyProgram;
 use Cake\Console\Shell;
-use Cake\Datasource\ConnectionManager;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use DebugKit\DebugTimer;
-use Stagemarkt\Entity\Entity;
-use Stagemarkt\Locator\RepositoryLocator;
-use Stagemarkt\WebserviceQuery;
+use Muffin\Webservice\WebserviceQuery;
 
 class PositionsImportTask extends Shell
 {
@@ -21,9 +18,9 @@ class PositionsImportTask extends Shell
     {
         parent::initialize();
 
-        $this->modelFactory('Repository', [new RepositoryLocator, 'get']);
+        $this->modelFactory('Endpoint', ['Muffin\Webservice\Model\EndpointRegistry', 'get']);
 
-        $this->loadModel('Stagemarkt.Positions', 'Repository');
+        $this->loadModel('Stagemarkt.Positions', 'Endpoint');
     }
 
     public function import($conditions)
@@ -47,38 +44,38 @@ class PositionsImportTask extends Shell
         for ($page = 1; $page <= $pages; $page++) {
             $query = $this->_importReadQuery($conditions);
             $query->applyOptions(['page' => $page]);
-            $entities = $query->all();
+            $resources = $query->all();
 
-            /* @var Entity $remoteEntity */
-            foreach ($entities as $remoteEntity) {
-                if ($positionsTable->exists(['stagemarkt_id' => $remoteEntity->id] + $conditions)) {
-                    $localPosition = $positionsTable->find()->where(['stagemarkt_id' => $remoteEntity->id] + $conditions)->first();
-                    $localPosition->applyStagemarktEntity($remoteEntity);
+            /* @var \Muffin\Webservice\Model\Resource $resource */
+            foreach ($resources as $resource) {
+                if ($positionsTable->exists(['stagemarkt_id' => $resource->id] + $conditions)) {
+                    $localPosition = $positionsTable->find()->where(['stagemarkt_id' => $resource->id] + $conditions)->first();
+                    $localPosition->applyResource($resource);
                 } else {
-                    $localPosition = Position::createFromStagemarktEntity($remoteEntity);
+                    $localPosition = Position::createFromResource($resource);
                 }
 
 //                $remoteDetailPosition = $this->Positions->get($remoteEntity->id);
-//                $localPosition->applyStagemarktEntity($remoteDetailPosition);
+//                $localPosition->applyResource($remoteDetailPosition);
 
-                if ($remoteEntity->has('company')) {
-                    if ($positionsTable->Companies->exists(['stagemarkt_id' => $remoteEntity->company->id])) {
-                        $localCompany = $positionsTable->Companies->find()->where(['stagemarkt_id' => $remoteEntity->company->id])->first();
-                        $localCompany->applyStagemarktEntity($remoteEntity->company);
+                if ($resource->has('company')) {
+                    if ($positionsTable->Companies->exists(['stagemarkt_id' => $resource->company->id])) {
+                        $localCompany = $positionsTable->Companies->find()->where(['stagemarkt_id' => $resource->company->id])->first();
+                        $localCompany->applyResource($resource->company);
                     } else {
-                        $localCompany = Company::createFromStagemarktEntity($remoteEntity->company);
+                        $localCompany = Company::createFromResource($resource->company);
                     }
 
                     $localPosition->set([
                         'company' => $localCompany
                     ]);
                 }
-                if ($remoteEntity->has('study_program')) {
-                    if ($positionsTable->StudyPrograms->exists(['id' => $remoteEntity->study_program->id])) {
-                        $localStudyProgram = $positionsTable->StudyPrograms->find()->where(['id' => $remoteEntity->study_program->id])->first();
-                        $localStudyProgram->applyStagemarktEntity($remoteEntity->study_program);
+                if ($resource->has('study_program')) {
+                    if ($positionsTable->StudyPrograms->exists(['id' => $resource->study_program->id])) {
+                        $localStudyProgram = $positionsTable->StudyPrograms->find()->where(['id' => $resource->study_program->id])->first();
+                        $localStudyProgram->applyResource($resource->study_program);
                     } else {
-                        $localStudyProgram = StudyProgram::createFromStagemarktEntity($remoteEntity->study_program);
+                        $localStudyProgram = StudyProgram::createFromResource($resource->study_program);
                     }
 
                     $localPosition->set([

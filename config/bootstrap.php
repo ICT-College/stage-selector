@@ -181,7 +181,7 @@ Request::addDetector('tablet', function ($request) {
  *
  */
 
-Plugin::load('Muffin/Webservice');
+Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
 Plugin::load('Stagemarkt');
 Plugin::load('Migrations');
 Plugin::load('Crud');

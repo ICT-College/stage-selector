@@ -2,13 +2,17 @@
 
 namespace Stagemarkt\Soap;
 
+use Cake\Database\Log\LoggedQuery;
 use Cake\Database\Log\QueryLogger;
 use DebugKit\DebugTimer;
-use Stagemarkt\LoggedQuery;
-use Stagemarkt\WebserviceInterface;
+use DebugKit\Log\Engine\DebugKitLog;
+use Muffin\Webservice\Webservice\WebserviceInterface;
+use Psr\Log\LoggerAwareTrait;
 
 abstract class SoapWebservice extends SoapClient implements WebserviceInterface
 {
+
+    use LoggerAwareTrait;
 
     protected $_logger;
 
@@ -31,14 +35,15 @@ abstract class SoapWebservice extends SoapClient implements WebserviceInterface
     {
         $query = new LoggedQuery;
         $query->query = $function_name;
+        $params = [];
         foreach ($arguments as $key => $value) {
             if (is_array($value)) {
-                $query->params[$key] = print_r($value, true);
+                $params[$key] = print_r($value, true);
 
                 continue;
             }
 
-            $query->params[$key] = $value;
+            $params[$key] = $value;
 
         }
 
@@ -48,9 +53,9 @@ abstract class SoapWebservice extends SoapClient implements WebserviceInterface
 
         DebugTimer::stop('stagemarkt-' . $function_name);
 
-        $query->took = DebugTimer::elapsedTime('stagemarkt-' . $function_name) * 1000;
-
         $this->logger()->log($query);
+
+        $this->setLogger(new DebugKitLog());
 
         return $response;
     }

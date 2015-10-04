@@ -1,8 +1,8 @@
 <?php
 
-namespace Stagemarkt\Repository;
+namespace Stagemarkt\Model;
 
-use Stagemarkt\WebserviceQuery;
+use Muffin\Webservice\WebserviceQuery;
 
 trait SearchableTrait
 {

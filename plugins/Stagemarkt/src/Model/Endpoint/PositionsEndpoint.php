@@ -1,12 +1,13 @@
 <?php
 
-namespace Stagemarkt\Repository;
+namespace Stagemarkt\Model\Endpoint;
 
-use Cake\Database\Schema\Table;
 use Cake\Datasource\ConnectionManager;
-use Stagemarkt\WebserviceQuery;
+use Muffin\Webservice\Model\Endpoint;
+use Muffin\Webservice\Schema;
+use Stagemarkt\Model\SearchableTrait;
 
-class PositionsRepository extends Repository
+class PositionsEndpoint extends Endpoint
 {
 
     use SearchableTrait;
@@ -48,7 +49,7 @@ class PositionsRepository extends Repository
     {
         parent::initialize($config);
 
-        $schema = new Table(null, [
+        $schema = new Schema(null, [
             'id' => [
                 'type' => 'string'
             ],
@@ -57,21 +58,19 @@ class PositionsRepository extends Repository
             ]
         ]);
         $schema->addConstraint('primary', [
-            'type' => Table::CONSTRAINT_PRIMARY,
+            'type' => Schema::CONSTRAINT_PRIMARY,
             'columns' => 'id'
         ]);
         $this->schema($schema);
-        $this->webservice(ConnectionManager::get('Stagemarkt')->searchClient());
+        $this->webservice('search');
     }
 
     /**
-     * Creates a new Query instance for this repository
-     *
-     * @return WebserviceQuery
+     * {@inheritDoc}
      */
-    public function query()
+    public function find($type = 'all', $options = [])
     {
-        $query = parent::query();
+        $query = parent::find($type, $options);
 
         $query->conditions([
             'type' => 'position'

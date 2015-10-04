@@ -1,17 +1,14 @@
 <?php
 
 namespace Stagemarkt\Soap;
-
-use Stagemarkt\Entity\Accreditation;
-use Stagemarkt\Entity\AddressCompany;
-use Stagemarkt\Entity\Company;
-use Stagemarkt\Entity\Position;
-use Stagemarkt\Entity\StudyProgram;
 use Stagemarkt\Response\SearchResponse;
-use Stagemarkt\ResultSet;
-use Stagemarkt\Stagemarkt;
-use Stagemarkt\Webservice;
-use Stagemarkt\WebserviceQuery;
+use Stagemarkt\Model\Resource\Position;
+use Stagemarkt\Model\Resource\Company;
+use Stagemarkt\Model\Resource\StudyProgram;
+use Stagemarkt\Model\Resource\AddressCompany;
+use Stagemarkt\Model\Resource\Accreditation;
+use Muffin\Webservice\WebserviceQuery;
+use Muffin\Webservice\ResultSet;
 
 /**
  * Class Search
@@ -25,8 +22,8 @@ class Search extends StagemarktService
     public function search(array $conditions, array $options = [])
     {
         $defaultOptions = [
+            'page' => 1,
             'limit' => 10,
-            'page' => 1
         ];
         $options = array_merge($defaultOptions, $options);
 
@@ -230,7 +227,16 @@ class Search extends StagemarktService
             return $this->stagemarktClient()->detailsClient()->execute($query);
         }
 
-        $response = $this->search($query->conditions(), $query->getOptions());
+        $options = [];
+        if ($query->page()) {
+            $options['page'] = $query->page();
+        }
+        if ($query->limit()) {
+            $options['limit'] = $query->limit();
+        }
+        $response = $this->search(
+            $query->conditions(), $options
+        );
 
         switch ($query->conditions()['type']) {
             case 'company':

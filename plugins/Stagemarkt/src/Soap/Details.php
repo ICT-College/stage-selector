@@ -3,19 +3,14 @@
 namespace Stagemarkt\Soap;
 
 use Cake\I18n\Time;
-use Stagemarkt\Entity\Accreditation;
-use Stagemarkt\Entity\AddressCompany;
-use Stagemarkt\Entity\Company;
-use Stagemarkt\Entity\ContactpersonCompany;
-use Stagemarkt\Entity\Position;
-use Stagemarkt\Entity\QualificationPart;
-use Stagemarkt\Entity\StudyProgram;
+use Muffin\Webservice\WebserviceQuery;
+use Stagemarkt\Model\Resource\AddressCompany;
+use Stagemarkt\Model\Resource\Company;
+use Stagemarkt\Model\Resource\ContactpersonCompany;
+use Stagemarkt\Model\Resource\Position;
+use Stagemarkt\Model\Resource\QualificationPart;
+use Stagemarkt\Model\Resource\StudyProgram;
 use Stagemarkt\Response\DetailsResponse;
-use Stagemarkt\Response\SearchResponse;
-use Stagemarkt\ResultSet;
-use Stagemarkt\Stagemarkt;
-use Stagemarkt\Webservice;
-use Stagemarkt\WebserviceQuery;
 
 class Details extends StagemarktService
 {

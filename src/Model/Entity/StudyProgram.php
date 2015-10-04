@@ -3,20 +3,22 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Muffin\Webservice\Model\Resource;
+use Muffin\Webservice\Model\ResourceBasedEntityTrait;
 use Stagemarkt\Entity\Entity as StagemarktEntity;
 use Stagemarkt\Entity\StagemarktBasedEntityTrait;
 
 class StudyProgram extends Entity
 {
 
-    use StagemarktBasedEntityTrait {
-        applyStagemarktEntity as protected _applyStagemarktEntity;
+    use ResourceBasedEntityTrait {
+        applyResource as protected _applyResource;
     }
 
-    public function applyStagemarktEntity(StagemarktEntity $entity) {
+    public function applyResource(Resource $resource) {
         $this->set([
-            'id' => $entity->id,
-            'description' => $entity->description,
+            'id' => $resource->id,
+            'description' => $resource->description,
         ]);
     }
 }

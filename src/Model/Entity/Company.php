@@ -6,28 +6,36 @@ use App\Database\Point;
 use Cake\Cache\Cache;
 use Cake\Network\Http\Client;
 use Cake\ORM\Entity;
-use Stagemarkt\Entity\Entity as StagemarktEntity;
-use Stagemarkt\Entity\StagemarktBasedEntityTrait;
+use Muffin\Webservice\Model\Resource;
+use Muffin\Webservice\Model\ResourceBasedEntityInterface;
+use Muffin\Webservice\Model\ResourceBasedEntityTrait;
 
-class Company extends Entity
+class Company extends Entity implements ResourceBasedEntityInterface
 {
 
-    use StagemarktBasedEntityTrait {
-        applyStagemarktEntity as protected _applyStagemarktEntity;
+    use ResourceBasedEntityTrait {
+        applyResource as protected _applyResource;
     }
 
-    public function applyStagemarktEntity(StagemarktEntity $entity)
+    public function applyResource(Resource $resource)
     {
+        $coordinates = $this->_addressToCoordinates(
+            $resource->address->address . ' ' . $resource->address->city
+        );
+        if (!$coordinates) {
+            $coordinates = null;
+        }
+
         $this->set([
-            'stagemarkt_id' => $entity->id,
-            'name' => $entity->name,
-            'address' => $entity->address->address,
-            'postcode' => $entity->address->postcode,
-            'city' => $entity->address->city,
-            'coordinates' => $this->_addressToCoordinates($entity->address->address . ' ' . $entity->address->city)
+            'stagemarkt_id' => $resource->id,
+            'name' => $resource->name,
+            'address' => $resource->address->address,
+            'postcode' => $resource->address->postcode,
+            'city' => $resource->address->city,
+            'coordinates' => $coordinates
         ]);
 
-        if ($entity->address->country === 'Nederland') {
+        if ($resource->address->country === 'Nederland') {
             $this->set('country', 'NL');
         }
     }

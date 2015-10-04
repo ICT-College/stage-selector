@@ -52,11 +52,18 @@ abstract class SoapClient extends \SoapClient
             'request' => $arguments
         ];
 
-
         $soapCall = parent::__soapCall($function_name, [$arguments], $options, $input_headers, $output_headers);
 
         DebugTimer::stop('SoapRequest');
 
         return $soapCall;
+    }
+
+    public function __debugInfo()
+    {
+        return [
+            'license' => $this->_license,
+            'wsdl' => $this->_wsdl
+        ];
     }
 }

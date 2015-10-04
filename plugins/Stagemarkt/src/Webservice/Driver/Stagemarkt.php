@@ -35,6 +35,8 @@ class Stagemarkt extends AbstractDriver
     {
         $this->_client = new \Stagemarkt\Stagemarkt($this->config());
         $this->_client->logger($this->logger());
+
+        $this->webservice('search', $this->_client->searchClient());
     }
 
     public function logger($instance = null)
