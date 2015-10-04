@@ -12,7 +12,7 @@
         "cakephp/plugin-installer": "*",
         "phpunit/phpunit": "4.1.*",
         "friendsofcake/crud": "dev-master",
-        "muffin/webservice": "dev-master",
+        "muffin/webservice": "dev-feature-orm",
         "friendsofcake/bootstrap-ui": "~0.3",
         "cakedc/search": "3.0.x-dev"
     },
@@ -41,6 +41,13 @@
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump"
     },
+    "repositories":
+    [
+        {
+            "type": "vcs",
+            "url": "https://github.com/CVO-Technologies/cakephp-webservice.git"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }

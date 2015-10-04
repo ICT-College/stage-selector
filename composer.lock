@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2668aa6d413c077e5acf245c01b7b95d",
+    "hash": "ecb6d7ff7e3ec58c448cd0ce14ca28b9",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -253,22 +253,22 @@
         },
         {
             "name": "cakephp/migrations",
-            "version": "1.3",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/migrations.git",
-                "reference": "eb3d2cddf14148fa7d1ea1e083c301ccae733c59"
+                "reference": "6f9f3da1f872a739c7d9a1d43eeb01e258bdd2c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/migrations/zipball/eb3d2cddf14148fa7d1ea1e083c301ccae733c59",
-                "reference": "eb3d2cddf14148fa7d1ea1e083c301ccae733c59",
+                "url": "https://api.github.com/repos/cakephp/migrations/zipball/6f9f3da1f872a739c7d9a1d43eeb01e258bdd2c1",
+                "reference": "6f9f3da1f872a739c7d9a1d43eeb01e258bdd2c1",
                 "shasum": ""
             },
             "require": {
                 "cakephp/cakephp": "~3.0",
                 "php": ">=5.4",
-                "robmorgan/phinx": ">=0.4.2 <1.0"
+                "robmorgan/phinx": "dev-master"
             },
             "require-dev": {
                 "cakephp/bake": "@stable",
@@ -299,7 +299,7 @@
                 "cakephp",
                 "migrations"
             ],
-            "time": "2015-09-05 13:42:09"
+            "time": "2015-09-30 21:58:44"
         },
         {
             "name": "cakephp/plugin-installer",
@@ -343,16 +343,16 @@
         },
         {
             "name": "friendsofcake/bootstrap-ui",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfCake/bootstrap-ui.git",
-                "reference": "116f8e441f05a8941fc8a8cdce3e0e7933425cc6"
+                "reference": "43184b11a4962b8591dbfc1fff0854b65579575a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/116f8e441f05a8941fc8a8cdce3e0e7933425cc6",
-                "reference": "116f8e441f05a8941fc8a8cdce3e0e7933425cc6",
+                "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/43184b11a4962b8591dbfc1fff0854b65579575a",
+                "reference": "43184b11a4962b8591dbfc1fff0854b65579575a",
                 "shasum": ""
             },
             "require-dev": {
@@ -388,7 +388,7 @@
                 "cakephp",
                 "twitter"
             ],
-            "time": "2015-06-05 14:07:08"
+            "time": "2015-09-25 12:54:30"
         },
         {
             "name": "friendsofcake/crud",
@@ -396,12 +396,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfCake/crud.git",
-                "reference": "4314d2af940e0098a83326bd9c6b99420338afa1"
+                "reference": "90d8099d7c0948a830de14f8aa842d8f38907ffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfCake/crud/zipball/4314d2af940e0098a83326bd9c6b99420338afa1",
-                "reference": "4314d2af940e0098a83326bd9c6b99420338afa1",
+                "url": "https://api.github.com/repos/FriendsOfCake/crud/zipball/90d8099d7c0948a830de14f8aa842d8f38907ffa",
+                "reference": "90d8099d7c0948a830de14f8aa842d8f38907ffa",
                 "shasum": ""
             },
             "require": {
@@ -409,8 +409,7 @@
             },
             "require-dev": {
                 "friendsofcake/cakephp-test-utilities": "dev-master",
-                "friendsofcake/search": "dev-master",
-                "phpunit/phpunit": "3.7.33"
+                "friendsofcake/search": "dev-master"
             },
             "suggest": {
                 "friendsofcake/crud-view": "Automated admin backend based on your Crud configuration.",
@@ -462,7 +461,7 @@
                 "scaffolding",
                 "update"
             ],
-            "time": "2015-09-22 13:40:01"
+            "time": "2015-10-02 12:27:20"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -562,16 +561,16 @@
         },
         {
             "name": "muffin/webservice",
-            "version": "dev-master",
+            "version": "dev-feature-orm",
             "source": {
                 "type": "git",
-                "url": "https://github.com/UseMuffin/Webservice.git",
-                "reference": "8401f1103304ae5672593ac0d212a0ac9647d8c9"
+                "url": "https://github.com/cvo-technologies/cakephp-webservice.git",
+                "reference": "de8870247fab6ae962deacf2c8371ba962680272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/UseMuffin/Webservice/zipball/8401f1103304ae5672593ac0d212a0ac9647d8c9",
-                "reference": "8401f1103304ae5672593ac0d212a0ac9647d8c9",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/de8870247fab6ae962deacf2c8371ba962680272",
+                "reference": "de8870247fab6ae962deacf2c8371ba962680272",
                 "shasum": ""
             },
             "require-dev": {
@@ -585,7 +584,11 @@
                     "Muffin\\Webservice\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Muffin\\Webservice\\Test\\": "tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -613,7 +616,11 @@
                 "muffin",
                 "webservice"
             ],
-            "time": "2015-09-17 14:17:16"
+            "support": {
+                "issues": "https://github.com/usemuffin/webservice/issues",
+                "source": "https://github.com/usemuffin/webservice"
+            },
+            "time": "2015-10-04 14:32:26"
         },
         {
             "name": "nesbot/carbon",
@@ -1070,16 +1077,16 @@
         },
         {
             "name": "robmorgan/phinx",
-            "version": "v0.4.6",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robmorgan/phinx.git",
-                "reference": "1351ca36dd2419d7de02afd1aaa415929112d7f1"
+                "reference": "43313ad89c0ad1851aeefafc164e2822e49867e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/1351ca36dd2419d7de02afd1aaa415929112d7f1",
-                "reference": "1351ca36dd2419d7de02afd1aaa415929112d7f1",
+                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/43313ad89c0ad1851aeefafc164e2822e49867e3",
+                "reference": "43313ad89c0ad1851aeefafc164e2822e49867e3",
                 "shasum": ""
             },
             "require": {
@@ -1128,7 +1135,7 @@
                 "migrations",
                 "phinx"
             ],
-            "time": "2015-09-11 15:44:41"
+            "time": "2015-09-30 08:12:11"
         },
         {
             "name": "sebastian/comparator",
@@ -1452,16 +1459,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.7.4",
+            "version": "v2.7.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Config.git",
-                "reference": "5ab9ff48b3cb5b40951a607f77fc1cbfd29edba8"
+                "url": "https://github.com/symfony/config.git",
+                "reference": "9698fdf0a750d6887d5e7729d5cf099765b20e61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/5ab9ff48b3cb5b40951a607f77fc1cbfd29edba8",
-                "reference": "5ab9ff48b3cb5b40951a607f77fc1cbfd29edba8",
+                "url": "https://api.github.com/repos/symfony/config/zipball/9698fdf0a750d6887d5e7729d5cf099765b20e61",
+                "reference": "9698fdf0a750d6887d5e7729d5cf099765b20e61",
                 "shasum": ""
             },
             "require": {
@@ -1498,20 +1505,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2015-08-27 06:45:45"
+            "time": "2015-09-21 15:02:29"
         },
         {
             "name": "symfony/console",
-            "version": "v2.7.4",
+            "version": "v2.7.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
-                "reference": "9ff9032151186bd66ecee727d728f1319f52d1d8"
+                "url": "https://github.com/symfony/console.git",
+                "reference": "06cb17c013a82f94a3d840682b49425cd00a2161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/9ff9032151186bd66ecee727d728f1319f52d1d8",
-                "reference": "9ff9032151186bd66ecee727d728f1319f52d1d8",
+                "url": "https://api.github.com/repos/symfony/console/zipball/06cb17c013a82f94a3d840682b49425cd00a2161",
+                "reference": "06cb17c013a82f94a3d840682b49425cd00a2161",
                 "shasum": ""
             },
             "require": {
@@ -1555,20 +1562,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-09-03 11:40:38"
+            "time": "2015-09-25 08:32:23"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.7.4",
+            "version": "v2.7.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "f079e9933799929584200b9a926f72f29e291654"
+                "url": "https://github.com/symfony/filesystem.git",
+                "reference": "a17f8a17c20e8614c15b8e116e2f4bcde102cfab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/f079e9933799929584200b9a926f72f29e291654",
-                "reference": "f079e9933799929584200b9a926f72f29e291654",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a17f8a17c20e8614c15b8e116e2f4bcde102cfab",
+                "reference": "a17f8a17c20e8614c15b8e116e2f4bcde102cfab",
                 "shasum": ""
             },
             "require": {
@@ -1604,20 +1611,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-08-27 07:03:44"
+            "time": "2015-09-09 17:42:36"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.7.4",
+            "version": "v2.7.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Yaml.git",
-                "reference": "2dc7b06c065df96cc686c66da2705e5e18aef661"
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/2dc7b06c065df96cc686c66da2705e5e18aef661",
-                "reference": "2dc7b06c065df96cc686c66da2705e5e18aef661",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
+                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
                 "shasum": ""
             },
             "require": {
@@ -1653,7 +1660,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-08-24 07:13:45"
+            "time": "2015-09-14 14:14:09"
         }
     ],
     "packages-dev": [
@@ -2048,16 +2055,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v2.7.4",
+            "version": "v2.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "b39221998ff5fc26ba63f96d2b833dfddc233d57"
+                "reference": "ba8c9a0edf18f70a7efcb8d3eb35323a10263338"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/b39221998ff5fc26ba63f96d2b833dfddc233d57",
-                "reference": "b39221998ff5fc26ba63f96d2b833dfddc233d57",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/ba8c9a0edf18f70a7efcb8d3eb35323a10263338",
+                "reference": "ba8c9a0edf18f70a7efcb8d3eb35323a10263338",
                 "shasum": ""
             },
             "require": {
@@ -2103,7 +2110,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2015-08-31 12:28:11"
+            "time": "2015-09-22 14:41:01"
         }
     ],
     "aliases": [],
