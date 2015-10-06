@@ -25,11 +25,12 @@ class PositionsController extends AppController
     public function implementedEvents()
     {
         return parent::implementedEvents() + [
-            'Crud.beforePaginate' => 'beforePaginate'
+            'Crud.beforeFind' => 'beforeFindQuery',
+            'Crud.beforePaginate' => 'beforeFindQuery'
         ];
     }
 
-    public function beforePaginate(Event $event)
+    public function beforeFindQuery(Event $event)
     {
         /* @var Query $query */
         $query = $event->subject()->query;
