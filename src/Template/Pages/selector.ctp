@@ -146,7 +146,7 @@
                         <address>
                             <strong><?= h(__('Adres')); ?></strong><br/>
                             <span class="company-address-address"></span><br/>
-                            <span class="company-address-postcode"></span>, <span class="company-address-city"></span>
+                            <span class="company-address-city"></span> <span class="company-address-postcode"></span>
                         </address>
 
                         <strong>Email</strong>: <span class="company-email"></span><br/>

@@ -197,7 +197,7 @@ function loadContent() {
                 $('.positions > tbody > tr').remove();
 
                 data.data.forEach(function (value, key) {
-                    $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description + '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address.address + '<br/>' + value.company.address.postcode + ' ' + value.company.address.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="add" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span></a></td></tr>');
+                    $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description + '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="add" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span></a></td></tr>');
                 });
 
                 if (data.data.length == 0) {
@@ -216,10 +216,13 @@ function loadContent() {
                 if (currentPage <= data.pagination.page_count && currentPage >= lastSetPage) {
                     number = currentPage - (8 - (data.pagination.page_count - currentPage));
                 }
+                if (number < 1) {
+                    number = 1;
+                }
 
                 $('.pagination li').remove();
 
-                if (number >= 1 && data.data.length != 0) {
+                if (data.pagination.page_count > 1 && data.data.length != 0) {
                     for (var i = 1; i <= 9; i++) {
                         if (number > data.pagination.page_count) {
                             break;
@@ -279,12 +282,12 @@ function loadModalContent(id) {
                 count++;
             }
 
-            modalBody.find('.company-address-address').text(data.data.company.address.address);
-            modalBody.find('.company-address-city').text(data.data.company.address.city);
-            modalBody.find('.company-address-postcode').text(data.data.company.address.postcode);
-            modalBody.find('.company-correspondence-address-address').text(data.data.company.correspondence_address.address);
-            modalBody.find('.company-correspondence-address-city').text(data.data.company.correspondence_address.city);
-            modalBody.find('.company-correspondence-address-postcode').text(data.data.company.correspondence_address.postcode);
+            modalBody.find('.company-address-address').text(data.data.company.address);
+            modalBody.find('.company-address-postcode').text(data.data.company.city);
+            modalBody.find('.company-address-city').text(data.data.company.postcode);
+            //modalBody.find('.company-correspondence-address-address').text(data.data.company.address);
+            //modalBody.find('.company-correspondence-address-city').text(data.data.company.city);
+            //modalBody.find('.company-correspondence-address-postcode').text(data.data.company.postcode);
             console.log(data);
 
             modalBody.find('.company-email').text(data.data.company.email);
@@ -292,7 +295,7 @@ function loadModalContent(id) {
             modalBody.find('.company-website').attr('href', 'http://' + data.data.company.website);
             modalBody.find('.company-telephone').text(data.data.company.telephone);
 
-            modalBody.find('iframe').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + data.data.company.address.address + ' ' + data.data.company.address.postcode + ' ' + data.data.company.correspondence_address.city + '&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI');
+            modalBody.find('iframe').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + data.data.company.address + ' ' + data.data.company.postcode + ' ' + data.data.company.city + '&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI');
 
             var state = $('tr[data-id=' + id + '] a[data-toggle="selection"]').data('state');
 
