@@ -127,7 +127,7 @@ class CompaniesTable extends Table
         }
 
         $response = file_get_contents(
-            'http://maps.google.com/maps/api/geocode/json?sensor=false&address=' . urlencode($address)
+            'https://maps.google.com/maps/api/geocode/json?sensor=false&address=' . urlencode($address)
         );
 
         $json = json_decode($response);

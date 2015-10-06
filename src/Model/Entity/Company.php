@@ -50,7 +50,7 @@ class Company extends Entity implements ResourceBasedEntityInterface
 
         $client = new Client;
         $response = $client->get(
-            'http://maps.google.com/maps/api/geocode/json', ['sensor' => false, 'address' => $address]
+            'https://maps.google.com/maps/api/geocode/json', ['sensor' => false, 'address' => $address]
         );
 
         if (!$response->isOk()) {
