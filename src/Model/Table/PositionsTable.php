@@ -110,9 +110,20 @@ class PositionsTable extends Table
                 'field' => $options['field']
             ];
 
+            // Convert position address fields to company address fields
             if (isset($options['company_address'])) {
                 $radiusOptions['address'] = $options['company_address'];
             }
+            if (isset($options['company_postcode'])) {
+                $radiusOptions['postcode'] = $options['company_postcode'];
+            }
+            if (isset($options['company_city'])) {
+                $radiusOptions['city'] = $options['company_city'];
+            }
+            if (isset($options['company_country'])) {
+                $radiusOptions['country'] = $options['company_country'];
+            }
+
             $query->find('radius', $radiusOptions);
 
             return $query;
