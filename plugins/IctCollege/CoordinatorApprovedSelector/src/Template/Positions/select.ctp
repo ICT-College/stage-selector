@@ -9,15 +9,15 @@
 
         <div class="col-md-4">
             <ul class="nav nav-pills nav-stacked nav-selection">
-<!--                <li class="active"><a href="#">1. 0100Dev - Webdeveloper</a></li>-->
-<!--                <li class="active"><a href="#">2. CVO Computers - Schoonmaakster</a></li>-->
+                <!--                <li class="active"><a href="#">1. 0100Dev - Webdeveloper</a></li>-->
+                <!--                <li class="active"><a href="#">2. CVO Computers - Schoonmaakster</a></li>-->
                 <li><a href="#">1.</a></li>
                 <li><a href="#">2.</a></li>
             </ul>
         </div>
         <div class="col-md-4">
             <ul class="nav nav-pills nav-stacked nav-selection">
-<!--                <li class="active"><a href="#">3. Allahagbar - Boem</a></li>-->
+                <!--                <li class="active"><a href="#">3. Allahagbar - Boem</a></li>-->
                 <li><a href="#">3.</a></li>
                 <li><a href="#">4.</a></li>
             </ul>
@@ -110,16 +110,16 @@
 
 <table class="table table-hover positions" data-page="1">
     <thead>
-        <tr>
-            <th></th>
-            <th><?= __('Job') ?></th>
-            <th><?= __('Company') ?></th>
-            <th><?= __('Address') ?></th>
-            <th>&nbsp;</th>
-        </tr>
+    <tr>
+        <th></th>
+        <th><?= __('Job') ?></th>
+        <th><?= __('Company') ?></th>
+        <th><?= __('Address') ?></th>
+        <th>&nbsp;</th>
+    </tr>
     </thead>
     <tbody>
-        <tr><td colspan="5">Geen zoekresultaten</td></tr>
+    <tr><td colspan="5">Geen zoekresultaten</td></tr>
     </tbody>
 </table>
 

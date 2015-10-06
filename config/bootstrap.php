@@ -183,6 +183,7 @@ Request::addDetector('tablet', function ($request) {
 
 Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
 Plugin::load('Stagemarkt');
+Plugin::load('IctCollege/CoordinatorApprovedSelector');
 Plugin::load('Migrations');
 Plugin::load('Crud');
 Plugin::load('BootstrapUI');

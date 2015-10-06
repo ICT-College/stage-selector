@@ -1,0 +1,10 @@
+{
+    "name": "ict-college/coordinator-approved-selector",
+    "authors": [
+        {
+            "name": "Marlin Cremers",
+            "email": "m.cremers@cvo-technologies.com"
+        }
+    ],
+    "require": {}
+}

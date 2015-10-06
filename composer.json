@@ -29,7 +29,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "src",
-            "Stagemarkt\\": "plugins/Stagemarkt/src"
+            "Stagemarkt\\": "plugins/Stagemarkt/src",
+            "IctCollege\\CoordinatorApprovedSelector\\": "plugins/IctCollege/CoordinatorApprovedSelector/src"
         }
     },
     "autoload-dev": {
