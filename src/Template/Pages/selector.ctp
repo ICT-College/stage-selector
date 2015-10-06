@@ -1,5 +1,5 @@
-<?= $this->Html->script(['select.js', 'awesomplete.min.js'], ['block' => true]) ?>
-<?= $this->Html->css(['awesomplete.css'], ['block' => true]) ?>
+<?= $this->Html->script(['awesomplete.min.js', 'bootstrap-slider.min.js', 'select.js'], ['block' => true]) ?>
+<?= $this->Html->css(['awesomplete.css', 'bootstrap-slider.min.css'], ['block' => true]) ?>
 <?= $this->start('header') ?>
 <div class="header clearfix">
     <div class="row">
@@ -49,16 +49,8 @@
                 <?= $this->Form->create(false, ['type' => 'get', 'id' => 'filter']) ?>
 
                 <div class="col-md-5">
+                    <?= $this->Form->input('description', ['label' => __('Description')]) ?>
                     <?= $this->Form->input('company_name', ['label' => __('Company name')]) ?>
-                    <?= $this->Form->input('learning_pathway', [
-                        'options' => [
-                            'BBL',
-                            'BOL',
-                            'VMBO',
-                            'HBO'
-                        ],
-                        'label' => __('Learning pathway')
-                    ]); ?>
                     <?= $this->Form->input('study_program_id', [
                         'type' => 'text',
                         'label' => [
@@ -71,24 +63,25 @@
                 </div>
 
                 <div class="col-md-4">
+                    <?= $this->Form->input('company_address', ['label' => __('Adres')]) ?>
                     <div class="row">
-                        <div class="col-md-8">
-                            <?= $this->Form->input('company_address_street', ['label' => __('Street')]) ?>
+                        <div class="col-md-6">
+                            <?= $this->Form->input('company_postcode', ['label' => __('Postcode')]) ?>
                         </div>
-                        <div class="col-md-4">
-                            <?= $this->Form->input('company_address_number', ['label' => __('Number')]) ?>
+                        <div class="col-md-6">
+                            <?= $this->Form->input('company_city', ['label' => __('City')]) ?>
                         </div>
                     </div>
-                    <?= $this->Form->input('company_address_city', ['label' => __('City')]) ?>
-                    <?= $this->Form->input('company_address_country', ['label' => __('Country')]) ?>
 
-                    <?= $this->Form->input('search_in_area', [
-                        'type' => 'checkbox',
-                        'checked',
+                    <?= $this->Form->input('radius', [
+                        'data-slider-min' => 0,
+                        'data-slider-max' => 50,
+                        'data-slider-step' => 1,
+                        'data-slider-value' => 0,
                         'label' => [
                             'text' => __('Search in area') . ' <span class="glyphicon glyphicon-info-sign"><span>',
                             'data-toggle' => 'tooltip',
-                            'title' => __('When you select this, we search around the location given above. When you unselect this, the company MUST be located at the given location above.'),
+                            'title' => __('To search in a radius, you need to have filled in address, postcode and/or city.'),
                             'escape' => false
                         ]
                     ]) ?>
@@ -96,7 +89,15 @@
 
                 <div class="col-md-3">
                     <?= $this->Form->input('stagemarkt_id', ['type' => 'text', 'label' => __('Code company')]) ?>
-                    <?= $this->Form->input('brin', ['label' => __('BRIN number')]) ?>
+                    <?= $this->Form->input('learning_pathway', [
+                        'options' => [
+                            'BBL' => 'BBL',
+                            'BOL' => 'BOL',
+                            'VMBO' => 'VMBO',
+                            'HBO' => 'HBO'
+                        ],
+                        'label' => __('Learning pathway')
+                    ]); ?>
 
                     <?= $this->Form->submit(__('Search'), ['class' => 'btn btn-primary', 'style' => 'width: 100%; margin-top: 25px;']) ?>
                 </div>

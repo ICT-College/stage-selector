@@ -143,6 +143,12 @@ $(function() {
         $('tr[data-id=' + id + '] a[data-toggle="selection"]').click();
     });
 
+    $('#radius').slider({
+        formatter: function(value) {
+            return value + 'km';
+        }
+    });
+
     // All tooltips are tooltips, dammit bootstrap!
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -163,7 +169,7 @@ function loadContent() {
     //Receive records and create an object with only usefull filters
     var filters = {};
 
-    $('#filters').find('input[type!="submit"]').each(function() {
+    $('#filters').find('input[type!="submit"], select').each(function() {
         var filter = $(this).attr('name');
         var value = $(this).val();
 
@@ -174,6 +180,10 @@ function loadContent() {
 
     if (filters['study_program_id']) {
         filters['study_program_id'] = filters['study_program_id'].split('-')[0].replace(/\D/g,'');
+    }
+
+    if (!filters['company_address'] && !filters['company_postcode'] && !filters['company_city']) {
+        delete filters['radius'];
     }
 
     filters['page'] = $('.positions').data('page');

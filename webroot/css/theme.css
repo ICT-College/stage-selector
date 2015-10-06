@@ -69,3 +69,8 @@ body {
 #company-map {
     height: 400px;
 }
+
+.slider.slider-horizontal {
+    width: 100%;
+    margin-top: 6px;
+}

@@ -19,6 +19,8 @@ if (!$this->exists('header')) {
     </title>
     <?= $this->Html->meta('icon') ?>
 
+    <?= $this->fetch('css') ?>
+
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('theme.css') ?>
 
@@ -26,7 +28,6 @@ if (!$this->exists('header')) {
     <?= $this->Html->script('bootstrap.min.js') ?>
 
     <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>
