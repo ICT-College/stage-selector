@@ -12,6 +12,7 @@
         "cakephp/plugin-installer": "*",
         "phpunit/phpunit": "4.1.*",
         "friendsofcake/crud": "dev-master",
+        "cvo-technologies/cakephp-gearman": "dev-master",
         "muffin/webservice": "dev-feature-orm",
         "friendsofcake/bootstrap-ui": "~0.3",
         "cakedc/search": "3.0.x-dev"

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ecb6d7ff7e3ec58c448cd0ce14ca28b9",
+    "hash": "f89340fe921649014119a68134467cf6",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -340,6 +340,55 @@
             ],
             "description": "A composer installer for CakePHP 3.0+ plugins.",
             "time": "2015-06-10 10:35:13"
+        },
+        {
+            "name": "cvo-technologies/cakephp-gearman",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cvo-technologies/cakephp-gearman.git",
+                "reference": "4dc575e9a2de67d92ce1f178f11860b4932d5f61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-gearman/zipball/4dc575e9a2de67d92ce1f178f11860b4932d5f61",
+                "reference": "4dc575e9a2de67d92ce1f178f11860b4932d5f61",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "~3.0"
+            },
+            "require-dev": {
+                "cakephp/cakephp-codesniffer": "2.*",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "CvoTechnologies\\Gearman\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wouter van Os",
+                    "homepage": "http://wouter0100.nl",
+                    "role": "Author"
+                }
+            ],
+            "description": "A gearman plugin for CakePHP 3",
+            "homepage": "https://github.com/cvo-technologies/cakephp-gearman",
+            "keywords": [
+                "CVO-technologies",
+                "cakephp",
+                "gearman",
+                "jobs",
+                "workers"
+            ],
+            "time": "2015-10-06 13:47:04"
         },
         {
             "name": "friendsofcake/bootstrap-ui",
@@ -2117,6 +2166,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "friendsofcake/crud": 20,
+        "cvo-technologies/cakephp-gearman": 20,
         "muffin/webservice": 20,
         "cakedc/search": 20,
         "psy/psysh": 0
