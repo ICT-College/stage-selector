@@ -56,7 +56,7 @@ class AppController extends Controller
             'listeners' => [
                 'Crud.Api',
                 'Crud.ApiPagination',
-                'Crud.ApiQueryLog'
+//                'Crud.ApiQueryLog'
             ]
         ]);
         $this->loadComponent('Search.Prg');

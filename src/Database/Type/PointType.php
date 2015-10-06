@@ -52,8 +52,6 @@ class PointType extends Type
             $value = new Point($x, $y);
         }
 
-        debug($value);
-
         if ($value instanceof Point) {
             return $value;
         }
