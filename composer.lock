@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7feb0d51891570c18ff9bed90f5896c9",
+    "hash": "98f5fda0086e9be7056ec101f6f04685",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -338,16 +338,16 @@
         },
         {
             "name": "cvo-technologies/cakephp-gearman",
-            "version": "dev-master",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cvo-technologies/cakephp-gearman.git",
-                "reference": "865b9ed003e0acb02b0fe3d77a9dc0263d43cfc0"
+                "reference": "9127c6ae05046cd0dd7916791de4f270667f34f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cvo-technologies/cakephp-gearman/zipball/865b9ed003e0acb02b0fe3d77a9dc0263d43cfc0",
-                "reference": "865b9ed003e0acb02b0fe3d77a9dc0263d43cfc0",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-gearman/zipball/9127c6ae05046cd0dd7916791de4f270667f34f3",
+                "reference": "9127c6ae05046cd0dd7916791de4f270667f34f3",
                 "shasum": ""
             },
             "require": {
@@ -383,7 +383,7 @@
                 "jobs",
                 "workers"
             ],
-            "time": "2015-10-07 06:58:33"
+            "time": "2015-10-07 11:30:49"
         },
         {
             "name": "friendsofcake/bootstrap-ui",
@@ -609,12 +609,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cvo-technologies/cakephp-webservice.git",
-                "reference": "de8870247fab6ae962deacf2c8371ba962680272"
+                "reference": "96e61a0718057fddba0127d556bce9f5ee646fa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/de8870247fab6ae962deacf2c8371ba962680272",
-                "reference": "de8870247fab6ae962deacf2c8371ba962680272",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/96e61a0718057fddba0127d556bce9f5ee646fa4",
+                "reference": "96e61a0718057fddba0127d556bce9f5ee646fa4",
                 "shasum": ""
             },
             "require-dev": {
@@ -664,7 +664,7 @@
                 "issues": "https://github.com/usemuffin/webservice/issues",
                 "source": "https://github.com/usemuffin/webservice"
             },
-            "time": "2015-10-04 14:32:26"
+            "time": "2015-10-07 11:16:55"
         },
         {
             "name": "nesbot/carbon",
@@ -714,16 +714,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.2.3",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f"
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ef1ca6835468857944d5c3b48fa503d5554cff2f",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979",
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979",
                 "shasum": ""
             },
             "require": {
@@ -772,7 +772,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-09-14 06:51:16"
+            "time": "2015-10-06 15:47:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2161,7 +2161,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "friendsofcake/crud": 20,
-        "cvo-technologies/cakephp-gearman": 20,
         "muffin/webservice": 20,
         "cakedc/search": 20,
         "psy/psysh": 0
