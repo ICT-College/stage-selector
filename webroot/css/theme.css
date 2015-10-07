@@ -74,3 +74,10 @@ body {
     width: 100%;
     margin-top: 6px;
 }
+
+.position-description {
+    white-space: pre;
+
+    word-break: break-all;
+    word-wrap: break-word;
+}

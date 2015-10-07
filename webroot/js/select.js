@@ -1,9 +1,3 @@
-var requestData = null;
-var isFadingOut = true;
-var map = null;
-var geocoder = null;
-var marker = null;
-
 $(function() {
 
     // Update icon when toggling the #filters collapse
@@ -292,7 +286,7 @@ function loadModalContent(id) {
 
             modalBody.find('.company-email').text(data.data.company.email);
             modalBody.find('.company-website').text(data.data.company.website);
-            modalBody.find('.company-website').attr('href', 'http://' + data.data.company.website);
+            modalBody.find('.company-website').attr('href', data.data.company.website);
             modalBody.find('.company-telephone').text(data.data.company.telephone);
 
             modalBody.find('iframe').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + data.data.company.address + ' ' + data.data.company.postcode + ' ' + data.data.company.city + '&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI');
