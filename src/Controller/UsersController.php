@@ -9,7 +9,7 @@ class UsersController extends AppController
     /**
      * Login action for Users controller
      *
-     * @return void
+     * @return void|\Cake\Network\Response
      */
     public function login()
     {
@@ -27,7 +27,7 @@ class UsersController extends AppController
     /**
      * Logout action for Users controller
      *
-     * @return void
+     * @return void|\Cake\Network\Response
      */
     public function logout()
     {

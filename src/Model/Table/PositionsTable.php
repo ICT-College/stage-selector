@@ -146,17 +146,45 @@ class PositionsTable extends Table
         });
     }
 
+    /**
+     * A finder which is able to find multiple values according to the value.
+     * For example you have configured it like:
+     * [
+     *  'type' => 'finder',
+     *  'finder' => 'OrValue',
+     *  'or' => [
+     *      'BOL' => 'GV',
+     *      'BBL' => [ 'GV', 'AB' ]
+     *   ]
+     * ]
+     * When the value is "BOL" it will search the values BOL or GV.
+     * But when the value is BBL, it will search for BBL, GV or AB.
+     * When no values match the item in the array it will perform a normal value find.
+     *
+     * @param Query $query
+     * @param array $options
+     *
+     * @return Query
+     */
     public function findOrValue(Query $query, array $options)
     {
         if (isset($options[$options['field']['name']]) &&
             isset($options['field']['or'][$options[$options['field']['name']]])) {
 
-            $query->where([
-                $options['field']['field'] . ' IN' => [
-                    $options['field']['or'][$options[$options['field']['name']]],
-                    $options[$options['field']['name']]
-                ]
-            ]);
+            if (is_array($options[$options['field']['name']])) {
+                $query->where([
+                    $options['field']['field'] . ' IN' => [
+                        $options['field']['or'][$options[$options['field']['name']]],
+                    ] + $options[$options['field']['name']]
+                ]);
+            } else {
+                $query->where([
+                    $options['field']['field'] . ' IN' => [
+                        $options['field']['or'][$options[$options['field']['name']]],
+                        $options[$options['field']['name']]
+                    ]
+                ]);
+            }
         } else {
             $query->where([$options['field']['field'] => $options[$options['field']['name']]]);
         }
