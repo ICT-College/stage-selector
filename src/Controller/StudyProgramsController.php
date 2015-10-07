@@ -9,6 +9,9 @@ use Stagemarkt\Locator\RepositoryLocator;
 class StudyProgramsController extends AppController
 {
 
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         parent::initialize();

@@ -7,6 +7,11 @@ use Crud\Action\IndexAction;
 class SearchIndexAction extends IndexAction
 {
 
+    /**
+     * Creates a searchable CRUD index
+     *
+     * @return void
+     */
     protected function _handle()
     {
         $this->_controller()->Prg->commonProcess();

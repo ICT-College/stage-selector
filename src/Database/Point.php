@@ -12,12 +12,24 @@ class Point implements \JsonSerializable, ExpressionInterface
     private $__x;
     private $__y;
 
+    /**
+     * Constructs a point with X and Y coordinates
+     *
+     * @param float $x X coordinate
+     * @param float $y Y coordinate
+     */
     public function __construct($x, $y)
     {
         $this->__x = $x;
         $this->__y = $y;
     }
 
+    /**
+     * Creates a point instance from a MySQL ASTEXT representation
+     *
+     * @param string $text MySQL ASTEXT representation
+     * @return Point Constructed point
+     */
     public static function fromText($text)
     {
         list($x, $y) = sscanf($text, 'POINT(%f %f)');
@@ -25,24 +37,30 @@ class Point implements \JsonSerializable, ExpressionInterface
         return new Point($x, $y);
     }
 
+    /**
+     * Returns the X coordinate
+     *
+     * @return float X coordinate
+     */
     public function x()
     {
         return $this->__x;
     }
 
+    /**
+     * Returns the Y coordinate
+     *
+     * @return float Y coordinate
+     */
     public function y()
     {
         return $this->__y;
     }
 
     /**
-     * (PHP 5 &gt;= 5.4.0)<br/>
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
+     * {@inheritDoc}
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'x' => $this->__x,

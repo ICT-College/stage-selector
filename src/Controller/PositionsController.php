@@ -10,6 +10,9 @@ use Stagemarkt\Locator\RepositoryLocator;
 class PositionsController extends AppController
 {
 
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         parent::initialize();
@@ -30,6 +33,13 @@ class PositionsController extends AppController
         ];
     }
 
+    /**
+     * Adds contain to the query to get relations
+     *
+     * @param Event $event
+     *
+     * @return void
+     */
     public function beforeFindQuery(Event $event)
     {
         /* @var Query $query */
