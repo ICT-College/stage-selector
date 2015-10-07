@@ -17,7 +17,9 @@ class CompanyDetailsTask extends Shell
     /**
      * Updates the detailsx of a company
      *
-     * @param $options
+     * @param array $options Options to use in task
+     *
+     * @return void
      */
     public function main($options)
     {
@@ -34,10 +36,9 @@ class CompanyDetailsTask extends Shell
         try {
             /* @var Company $company */
             $company = $this->Companies->get($options['company_id']);
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             if (!isset($options['retried'])) {
-                $options['retried']  = 1;
+                $options['retried'] = 1;
             } else {
                 $options['retried']++;
             }

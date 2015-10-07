@@ -25,7 +25,7 @@ class ShardFilter extends DispatcherFilter
     protected $_selector;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function implementedEvents()
     {
