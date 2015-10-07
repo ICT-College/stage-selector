@@ -137,7 +137,7 @@ class PositionsTable extends Table
 
     public function findOrValue(Query $query, array $options)
     {
-        if (isset($options['learning_pathway']) && in_array($options['learning_pathway'], $options['field']['or'])) {
+        if (isset($options['learning_pathway']) && isset($options['field']['or'][$options['learning_pathway']])) {
             $query->where([
                 'learning_pathway IN' => [
                     $options['field']['or'][$options['learning_pathway']],
