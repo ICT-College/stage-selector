@@ -51,7 +51,12 @@ class PositionsTable extends Table
             'type' => 'value'
         ),
         'learning_pathway' => array(
-            'type' => 'value'
+            'type' => 'finder',
+            'finder' => 'OrValue',
+            'or' => [
+                'BOL' => 'GV',
+                'BBL' => 'GV'
+            ]
         ),
         'description' => array(
             'type' => 'like'
@@ -128,5 +133,21 @@ class PositionsTable extends Table
 
             return $query;
         });
+    }
+
+    public function findOrValue(Query $query, array $options)
+    {
+        if (isset($options['learning_pathway']) && in_array($options['learning_pathway'], $options['field']['or'])) {
+            $query->where([
+                'learning_pathway IN' => [
+                    $options['field']['or'][$options['learning_pathway']],
+                    $options['learning_pathway']
+                ]
+            ]);
+        } else {
+            $query->where(['learning_pathway' => $options['learning_pathway']]);
+        }
+
+        return $query;
     }
 }
