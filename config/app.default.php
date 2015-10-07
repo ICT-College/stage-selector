@@ -307,6 +307,9 @@ return [
         'company_coordinates' => [
             'className' => 'CompanyCoordinates'
         ],
+        'company_details' => [
+            'className' => 'CompanyDetails'
+        ]
     ],
 
     /**
