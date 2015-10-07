@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f89340fe921649014119a68134467cf6",
+    "hash": "7feb0d51891570c18ff9bed90f5896c9",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -178,16 +178,16 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "e430f46594877acf7f165464d097d2167e1ba166"
+                "reference": "7df65e63bb01fee56a9e83dab17f13f31cbbd7fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/e430f46594877acf7f165464d097d2167e1ba166",
-                "reference": "e430f46594877acf7f165464d097d2167e1ba166",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/7df65e63bb01fee56a9e83dab17f13f31cbbd7fb",
+                "reference": "7df65e63bb01fee56a9e83dab17f13f31cbbd7fb",
                 "shasum": ""
             },
             "require": {
@@ -218,11 +218,6 @@
                 "phpunit/phpunit": "*"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Cake\\": "src"
@@ -249,7 +244,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-09-20 02:14:20"
+            "time": "2015-10-07 02:10:21"
         },
         {
             "name": "cakephp/migrations",
@@ -347,12 +342,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cvo-technologies/cakephp-gearman.git",
-                "reference": "4dc575e9a2de67d92ce1f178f11860b4932d5f61"
+                "reference": "865b9ed003e0acb02b0fe3d77a9dc0263d43cfc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cvo-technologies/cakephp-gearman/zipball/4dc575e9a2de67d92ce1f178f11860b4932d5f61",
-                "reference": "4dc575e9a2de67d92ce1f178f11860b4932d5f61",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-gearman/zipball/865b9ed003e0acb02b0fe3d77a9dc0263d43cfc0",
+                "reference": "865b9ed003e0acb02b0fe3d77a9dc0263d43cfc0",
                 "shasum": ""
             },
             "require": {
@@ -388,7 +383,7 @@
                 "jobs",
                 "workers"
             ],
-            "time": "2015-10-06 13:47:04"
+            "time": "2015-10-07 06:58:33"
         },
         {
             "name": "friendsofcake/bootstrap-ui",
