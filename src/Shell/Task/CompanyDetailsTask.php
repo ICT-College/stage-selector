@@ -14,6 +14,11 @@ class CompanyDetailsTask extends Shell
 
     use JobAwareTrait;
 
+    /**
+     * Updates the detailsx of a company
+     *
+     * @param $options
+     */
     public function main($options)
     {
         if (!is_array($options)) {

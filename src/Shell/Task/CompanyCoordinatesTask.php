@@ -13,6 +13,11 @@ class CompanyCoordinatesTask extends Shell
 
     use JobAwareTrait;
 
+    /**
+     * Updates the coordinates of a company
+     *
+     * @param $options
+     */
     public function main($options)
     {
         if (!is_array($options)) {

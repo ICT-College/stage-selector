@@ -34,7 +34,13 @@ class ShardFilter extends DispatcherFilter
         return parent::implementedEvents();
     }
 
-
+    /**
+     * Handles the Router.selectorRoute event
+     *
+     * @param Event $event The event to be handled
+     *
+     * @return void
+     */
     public function selectorRoute(Event $event)
     {
         $this->_selector->setupRoutes($event->subject());
