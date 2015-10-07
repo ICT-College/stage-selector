@@ -45,6 +45,13 @@ class AppController extends Controller
 
         $this->loadComponent('Flash');
         $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Form' => [
+                    'fields' => ['username' => 'email']
+                ]
+            ]
+        ]);
         $this->loadComponent('Crud.Crud', [
             'actions' => [
                 'Crud.Index',
@@ -59,5 +66,9 @@ class AppController extends Controller
             ]
         ]);
         $this->loadComponent('Search.Prg');
+
+        if ($this->Auth->user() != null) {
+            $this->set('loggedUser', $this->Auth->user());
+        }
     }
 }

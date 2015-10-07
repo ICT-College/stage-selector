@@ -1,3 +1,3 @@
 <?php $this->assign('title', 'Voorpagina'); ?>
 
-<p>Hier is niks te vinden.</p>
+<p><?= $loggedUser['firstname'] ?> <?= $loggedUser['lastname'] ?> (<?= $loggedUser['email'] ?>)</p>
