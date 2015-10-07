@@ -3,9 +3,16 @@ namespace App\Controller;
 
 use IctCollege\CoordinatorApprovedSelector\Controller\AppController;
 
-class UsersController extends AppController {
+class UsersController extends AppController
+{
 
-    public function login() {
+    /**
+     * Login action for Users controller
+     *
+     * @return void
+     */
+    public function login()
+    {
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
@@ -15,10 +22,15 @@ class UsersController extends AppController {
         }
     }
 
-    public function logout() {
+    /**
+     * Logout action for Users controller
+     *
+     * @return void
+     */
+    public function logout()
+    {
         if ($this->request->is('post')) {
             return $this->redirect($this->Auth->logout());
         }
     }
-
 }

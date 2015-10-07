@@ -3,10 +3,16 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 
-class UsersTable extends Table {
+class UsersTable extends Table
+{
 
-    public static function defaultConnectionName() {
+    /**
+     * Connection name for this Table
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
         return 'main';
     }
-
 }
