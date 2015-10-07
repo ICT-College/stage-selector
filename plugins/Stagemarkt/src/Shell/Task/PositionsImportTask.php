@@ -48,8 +48,8 @@ class PositionsImportTask extends Shell
 
             /* @var \Muffin\Webservice\Model\Resource $resource */
             foreach ($resources as $resource) {
-                if ($positionsTable->exists(['stagemarkt_id' => $resource->id] + $conditions)) {
-                    $localPosition = $positionsTable->find()->where(['stagemarkt_id' => $resource->id] + $conditions)->first();
+                if ($positionsTable->exists(['stagemarkt_id' => $resource->id])) {
+                    $localPosition = $positionsTable->find()->where(['stagemarkt_id' => $resource->id])->first();
                     $localPosition->applyResource($resource);
                 } else {
                     $localPosition = Position::createFromResource($resource);
