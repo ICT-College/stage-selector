@@ -10,7 +10,7 @@ class User extends Entity
     /**
      * Hashes user password
      *
-     * @param $password
+     * @param string $password Password to hash
      *
      * @return void|bool|string
      */
