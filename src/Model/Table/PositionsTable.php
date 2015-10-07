@@ -169,7 +169,6 @@ class PositionsTable extends Table
         if ((isset($options[$options['field']['name']])) &&
             (isset($options['field']['or'][$options[$options['field']['name']]]))
         ) {
-
             if (is_array($options[$options['field']['name']])) {
                 $query->where([
                     $options['field']['field'] . ' IN' => [
