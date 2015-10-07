@@ -303,6 +303,27 @@ return [
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
         ],
     ],
+
+    'Google' => [
+        'maps' => [
+            'geocoding' => ''
+        ]
+    ],
+
+    'Webservices' => [
+        'stagemarkt' => [
+            'className' => 'Muffin\Webservice\Connection',
+            'service' => 'Stagemarkt\Webservice\Driver\Stagemarkt',
+            'license' => '',
+        ]
+    ],
+
+    'Gearman' => [
+        'Servers' => [
+            '127.0.0.1:4730'
+        ]
+    ],
+
     'Jobs' => [
         'company_coordinates' => [
             'className' => 'CompanyCoordinates'
