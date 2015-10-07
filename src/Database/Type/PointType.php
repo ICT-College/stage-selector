@@ -46,8 +46,8 @@ class PointType extends Type
 
         if (is_string($value)) {
             $coordinates = explode(',', $value);
-            $x = (float) $coordinates[0];
-            $y = (float) $coordinates[1];
+            $x = (float)$coordinates[0];
+            $y = (float)$coordinates[1];
 
             $value = new Point($x, $y);
         }
@@ -79,9 +79,4 @@ class PointType extends Type
 
         return Point::fromText($result);
     }
-
-//    public function toStatement($value, Driver $driver)
-//    {
-////        return \PDO::PARAM_LOB;
-//    }
 }

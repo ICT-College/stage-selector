@@ -15,6 +15,9 @@ class Position extends Entity
         applyResource as protected _applyResource;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function applyResource(Resource $resource) {
         $this->set([
             'stagemarkt_id' => $resource->id,

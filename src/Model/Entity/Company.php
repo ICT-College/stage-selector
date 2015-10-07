@@ -19,6 +19,9 @@ class Company extends Entity implements ResourceBasedEntityInterface
         applyResource as protected _applyResource;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function applyResource(Resource $resource)
     {
         $properties = [
@@ -69,6 +72,7 @@ class Company extends Entity implements ResourceBasedEntityInterface
             default:
                 Log::warning(__('Unknown country {0} for company', $resource->address->country));
         }
+
         foreach ($properties as $property => $value) {
             if ($this->get($property) === $value) {
                 continue;
@@ -78,6 +82,12 @@ class Company extends Entity implements ResourceBasedEntityInterface
         }
     }
 
+    /**
+     * Turns an address into a point class
+     *
+     * @param string $address Address to geocode
+     * @return Point|bool Either a point class or false in case of an error
+     */
     public function addressToCoordinates($address)
     {
         $cacheKey = 'address-coordinates-' . md5($address);
@@ -111,5 +121,4 @@ class Company extends Entity implements ResourceBasedEntityInterface
 
         return $point;
     }
-
 }

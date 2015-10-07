@@ -15,6 +15,9 @@ class StudyProgram extends Entity
         applyResource as protected _applyResource;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function applyResource(Resource $resource) {
         $this->set([
             'id' => $resource->id,

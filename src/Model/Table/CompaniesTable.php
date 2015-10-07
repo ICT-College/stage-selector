@@ -23,29 +23,32 @@ class CompaniesTable extends Table
 
     use JobAwareTrait;
 
-    public $filterArgs = array(
-        'name' => array(
+    public $filterArgs = [
+        'name' => [
             'type' => 'like'
-        ),
-        'address' => array(
+        ],
+        'address' => [
             'type' => 'value'
-        ),
-        'postcode' => array(
+        ],
+        'postcode' => [
             'type' => 'value'
-        ),
-        'city' => array(
+        ],
+        'city' => [
             'type' => 'value'
-        ),
-        'country' => array(
+        ],
+        'country' => [
             'type' => 'value'
-        ),
-        'radius' => array(
+        ],
+        'radius' => [
             'type' => 'finder',
             'field' => 'coordinates',
             'finder' => 'radius'
-        )
-    );
+        ]
+    ];
 
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -54,6 +57,14 @@ class CompaniesTable extends Table
         $this->addBehavior('Search.Searchable');
     }
 
+    /**
+     * Finds a company in a specified radius
+     *
+     * @param Query $query Query to apply the conditions to
+     * @param array $options
+     *
+     * @return Query
+     */
     public function findRadius(Query $query, array $options)
     {
         $addressComparisons = [];
@@ -125,6 +136,12 @@ class CompaniesTable extends Table
         return $query;
     }
 
+    /**
+     * Updates coordinates or details when needed
+     *
+     * @param Event $event
+     * @param Company $company
+     */
     public function afterSave(Event $event, Company $company)
     {
         $updateCoordinates = false;
@@ -164,6 +181,11 @@ class CompaniesTable extends Table
         }
     }
 
+    /**
+     * Start a background job to get the coordinates of a company
+     *
+     * @param Company $company
+     */
     public function updateCoordinates(Company $company)
     {
         $this->execute('company_coordinates', [
@@ -172,6 +194,11 @@ class CompaniesTable extends Table
         ]);
     }
 
+    /**
+     * Starts a background job to get more details of a company
+     *
+     * @param Company $company
+     */
     public function updateDetails(Company $company)
     {
         $this->execute('company_details', [
@@ -180,6 +207,12 @@ class CompaniesTable extends Table
         ]);
     }
 
+    /**
+     * Do a geocode on the provided address to get the coordinates
+     *
+     * @param $address
+     * @return Point|bool
+     */
     protected function _addressToCoordinates($address)
     {
         $cacheKey = 'address-coordinates-' . md5($address);
@@ -210,6 +243,9 @@ class CompaniesTable extends Table
         return $point;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _initializeSchema(Schema $schema)
     {
         $schema->columnType('coordinates', 'point');
