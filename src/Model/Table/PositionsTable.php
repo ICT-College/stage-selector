@@ -91,14 +91,12 @@ class PositionsTable extends Table
 
         // Loop through the query parts
         $query->traverse(function ($value, $clause) use (&$otherComparisons) {
+            /* @var QueryExpression $value */
+
             // Ignore all non where clauses
             if ($clause !== 'where') {
                 return;
             }
-
-            /**
-             * @var QueryExpression $value
-             */
 
             // Loop through conditions
             $value->traverse(function (Comparison $comparison) use (&$otherComparisons) {
@@ -161,8 +159,8 @@ class PositionsTable extends Table
      * But when the value is BBL, it will search for BBL, GV or AB.
      * When no values match the item in the array it will perform a normal value find.
      *
-     * @param Query $query
-     * @param array $options
+     * @param Query $query Query to apply the finder to
+     * @param array $options Options that apply to the filter
      *
      * @return Query
      */
