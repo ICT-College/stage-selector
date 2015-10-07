@@ -1,10 +1,21 @@
 {
     "name": "ict-college/coordinator-approved-selector",
+    "type": "cakephp-plugin",
     "authors": [
         {
             "name": "Marlin Cremers",
             "email": "m.cremers@cvo-technologies.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "IctCollege\\CoordinatorApprovedSelector\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IctCollege\\CoordinatorApprovedSelector\\tests\\": "tests"
+        }
+    }
 }
