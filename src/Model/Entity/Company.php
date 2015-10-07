@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 
 use App\Database\Point;
 use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Log\Log;
 use Cake\Network\Http\Client;
 use Cake\ORM\Entity;
@@ -85,9 +86,11 @@ class Company extends Entity implements ResourceBasedEntityInterface
             return Cache::read($cacheKey);
         }
 
+        $key = Configure::read('Google.maps.geocoding');
+
         $client = new Client;
         $response = $client->get(
-            'https://maps.google.com/maps/api/geocode/json', ['sensor' => false, 'address' => $address]
+            'https://maps.google.com/maps/api/geocode/json', ['sensor' => false, 'address' => $address, 'key' => $key]
         );
 
         if (!$response->isOk()) {

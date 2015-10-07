@@ -6,6 +6,7 @@ use App\Database\Point;
 use App\Database\Type\PointType;
 use App\Model\Entity\Company;
 use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Database\Expression\Comparison;
 use Cake\Database\Expression\FunctionExpression;
 use Cake\Database\Expression\QueryExpression;
@@ -187,8 +188,10 @@ class CompaniesTable extends Table
             return Cache::read($cacheKey);
         }
 
+        $key = Configure::read('Google.maps.geocoding');
+
         $response = file_get_contents(
-            'https://maps.google.com/maps/api/geocode/json?sensor=false&address=' . urlencode($address)
+            'https://maps.google.com/maps/api/geocode/json?sensor=false&key=' . $key . '&address=' . urlencode($address)
         );
 
         $json = json_decode($response);
