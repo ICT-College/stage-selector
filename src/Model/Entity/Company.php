@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 
 use App\Database\Point;
 use Cake\Cache\Cache;
+use Cake\Log\Log;
 use Cake\Network\Http\Client;
 use Cake\ORM\Entity;
 use Muffin\Webservice\Model\Resource;
@@ -19,28 +20,64 @@ class Company extends Entity implements ResourceBasedEntityInterface
 
     public function applyResource(Resource $resource)
     {
-        $coordinates = $this->_addressToCoordinates(
-            $resource->address->address . ' ' . $resource->address->city
-        );
-        if (!$coordinates) {
-            $coordinates = null;
-        }
-
-        $this->set([
+        $properties = [
             'stagemarkt_id' => $resource->id,
             'name' => $resource->name,
             'address' => $resource->address->address,
             'postcode' => $resource->address->postcode,
-            'city' => $resource->address->city,
-            'coordinates' => $coordinates
-        ]);
+            'city' => $resource->address->city
+        ];
+        switch ($resource->address->country) {
+            case 'Nederland':
+            case 'NEDERLAND':
+                $properties['country'] = 'NL';
+                break;
+            case 'China':
+                $properties['country'] = 'CN';
+                break;
+            case 'Spanje':
+                $properties['country'] = 'ES';
+                break;
+            case 'Verenigd Koninkrijk':
+                $properties['country'] = 'GB';
+                break;
+            case 'Turkije':
+                $properties['country'] = 'TR';
+                break;
+            case 'Curaçao':
+                $properties['country'] = 'CW';
+                break;
+            case 'Finland':
+                $properties['country'] = 'FI';
+                break;
+            case 'Noorwegen':
+                $properties['country'] = 'NO';
+                break;
+            case 'Aruba':
+                $properties['country'] = 'AW';
+                break;
+            case 'India':
+                $properties['country'] = 'IN';
+                break;
+            case 'Australië':
+                $properties['country'] = 'AU';
+                break;
+            case 'Zuid-Afrika':
+                $properties['country'] = 'ZA';
+                break;
+            default:
+                Log::warning(__('Unknown country {0} for company', $resource->address->country));
+        }
+        foreach ($properties as $property => $value) {
+            if ($this->get($property) === $value) {
+                continue;
+            }
 
-        if ($resource->address->country === 'Nederland') {
-            $this->set('country', 'NL');
+            $this->set($property, $value);
         }
     }
 
-    protected function _addressToCoordinates($address)
+    public function addressToCoordinates($address)
     {
         $cacheKey = 'address-coordinates-' . md5($address);
 

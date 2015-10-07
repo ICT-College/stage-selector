@@ -303,6 +303,11 @@ return [
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
         ],
     ],
+    'Jobs' => [
+        'company_coordinates' => [
+            'className' => 'CompanyCoordinates'
+        ],
+    ],
 
     /**
      * Configures logging options

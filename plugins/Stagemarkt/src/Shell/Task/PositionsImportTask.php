@@ -87,7 +87,8 @@ class PositionsImportTask extends Shell
                     'associated' => [
                         'Companies',
                         'StudyPrograms'
-                    ]
+                    ],
+                    'atomic' => false
                 ]);
             }
 

@@ -4,17 +4,23 @@ namespace App\Model\Table;
 
 use App\Database\Point;
 use App\Database\Type\PointType;
+use App\Model\Entity\Company;
 use Cake\Cache\Cache;
 use Cake\Database\Expression\Comparison;
 use Cake\Database\Expression\FunctionExpression;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\Schema\Table as Schema;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
+use CvoTechnologies\Gearman\JobAwareTrait;
 
 class CompaniesTable extends Table
 {
+
+    use JobAwareTrait;
 
     public $filterArgs = array(
         'name' => array(
@@ -116,6 +122,61 @@ class CompaniesTable extends Table
         ]);
 
         return $query;
+    }
+
+    public function afterSave(Event $event, Company $company)
+    {
+        $updateCoordinates = false;
+
+        // This is a new company and the coordinates haven't been defined
+        if (($company->isNew()) && (!$company->has('coordinates'))) {
+            $updateCoordinates = true;
+        }
+        // This is a existing company and the address has changed
+        if ((!$company->isNew()) && (($company->dirty('address')) || $company->dirty('postcode') || $company->dirty('city') || $company->dirty('country'))) {
+            $updateCoordinates = true;
+        }
+
+        $detailFields = [
+            'email',
+            'website',
+            'telephone'
+        ];
+        $detailsStored = false;
+        foreach ($detailFields as $field) {
+            if (!$company->has($field)) {
+                continue;
+            }
+            if (!$company->get($field)) {
+                continue;
+            }
+
+            $detailsStored = true;
+        }
+
+        if (!$detailsStored) {
+            $this->updateDetails($company);
+        }
+
+        if ($updateCoordinates) {
+            $this->updateCoordinates($company);
+        }
+    }
+
+    public function updateCoordinates(Company $company)
+    {
+        $this->execute('company_coordinates', [
+            'company_id' => $company->id,
+            'datasource' => $this->connection()->configName()
+        ]);
+    }
+
+    public function updateDetails(Company $company)
+    {
+        $this->execute('company_details', [
+            'company_id' => $company->id,
+            'datasource' => $this->connection()->configName()
+        ]);
     }
 
     protected function _addressToCoordinates($address)
