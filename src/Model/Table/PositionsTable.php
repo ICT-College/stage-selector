@@ -166,8 +166,9 @@ class PositionsTable extends Table
      */
     public function findOrValue(Query $query, array $options)
     {
-        if (isset($options[$options['field']['name']]) &&
-            isset($options['field']['or'][$options[$options['field']['name']]])) {
+        if ((isset($options[$options['field']['name']])) &&
+            (isset($options['field']['or'][$options[$options['field']['name']]]))
+        ) {
 
             if (is_array($options[$options['field']['name']])) {
                 $query->where([
