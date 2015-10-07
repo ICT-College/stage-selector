@@ -33,6 +33,9 @@ if (!$this->exists('header')) {
 <body>
     <div class="container">
         <?= $this->fetch('header') ?>
+
+        <?= $this->Flash->render() ?>
+
         <?= $this->fetch('content') ?>
 
         <footer class="footer">

@@ -15,7 +15,8 @@
         "cvo-technologies/cakephp-gearman": "~3.0",
         "muffin/webservice": "dev-feature-orm",
         "friendsofcake/bootstrap-ui": "~0.3",
-        "cakedc/search": "3.0.x-dev"
+        "cakedc/search": "3.0.x-dev",
+        "cakephp/acl": "dev-master"
     },
     "require-dev": {
         "psy/psysh": "@stable",

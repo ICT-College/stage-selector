@@ -181,6 +181,7 @@ Request::addDetector('tablet', function ($request) {
  *
  */
 
+Plugin::load('Acl', ['bootstrap' => true]);
 Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
 Plugin::load('Stagemarkt');
 Plugin::load('IctCollege/CoordinatorApprovedSelector');

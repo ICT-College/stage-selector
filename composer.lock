@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "98f5fda0086e9be7056ec101f6f04685",
+    "hash": "04cc3504fa5d9629e4baac679a9034bc",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -175,6 +175,51 @@
                 "search"
             ],
             "time": "2015-04-15 18:47:32"
+        },
+        {
+            "name": "cakephp/acl",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cakephp/acl.git",
+                "reference": "ef7f47794602ba6c83f59533ce393d0d92c5f354"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cakephp/acl/zipball/ef7f47794602ba6c83f59533ce393d0d92c5f354",
+                "reference": "ef7f47794602ba6c83f59533ce393d0d92c5f354",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "~3.0"
+            },
+            "require-dev": {
+                "cakephp/cakephp-codesniffer": "master-dev",
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Acl\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CakePHP Community",
+                    "homepage": "https://github.com/cakephp/acl/graphs/contributors"
+                }
+            ],
+            "description": "Acl Plugin for CakePHP 3.x framework",
+            "homepage": "http://cakephp.org",
+            "keywords": [
+                "acl",
+                "cakephp"
+            ],
+            "time": "2015-09-26 14:03:02"
         },
         {
             "name": "cakephp/cakephp",
@@ -2163,6 +2208,7 @@
         "friendsofcake/crud": 20,
         "muffin/webservice": 20,
         "cakedc/search": 20,
+        "cakephp/acl": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
