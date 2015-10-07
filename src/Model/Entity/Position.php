@@ -18,7 +18,8 @@ class Position extends Entity
     /**
      * {@inheritDoc}
      */
-    public function applyResource(Resource $resource) {
+    public function applyResource(Resource $resource)
+    {
         $this->set([
             'stagemarkt_id' => $resource->id,
             'kind' => $resource->kind,

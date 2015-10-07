@@ -36,7 +36,7 @@ class PositionsController extends AppController
     /**
      * Adds contain to the query to get relations
      *
-     * @param Event $event
+     * @param Event $event Event that was dispatched
      *
      * @return void
      */

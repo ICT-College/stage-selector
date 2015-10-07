@@ -2,8 +2,8 @@
 
 namespace App\Database;
 
-use Cake\Database\Expression\FunctionExpression;
 use Cake\Database\ExpressionInterface;
+use Cake\Database\Expression\FunctionExpression;
 use Cake\Database\ValueBinder;
 
 class Point implements \JsonSerializable, ExpressionInterface

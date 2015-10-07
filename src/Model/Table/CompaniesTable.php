@@ -61,7 +61,7 @@ class CompaniesTable extends Table
      * Finds a company in a specified radius
      *
      * @param Query $query Query to apply the conditions to
-     * @param array $options
+     * @param array $options A set of options to be used by the finder
      *
      * @return Query
      */
@@ -139,8 +139,10 @@ class CompaniesTable extends Table
     /**
      * Updates coordinates or details when needed
      *
-     * @param Event $event
-     * @param Company $company
+     * @param Event $event The event that was dispatched
+     * @param Company $company The company to check the details of
+     *
+     * @return void
      */
     public function afterSave(Event $event, Company $company)
     {
@@ -184,7 +186,9 @@ class CompaniesTable extends Table
     /**
      * Start a background job to get the coordinates of a company
      *
-     * @param Company $company
+     * @param Company $company The company to get the coordinates of
+     *
+     * @return void
      */
     public function updateCoordinates(Company $company)
     {
@@ -197,7 +201,9 @@ class CompaniesTable extends Table
     /**
      * Starts a background job to get more details of a company
      *
-     * @param Company $company
+     * @param Company $company The company to get the details of
+     *
+     * @return void
      */
     public function updateDetails(Company $company)
     {
@@ -210,7 +216,8 @@ class CompaniesTable extends Table
     /**
      * Do a geocode on the provided address to get the coordinates
      *
-     * @param $address
+     * @param string $address The address to geocode
+     *
      * @return Point|bool
      */
     protected function _addressToCoordinates($address)

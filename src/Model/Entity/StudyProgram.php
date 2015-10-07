@@ -18,7 +18,8 @@ class StudyProgram extends Entity
     /**
      * {@inheritDoc}
      */
-    public function applyResource(Resource $resource) {
+    public function applyResource(Resource $resource)
+    {
         $this->set([
             'id' => $resource->id,
             'description' => $resource->description,

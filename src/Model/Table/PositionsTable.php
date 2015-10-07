@@ -10,59 +10,62 @@ use Cake\ORM\Table;
 class PositionsTable extends Table
 {
 
-    public $filterArgs = array(
-        'company_id' => array(
+    public $filterArgs = [
+        'company_id' => [
             'type' => 'value'
-        ),
-        'company_name' => array(
+        ],
+        'company_name' => [
             'type' => 'like',
             'field' => 'Companies.name'
-        ),
-        'company_house_number' => array(
+        ],
+        'company_house_number' => [
             'type' => 'like',
             'field' => 'Companies.address'
-        ),
-        'company_street' => array(
+        ],
+        'company_street' => [
             'type' => 'like',
             'field' => 'Companies.address'
-        ),
-        'company_address' => array(
+        ],
+        'company_address' => [
             'type' => 'like',
             'field' => 'Companies.address'
-        ),
-        'company_postcode' => array(
+        ],
+        'company_postcode' => [
             'type' => 'value',
             'field' => 'Companies.postcode'
-        ),
-        'company_city' => array(
+        ],
+        'company_city' => [
             'type' => 'like',
             'field' => 'Companies.city'
-        ),
-        'company_country' => array(
+        ],
+        'company_country' => [
             'type' => 'value',
             'field' => 'Companies.country'
-        ),
-        'radius' => array(
+        ],
+        'radius' => [
             'type' => 'finder',
             'finder' => 'Radius',
             'field' => 'Companies.coordinates'
-        ),
-        'study_program_id' => array(
+        ],
+        'study_program_id' => [
             'type' => 'value'
-        ),
-        'learning_pathway' => array(
+        ],
+        'learning_pathway' => [
             'type' => 'finder',
             'finder' => 'OrValue',
             'or' => [
                 'BOL' => 'GV',
                 'BBL' => 'GV'
             ]
-        ),
-        'description' => array(
+        ],
+        'description' => [
             'type' => 'like'
-        ),
-    );
+        ],
+    ];
 
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -74,6 +77,14 @@ class PositionsTable extends Table
         $this->belongsTo('StudyPrograms');
     }
 
+    /**
+     * Finds positions in the provided ranges
+     *
+     * @param Query $query The query to apply conditions to
+     * @param array $options A set of options used by the finder
+     *
+     * @return void
+     */
     public function findRadius(Query $query, array $options)
     {
         $otherComparisons = [];
