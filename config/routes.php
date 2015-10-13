@@ -76,7 +76,7 @@ Router::scope('/', function (\Cake\Routing\RouteBuilder $routes) {
      */
     $routes->fallbacks('DashedRoute');
 
-    $routes->prefix('coordinator', function (\Cake\Routing\RouteBuilder $routeBuilder) {
+    $routes->prefix('admin', function (\Cake\Routing\RouteBuilder $routeBuilder) {
         $routeBuilder->fallbacks();
     });
 });

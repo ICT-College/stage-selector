@@ -188,6 +188,7 @@ Plugin::load('IctCollege/CoordinatorApprovedSelector');
 Plugin::load('IctCollege/EduArte', ['bootstrap' => true]);
 Plugin::load('Migrations');
 Plugin::load('Crud');
+Plugin::load('CrudView');
 Plugin::load('BootstrapUI');
 Plugin::load('Search');
 

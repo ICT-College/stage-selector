@@ -50,6 +50,12 @@ class AppController extends Controller
                 'Form' => [
                     'fields' => ['username' => 'email']
                 ]
+            ],
+            'loginAction' => [
+                'controller' => 'Users',
+                'action' => 'login',
+                'prefix' => false,
+                'plugin' => false
             ]
         ]);
         $this->loadComponent('Crud.Crud', [
