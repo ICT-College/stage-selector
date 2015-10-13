@@ -72,7 +72,7 @@ class PositionsEndpoint extends Endpoint
     {
         $query = parent::find($type, $options);
 
-        $query->conditions([
+        $query->where([
             'type' => 'position'
         ]);
 

@@ -4,7 +4,7 @@ namespace Stagemarkt\Soap;
 
 use Cake\I18n\Time;
 use Muffin\Webservice\ResultSet;
-use Muffin\Webservice\WebserviceQuery;
+use Muffin\Webservice\Query;
 use Stagemarkt\Model\Resource\AddressCompany;
 use Stagemarkt\Model\Resource\Company;
 use Stagemarkt\Model\Resource\ContactpersonCompany;
@@ -200,9 +200,9 @@ class Details extends StagemarktService
         return $response;
     }
 
-    public function execute(WebserviceQuery $query)
+    public function execute(Query $query, array $options = [])
     {
-        if ($query->action() !== WebserviceQuery::ACTION_READ) {
+        if ($query->action() !== Query::ACTION_READ) {
             throw new \BadMethodCallException;
         }
 

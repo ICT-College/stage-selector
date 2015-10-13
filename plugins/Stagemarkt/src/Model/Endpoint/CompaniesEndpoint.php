@@ -45,7 +45,7 @@ class CompaniesEndpoint extends Endpoint
     {
         $query = parent::find($type, $options);
 
-        $query->conditions([
+        $query->where([
             'type' => 'company'
         ]);
 

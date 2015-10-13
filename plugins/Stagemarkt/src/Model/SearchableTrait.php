@@ -2,7 +2,7 @@
 
 namespace Stagemarkt\Model;
 
-use Muffin\Webservice\WebserviceQuery;
+use Muffin\Webservice\Query;
 
 trait SearchableTrait
 {
@@ -10,12 +10,12 @@ trait SearchableTrait
      * findSearchable
      * Parses the get parameters into query conditions based on the rules defined in the table filterArgs property
      *
-     * @param WebserviceQuery $query The query to find with
+     * @param Query $query The query to find with
      * @param array $data Criteria of key->value pairs from post/named parameters
      *
-     * @return WebserviceQuery
+     * @return Query
      */
-    public function findSearchable(WebserviceQuery $query, $data)
+    public function findSearchable(Query $query, $data)
     {
         $this->setupFilterArgs();
 

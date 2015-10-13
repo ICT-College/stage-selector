@@ -9,7 +9,7 @@ use Cake\Console\Shell;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use DebugKit\DebugTimer;
-use Muffin\Webservice\WebserviceQuery;
+use Muffin\Webservice\Query;
 
 class PositionsImportTask extends Shell
 {
@@ -116,13 +116,13 @@ class PositionsImportTask extends Shell
     }
 
     /**
-     * @return WebserviceQuery
+     * @return Query
      */
     protected function _importReadQuery(array $conditions = [])
     {
         $query = $this->Positions->find();
-        $query->applyOptions(['limit' => '25']);
-        $query->conditions($conditions);
+        $query->limit(25);
+        $query->where($conditions);
 
         return $query;
     }

@@ -7,7 +7,7 @@ use Stagemarkt\Model\Resource\Company;
 use Stagemarkt\Model\Resource\StudyProgram;
 use Stagemarkt\Model\Resource\AddressCompany;
 use Stagemarkt\Model\Resource\Accreditation;
-use Muffin\Webservice\WebserviceQuery;
+use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 
 /**
@@ -217,13 +217,13 @@ class Search extends StagemarktService
         return $response;
     }
 
-    public function execute(WebserviceQuery $query)
+    public function execute(Query $query, array $options = [])
     {
-        if ($query->action() !== WebserviceQuery::ACTION_READ) {
+        if ($query->action() !== Query::ACTION_READ) {
             throw new \BadMethodCallException;
         }
 
-        if (isset($query->conditions()['id'])) {
+        if (isset($query->where()['id'])) {
             return $this->stagemarktClient()->detailsClient()->execute($query);
         }
 
@@ -235,10 +235,10 @@ class Search extends StagemarktService
             $options['limit'] = $query->limit();
         }
         $response = $this->search(
-            $query->conditions(), $options
+            $query->where(), $options
         );
 
-        switch ($query->conditions()['type']) {
+        switch ($query->where()['type']) {
             case 'company':
                 $entities = $response->companies();
 
