@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "abbeea9e2363a49c873bd2ce01549dc9",
+    "hash": "eb722a1236a96299a70fc1520c5e096d",
+    "content-hash": "861dbc5cd1a0317171a3824e21c05b00",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -714,12 +715,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cvo-technologies/cakephp-webservice.git",
-                "reference": "8050fd4e9f3998a2e403450c3282d236d268920e"
+                "reference": "da06bb977c2833aaec2ac61d4bad354ca472db30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/8050fd4e9f3998a2e403450c3282d236d268920e",
-                "reference": "8050fd4e9f3998a2e403450c3282d236d268920e",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/da06bb977c2833aaec2ac61d4bad354ca472db30",
+                "reference": "da06bb977c2833aaec2ac61d4bad354ca472db30",
                 "shasum": ""
             },
             "require-dev": {
@@ -769,7 +770,7 @@
                 "issues": "https://github.com/usemuffin/webservice/issues",
                 "source": "https://github.com/usemuffin/webservice"
             },
-            "time": "2015-10-08 16:46:07"
+            "time": "2015-10-13 12:14:05"
         },
         {
             "name": "nesbot/carbon",
