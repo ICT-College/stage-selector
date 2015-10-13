@@ -79,4 +79,16 @@ class PointType extends Type
 
         return Point::fromText($result);
     }
+
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    public function marshal($value)
+    {
+        list($x, $y) = explode(',', $value);
+
+        return new Point(trim($x), trim($y));
+    }
 }

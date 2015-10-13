@@ -86,4 +86,12 @@ class Point implements \JsonSerializable, ExpressionInterface
         $visitor($this->__x);
         $visitor($this->__y);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+        return $this->x() . ', ' . $this->y();
+    }
 }
