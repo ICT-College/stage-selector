@@ -20,4 +20,12 @@ class User extends Entity
             return (new DefaultPasswordHasher)->hash($password);
         }
     }
+
+    /**
+     * @return string
+     */
+    protected function _getName()
+    {
+        return $this->firstname . ((!empty($this->insertion)) ? ' ' . $this->insertion : '') . ' ' . $this->lastname;
+    }
 }
