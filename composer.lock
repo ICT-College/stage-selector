@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "c9946ba46d1393ce3883f6d9a610ba09",
+    "content-hash": "9d19f715878d23f8815d5d51868773ae",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -383,16 +384,16 @@
         },
         {
             "name": "cvo-technologies/cakephp-gearman",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cvo-technologies/cakephp-gearman.git",
-                "reference": "9127c6ae05046cd0dd7916791de4f270667f34f3"
+                "reference": "6b37375cac10eed47c7be9c143e8d49877a4cf2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cvo-technologies/cakephp-gearman/zipball/9127c6ae05046cd0dd7916791de4f270667f34f3",
-                "reference": "9127c6ae05046cd0dd7916791de4f270667f34f3",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-gearman/zipball/6b37375cac10eed47c7be9c143e8d49877a4cf2f",
+                "reference": "6b37375cac10eed47c7be9c143e8d49877a4cf2f",
                 "shasum": ""
             },
             "require": {
@@ -428,7 +429,7 @@
                 "jobs",
                 "workers"
             ],
-            "time": "2015-10-07 11:30:49"
+            "time": "2015-10-14 11:55:08"
         },
         {
             "name": "friendsofcake/bootstrap-ui",
