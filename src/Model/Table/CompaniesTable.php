@@ -16,6 +16,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
+use CvoTechnologies\Gearman\Gearman;
 use CvoTechnologies\Gearman\JobAwareTrait;
 
 class CompaniesTable extends Table
@@ -195,7 +196,7 @@ class CompaniesTable extends Table
         $this->execute('company_coordinates', [
             'company_id' => $company->id,
             'datasource' => $this->connection()->configName()
-        ]);
+        ], true, Gearman::PRIORITY_LOW);
     }
 
     /**
@@ -210,7 +211,7 @@ class CompaniesTable extends Table
         $this->execute('company_details', [
             'company_id' => $company->id,
             'datasource' => $this->connection()->configName()
-        ]);
+        ], true, Gearman::PRIORITY_LOW);
     }
 
     /**
