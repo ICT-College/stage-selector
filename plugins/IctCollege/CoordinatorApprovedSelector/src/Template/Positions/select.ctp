@@ -1,4 +1,4 @@
-<?= $this->Html->script(['awesomplete.min.js', 'bootstrap-slider.min.js', 'select.js'], ['block' => true]) ?>
+<?= $this->Html->script(['awesomplete.min.js', 'bootstrap-slider.min.js', 'IctCollege/CoordinatorApprovedSelector.select'], ['block' => true]) ?>
 <?= $this->Html->css(['awesomplete.css', 'bootstrap-slider.min.css'], ['block' => true]) ?>
 <?= $this->start('header') ?>
 <div class="header clearfix">
