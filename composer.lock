@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eb722a1236a96299a70fc1520c5e096d",
-    "content-hash": "861dbc5cd1a0317171a3824e21c05b00",
+    "hash": "c9946ba46d1393ce3883f6d9a610ba09",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -552,66 +551,6 @@
                 "update"
             ],
             "time": "2015-10-12 16:16:41"
-        },
-        {
-            "name": "friendsofcake/crud-view",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FriendsOfCake/crud-view.git",
-                "reference": "7c85b04efdb9ab444998e035f41b00ca73e26f21"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfCake/crud-view/zipball/7c85b04efdb9ab444998e035f41b00ca73e26f21",
-                "reference": "7c85b04efdb9ab444998e035f41b00ca73e26f21",
-                "shasum": ""
-            },
-            "require": {
-                "cakephp/cakephp": "~3.0",
-                "friendsofcake/bootstrap-ui": "~0.3",
-                "friendsofcake/crud": "*"
-            },
-            "require-dev": {
-                "friendsofcake/cakephp-test-utilities": "dev-master"
-            },
-            "type": "cakephp-plugin",
-            "autoload": {
-                "psr-4": {
-                    "CrudView\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Winther",
-                    "homepage": "http://cakephp.nu/",
-                    "role": "Author"
-                },
-                {
-                    "name": "Jose Diaz-Gonzalez",
-                    "homepage": "http://josediazgonzalez.com/",
-                    "role": "Author"
-                }
-            ],
-            "description": "View layer for CRUD",
-            "homepage": "https://github.com/FriendsOfCake/crud-view",
-            "keywords": [
-                "bake",
-                "cake",
-                "cakephp",
-                "create",
-                "crud",
-                "delete",
-                "retrieve",
-                "scaffold",
-                "scaffolding",
-                "update"
-            ],
-            "time": "2015-10-09 10:38:48"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -2267,7 +2206,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "friendsofcake/crud": 20,
-        "friendsofcake/crud-view": 20,
         "muffin/webservice": 20,
         "cakedc/search": 20,
         "cakephp/acl": 20,
