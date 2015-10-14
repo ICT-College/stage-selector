@@ -11,6 +11,16 @@ class StudentsTable extends Table
     /**
      * @inheritDoc
      */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->displayField('student_number');
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function _initializeSchema(Schema $table)
     {
         $table->columnType('initials', 'encrypted');

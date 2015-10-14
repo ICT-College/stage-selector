@@ -19,6 +19,7 @@
  */
 
 use Cake\Core\Plugin;
+use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 
 /**
@@ -41,7 +42,7 @@ use Cake\Routing\Router;
  */
 Router::defaultRouteClass('DashedRoute');
 
-Router::scope('/', function (\Cake\Routing\RouteBuilder $routes) {
+Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
      * its action called 'display', and we pass a param to select the view file
@@ -54,7 +55,7 @@ Router::scope('/', function (\Cake\Routing\RouteBuilder $routes) {
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
-    $routes->scope('/selector', function (\Cake\Routing\RouteBuilder $routeBuilder) {
+    $routes->scope('/selector', function (RouteBuilder $routeBuilder) {
         \Cake\Event\EventManager::instance()->dispatch(new \Cake\Event\Event('Router.selectorRoute', $routeBuilder));
     });
 
@@ -76,12 +77,16 @@ Router::scope('/', function (\Cake\Routing\RouteBuilder $routes) {
      */
     $routes->fallbacks('DashedRoute');
 
-    $routes->prefix('admin', function (\Cake\Routing\RouteBuilder $routeBuilder) {
+    $routes->prefix('admin', function (RouteBuilder $routeBuilder) {
         $routeBuilder->fallbacks();
+    });
+    $routes->scope('/users', ['controller' => 'Users'], function (RouteBuilder $routeBuilder) {
+        $routeBuilder->namePrefix('users_');
+        $routeBuilder->connect('/activate/*', ['action' => 'activate'], ['_name' => 'activate']);
     });
 });
 
-Router::scope('/api', function (\Cake\Routing\RouteBuilder $routes) {
+Router::scope('/api', function (RouteBuilder $routes) {
     $routes->extensions(['json', 'xml']);
     $routes->resources('Companies');
     $routes->resources('Positions');
