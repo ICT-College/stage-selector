@@ -33,7 +33,7 @@ class UsersTable extends Table
 
     public function fromStudent($studentNumber, Shard $shard)
     {
-        return $this->execute('inviteStudent', [
+        return $this->execute('get_user_from_student', [
             'student_number' => $studentNumber,
             'shard' => $shard
         ], false, Gearman::PRIORITY_HIGH);

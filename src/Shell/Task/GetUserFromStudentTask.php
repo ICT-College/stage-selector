@@ -6,7 +6,7 @@ use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Psr\Log\LogLevel;
 
-class InviteStudentTask extends Shell
+class GetUserFromStudentTask extends Shell
 {
 
     /**
