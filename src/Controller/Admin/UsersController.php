@@ -14,14 +14,20 @@ class UsersController extends AppController
         $shard = TableRegistry::get('Shards')->get(1);
         $user = $this->Users->fromStudent($number, $shard);
         if (!$user) {
-            return;
+            $this->Flash->error(__('Failed to receive user from student.'));
+
+            return $this->redirect($this->referer());
         }
 
         $user = $this->Users->invite($user, $shard);
         if (!$user) {
-            $this->set('user', $user);
+            $this->Flash->error(__('Failed to invite user.'));
 
-            return;
+            return $this->redirect($this->referer());
         }
+
+        $this->Flash->success(__('Student is invited.'));
+
+        return $this->redirect($this->referer());
     }
 }
