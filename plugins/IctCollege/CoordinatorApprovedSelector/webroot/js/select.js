@@ -50,6 +50,14 @@ $(function() {
                 $(self).html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success pull-right').data('state', 'add');
             }
         }, 1000);
+
+        $.ajax({
+            'url': '/api/coordinator_approved_selector/internship_applications' + (($(this).data('state') == 'add') ? '' : '/position-delete') + '.json',
+            'method': ($(this).data('state') == 'add') ? 'POST' : 'DELETE',
+            'data': {
+                'position_id': $(this).closest('tr').data('id')
+            }
+        });
     });
 
     $(document).on('click', '[data-id]', function (e) {
@@ -132,7 +140,7 @@ $(function() {
     });
 
     $('.position-modal .position-select').on('click', function() {
-        var id = $('.position-modal').modal('hide').data('id');
+        var id = $('.position-modal').modal('hide').find('.modal-content').data('id');
 
         $('tr[data-id=' + id + '] a[data-toggle="selection"]').click();
     });
@@ -243,7 +251,7 @@ function loadModalContent(id) {
 
     $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
         $.get('/api/positions/' + id + '.json', function (data) {
-            modalBody.data('id', id);
+            modalBody.find('.modal-content').data('id', id);
 
             modalBody.find('.study-program-title').text(data.data.study_program.description + ' at ' + data.data.company.name);
             modalBody.find('.study-program-description').text(data.data.study_program.description);
