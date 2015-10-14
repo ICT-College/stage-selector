@@ -206,9 +206,9 @@ class Details extends StagemarktService
             throw new \BadMethodCallException;
         }
 
-        $response = $this->details($query->conditions(), $query->getOptions());
+        $response = $this->details($query->where(), $query->getOptions());
 
-        switch ($query->conditions()['type']) {
+        switch ($query->where()['type']) {
             case 'company':
                 $entity = $response->company();
 
