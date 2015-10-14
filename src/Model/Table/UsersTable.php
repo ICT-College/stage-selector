@@ -41,7 +41,9 @@ class UsersTable extends Table
 
     public function invite(User $user, Shard $shard)
     {
-        $user = $this->save($user);
+        $user = $this->save($user, [
+            'associated' => false
+        ]);
         if (!$user) {
             return false;
         }
@@ -85,8 +87,6 @@ class UsersTable extends Table
             ->notEmpty('firstname', 'Firstname cannot be left blank')
             ->requirePresence('lastname')
             ->notEmpty('lastname', 'Lastname cannot be left blank')
-            ->requirePresence('student_number')
-            ->notEmpty('student_number', 'Student number cannot be left blank')
             ->add('student_number', [
                 'unique' => [
                     'rule' => 'validateUnique',
