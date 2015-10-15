@@ -43,7 +43,7 @@ class StudentsController extends AppController
         return $this->redirect($this->referer());
     }
 
-    public function inviteStudent()
+    public function invite()
     {
         $inviteStudent = new InviteStudentForm();
 

@@ -1,7 +1,7 @@
 <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?= $this->Form->create(false, ['url' => ['controller' => 'Students', 'action' => 'inviteStudent', 'plugin' => false]]) ?>
+            <?= $this->Form->create(false, ['url' => ['controller' => 'Students', 'action' => 'invite', 'plugin' => false]]) ?>
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><?= h(__('Invite student')) ?></h4>
