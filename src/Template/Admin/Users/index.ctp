@@ -1,3 +1,5 @@
+<div class="text-center"><?= $this->Paginator->numbers() ?></div>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -39,3 +41,5 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<div class="text-center"><?= $this->Paginator->numbers() ?></div>
