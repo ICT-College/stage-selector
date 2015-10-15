@@ -13,6 +13,17 @@ if (!$this->exists('header')) {
                 </button>
                 <a class="navbar-brand" href="/">Stage Selector</a>
             </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <?= $this->Html->link(__('Invite'), '#', [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#inviteModal'
+                        ]) ?>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <?php
@@ -78,6 +89,8 @@ if (!$this->exists('header')) {
         </div>
     </div>
 </div>
+
+<?= $this->element('invite') ?>
 
 </body>
 </html>

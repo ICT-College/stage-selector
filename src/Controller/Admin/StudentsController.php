@@ -22,7 +22,6 @@ class StudentsController extends AppController
         $lastStudentsSync = Cache::read('students_sync');
 
         $this->set('studentsSync', new StudentsSyncForm());
-        $this->set('inviteStudent', new InviteStudentForm());
         $this->set('lastStudentsSync', $lastStudentsSync);
     }
 
