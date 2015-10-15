@@ -78,10 +78,13 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->fallbacks('DashedRoute');
 
     $routes->prefix('admin', function (RouteBuilder $routeBuilder) {
+        $routeBuilder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+
         $routeBuilder->fallbacks();
     });
     $routes->scope('/users', ['controller' => 'Users'], function (RouteBuilder $routeBuilder) {
         $routeBuilder->namePrefix('users_');
+
         $routeBuilder->connect('/activate/*', ['action' => 'activate'], ['_name' => 'activate']);
     });
 });
