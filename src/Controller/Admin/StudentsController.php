@@ -9,11 +9,17 @@ use Cake\I18n\Time;
 class StudentsController extends AppController
 {
 
+    public $paginate = [
+        'conditions' => [
+            'student_id IS NOT' => null
+        ]
+    ];
+
     public function initialize()
     {
         parent::initialize();
 
-        $this->modelClass = null;
+        $this->modelClass = 'Users';
     }
 
     public function synchronize()
