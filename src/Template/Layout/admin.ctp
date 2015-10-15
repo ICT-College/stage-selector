@@ -22,6 +22,19 @@ if (!$this->exists('header')) {
                             'data-target' => '#inviteModal'
                         ]) ?>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= $loggedUser['firstname'] ?> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <?= $this->Form->postLink(__('Logout'), [
+                                    'controller' => 'Users',
+                                    'action' => 'logout',
+                                    'prefix' => false,
+                                    'plugin' => false
+                                ]) ?>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
