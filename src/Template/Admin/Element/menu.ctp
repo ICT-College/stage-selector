@@ -30,6 +30,14 @@
             <li role="separator" class="divider"></li>
 
             <li>
+                <?= $this->Html->link(__('Sync students'), [
+                    'controller' => 'Pages',
+                    'action' => 'display',
+                    'students_sync'
+                ]) ?>
+            </li>
+
+            <li>
                 <?= $this->Html->link(__('Users'), [
                     'controller' => 'Users',
                     'action' => 'index'

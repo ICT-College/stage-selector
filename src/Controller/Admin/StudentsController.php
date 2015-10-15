@@ -16,16 +16,7 @@ class StudentsController extends AppController
         $this->modelClass = null;
     }
 
-
-    public function index()
-    {
-        $lastStudentsSync = Cache::read('students_sync');
-
-        $this->set('studentsSync', new StudentsSyncForm());
-        $this->set('lastStudentsSync', $lastStudentsSync);
-    }
-
-    public function studentsSync()
+    public function synchronize()
     {
         $studentsSync = new StudentsSyncForm();
 
