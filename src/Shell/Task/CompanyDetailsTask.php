@@ -31,7 +31,7 @@ class CompanyDetailsTask extends Shell
 
         $this->loadModel('Companies');
 
-        $companiesEndpoint = EndpointRegistry::get('Stagemarkt.Companies');
+        $companiesEndpoint = EndpointRegistry::get('IctCollege/Stagemarkt.Companies');
 
         try {
             /* @var Company $company */

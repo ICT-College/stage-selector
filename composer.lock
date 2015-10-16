@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c9946ba46d1393ce3883f6d9a610ba09",
+    "hash": "4f5578bac40df105b1aab5b06cd98db2",
     "content-hash": "9d19f715878d23f8815d5d51868773ae",
     "packages": [
         {
@@ -655,16 +655,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cvo-technologies/cakephp-webservice.git",
-                "reference": "da06bb977c2833aaec2ac61d4bad354ca472db30"
+                "reference": "6081358af1b85cae384cf532ad197ffebf822788"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/da06bb977c2833aaec2ac61d4bad354ca472db30",
-                "reference": "da06bb977c2833aaec2ac61d4bad354ca472db30",
+                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/6081358af1b85cae384cf532ad197ffebf822788",
+                "reference": "6081358af1b85cae384cf532ad197ffebf822788",
                 "shasum": ""
             },
             "require-dev": {
-                "cakephp/cakephp": "~3.0",
+                "cakephp/cakephp": "dev-master",
                 "cakephp/cakephp-codesniffer": "2.*",
                 "phpunit/phpunit": "4.1.*"
             },
@@ -710,7 +710,7 @@
                 "issues": "https://github.com/usemuffin/webservice/issues",
                 "source": "https://github.com/usemuffin/webservice"
             },
-            "time": "2015-10-13 12:14:05"
+            "time": "2015-10-16 15:35:32"
         },
         {
             "name": "nesbot/carbon",

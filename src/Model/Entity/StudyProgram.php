@@ -5,8 +5,6 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use Muffin\Webservice\Model\Resource;
 use Muffin\Webservice\Model\ResourceBasedEntityTrait;
-use Stagemarkt\Entity\Entity as StagemarktEntity;
-use Stagemarkt\Entity\StagemarktBasedEntityTrait;
 
 class StudyProgram extends Entity
 {

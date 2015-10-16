@@ -5,7 +5,6 @@ namespace App\Controller;
 use Cake\Event\Event;
 use Cake\Network\Response;
 use Cake\ORM\Query;
-use Stagemarkt\Locator\RepositoryLocator;
 
 class PositionsController extends AppController
 {
