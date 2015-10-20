@@ -15,9 +15,10 @@
         "cvo-technologies/cakephp-gearman": "~3.0",
         "muffin/webservice": "dev-feature-orm",
         "friendsofcake/bootstrap-ui": "~0.3",
-        "cakedc/search": "3.0.x-dev",
+        "ictcollege/cakephp-stagemarkt": "dev-master",
+        "friendsofcake/search": "dev-master",
         "cakephp/acl": "dev-master",
-        "ictcollege/cakephp-stagemarkt": "dev-master"
+        "sameer-shelavale/php-countries-array": "dev-master"
     },
     "require-dev": {
         "psy/psysh": "@stable",
