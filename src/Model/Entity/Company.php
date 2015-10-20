@@ -29,49 +29,9 @@ class Company extends Entity implements ResourceBasedEntityInterface
             'name' => $resource->name,
             'address' => $resource->address->address,
             'postcode' => $resource->address->postcode,
-            'city' => $resource->address->city
+            'city' => $resource->address->city,
+            'country' => $resource->address->country
         ];
-        switch ($resource->address->country) {
-            case 'Nederland':
-            case 'NEDERLAND':
-                $properties['country'] = 'NL';
-                break;
-            case 'China':
-                $properties['country'] = 'CN';
-                break;
-            case 'Spanje':
-                $properties['country'] = 'ES';
-                break;
-            case 'Verenigd Koninkrijk':
-                $properties['country'] = 'GB';
-                break;
-            case 'Turkije':
-                $properties['country'] = 'TR';
-                break;
-            case 'Curaçao':
-                $properties['country'] = 'CW';
-                break;
-            case 'Finland':
-                $properties['country'] = 'FI';
-                break;
-            case 'Noorwegen':
-                $properties['country'] = 'NO';
-                break;
-            case 'Aruba':
-                $properties['country'] = 'AW';
-                break;
-            case 'India':
-                $properties['country'] = 'IN';
-                break;
-            case 'Australië':
-                $properties['country'] = 'AU';
-                break;
-            case 'Zuid-Afrika':
-                $properties['country'] = 'ZA';
-                break;
-            default:
-                Log::warning(__('Unknown country {0} for company', $resource->address->country));
-        }
 
         foreach ($properties as $property => $value) {
             if ($this->get($property) === $value) {

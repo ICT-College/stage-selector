@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4f5578bac40df105b1aab5b06cd98db2",
-    "content-hash": "9d19f715878d23f8815d5d51868773ae",
+    "hash": "68e0045473852b991b7e85bdaa4dd0ac",
+    "content-hash": "289980dac50cfed1ef711c7ae9897c4e",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -552,6 +552,45 @@
                 "update"
             ],
             "time": "2015-10-12 16:16:41"
+        },
+        {
+            "name": "ictcollege/cakephp-stagemarkt",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ICT-College/cakephp-stagemarkt.git",
+                "reference": "09deab08e823f8d0d55e3b8ef5d2c6a414e5655b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ICT-College/cakephp-stagemarkt/zipball/09deab08e823f8d0d55e3b8ef5d2c6a414e5655b",
+                "reference": "09deab08e823f8d0d55e3b8ef5d2c6a414e5655b",
+                "shasum": ""
+            },
+            "require-dev": {
+                "cakephp/cakephp": "dev-master#d83ca687a340a385f9233574e2d606b8d95cc685",
+                "cakephp/cakephp-codesniffer": "2.*",
+                "muffin/webservice": "dev-feature-orm",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "IctCollege\\Stagemarkt\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marlin Cremers",
+                    "email": "m.cremers@cvo-technologies.com"
+                }
+            ],
+            "description": "CakePHP webservice for Stagemarkt",
+            "time": "2015-10-16 22:13:16"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -2210,6 +2249,7 @@
         "muffin/webservice": 20,
         "cakedc/search": 20,
         "cakephp/acl": 20,
+        "ictcollege/cakephp-stagemarkt": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,

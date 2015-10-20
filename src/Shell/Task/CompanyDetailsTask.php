@@ -55,9 +55,7 @@ class CompanyDetailsTask extends Shell
 
         $this->log(__('Looking up details for company {0} with id {1}', $company->name, $company->id), LogLevel::INFO);
 
-        $companyResource = $companiesEndpoint->find()->where([
-            'id' => $company->stagemarkt_id
-        ])->first();
+        $companyResource = $companiesEndpoint->get($company->stagemarkt_id);
 
         if (!$companyResource) {
             $this->log(__('Looking up details for company {0} with id {1} failed', $company->name, $company->id), LogLevel::NOTICE);

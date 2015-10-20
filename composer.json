@@ -16,7 +16,8 @@
         "muffin/webservice": "dev-feature-orm",
         "friendsofcake/bootstrap-ui": "~0.3",
         "cakedc/search": "3.0.x-dev",
-        "cakephp/acl": "dev-master"
+        "cakephp/acl": "dev-master",
+        "ictcollege/cakephp-stagemarkt": "dev-master"
     },
     "require-dev": {
         "psy/psysh": "@stable",
@@ -30,7 +31,6 @@
     "autoload": {
         "psr-4": {
             "App\\": "src",
-            "IctCollege\\Stagemarkt\\": "plugins/IctCollege/Stagemarkt/src",
             "IctCollege\\CoordinatorApprovedSelector\\": "plugins/IctCollege/CoordinatorApprovedSelector/src",
             "IctCollege\\EduArte\\": "plugins/IctCollege/EduArte/src"
         }
