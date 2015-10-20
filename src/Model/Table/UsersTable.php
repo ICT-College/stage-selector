@@ -3,6 +3,7 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Shard;
 use App\Model\Entity\User;
+use Cake\Database\Expression\FunctionExpression;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Mailer\MailerAwareTrait;
@@ -67,12 +68,32 @@ class UsersTable extends Table
 
     public function searchConfiguration()
     {
+        $concatWithoutInsertion = new FunctionExpression('CONCAT', [
+            $this->aliasField('firstname') => 'literal',
+            ' ',
+            $this->aliasField('lastname') => 'literal'
+        ]);
+
+        $concatWithInsertion = new FunctionExpression('CONCAT', [
+            $this->aliasField('firstname') => 'literal',
+            ' ',
+            $this->aliasField('insertion') => 'literal',
+            ' ',
+            $this->aliasField('lastname') => 'literal'
+        ]);
+
         $search = new Manager($this);
         $search
             ->like('q', [
                 'before' => true,
                 'after' => true,
-                'field' => [$this->aliasField('firstname'), $this->aliasField('lastname')]
+                'field' => [
+                    $concatWithoutInsertion,
+                    $concatWithInsertion,
+                    $this->aliasField('student_number'),
+                    $this->aliasField('firstname'),
+                    $this->aliasField('lastname')
+                ]
             ]);
         return $search;
     }
