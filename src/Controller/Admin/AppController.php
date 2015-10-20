@@ -15,10 +15,7 @@ class AppController extends BaseController
         $this->Crud->mapAction('add', [
             'messages' => [
                 'success' => [
-                    'element' => 'success',
-                    'params' => [
-                        'class' => false
-                    ]
+                    'element' => 'success'
                 ]
             ]
         ]);
@@ -26,10 +23,7 @@ class AppController extends BaseController
         $this->Crud->mapAction('edit', [
             'messages' => [
                 'success' => [
-                    'element' => 'success',
-                    'params' => [
-                        'class' => false
-                    ]
+                    'element' => 'success'
                 ]
             ]
         ]);
@@ -37,12 +31,22 @@ class AppController extends BaseController
         $this->Crud->mapAction('delete', [
             'messages' => [
                 'success' => [
-                    'element' => 'success',
-                    'params' => [
-                        'class' => false
-                    ]
+                    'element' => 'success'
                 ]
             ]
         ]);
+    }
+
+    public function implementedEvents()
+    {
+        return parent::implementedEvents() + [
+            'Crud.setFlash' => 'crudSetFlash'
+        ];
+    }
+
+    public function crudSetFlash(Event $event) {
+        unset($event->subject()->params['class']);
+
+        return $event;
     }
 }
