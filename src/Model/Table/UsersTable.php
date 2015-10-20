@@ -4,6 +4,7 @@ namespace App\Model\Table;
 use App\Model\Entity\Shard;
 use App\Model\Entity\User;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Association;
 use Cake\ORM\Table;
@@ -28,9 +29,17 @@ class UsersTable extends Table
         $this->addBehavior('Search.Search');
 
         $this->displayField('name');
-        $this->belongsTo('Students', [
-            'strategy' => Association::STRATEGY_SELECT
-        ]);
+
+        try {
+            // We only need to set the students relation when the secured alias is set.
+            // Because alias doesn't have support for "normally" getting the alias, we must it do it this way.
+            ConnectionManager::get('secured');
+
+            $this->belongsTo('Students', [
+                'strategy' => Association::STRATEGY_SELECT
+            ]);
+        }catch(MissingDatasourceConfigException $e) {}
+
         $this->eventManager()->on($this->getMailer('User'));
     }
 
