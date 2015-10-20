@@ -69,11 +69,16 @@ class AppController extends Controller
             'listeners' => [
                 'Crud.Api',
                 'Crud.ApiPagination',
+                'Crud.Search'
             ]
         ]);
 
         if ($this->Auth->user() != null) {
             $this->set('loggedUser', $this->Auth->user());
+        }
+
+        if ($this->request->action === 'index') {
+            $this->loadComponent('Search.Prg');
         }
     }
 }

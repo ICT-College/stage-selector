@@ -20,12 +20,6 @@ class StudentsController extends AppController
     {
         parent::initialize();
 
-        if ($this->request->action === 'index') {
-            $this->Crud->addListener('Crud.Search');
-
-            $this->loadComponent('Search.Prg');
-        }
-
         $this->modelClass = 'Users';
     }
 

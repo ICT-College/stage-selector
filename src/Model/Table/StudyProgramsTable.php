@@ -3,16 +3,10 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use Search\Manager;
 
 class StudyProgramsTable extends Table
 {
-
-    public $filterArgs = [
-        'q' => [
-            'type' => 'like',
-            'field' => 'description'
-        ],
-    ];
 
     /**
      * {@inheritDoc}
@@ -22,7 +16,18 @@ class StudyProgramsTable extends Table
         parent::initialize($config);
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Search.Searchable');
+        $this->addBehavior('Search.Search');
+    }
+
+    public function searchConfiguration()
+    {
+        $search = new Manager($this);
+        $search->like('q', [
+            'before' => true,
+            'after' => true,
+            'field' => $this->aliasField('description')
+        ]);
+        return $search;
     }
 
     /**

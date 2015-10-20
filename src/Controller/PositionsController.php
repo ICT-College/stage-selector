@@ -9,17 +9,7 @@ use Cake\ORM\Query;
 class PositionsController extends AppController
 {
 
-    /**
-     * {@inheritDoc}
-     */
-    public function initialize()
-    {
-        parent::initialize();
 
-        $this->Crud->config('actions.index', [
-            'className' => 'SearchIndex'
-        ]);
-    }
 
     /**
      * {@inheritDoc}

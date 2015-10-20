@@ -33,7 +33,6 @@ class CompaniesTable extends Table
         parent::initialize($config);
 
         $this->addBehavior('Timestamp');
-//        $this->addBehavior('Search.Searchable');
         $this->addBehavior('Search.Search');
     }
 
@@ -42,6 +41,8 @@ class CompaniesTable extends Table
         $search = new Manager($this);
         $search
             ->like('name', [
+                'before' => true,
+                'after' => true,
                 'field' => $this->aliasField('name')
             ])
             ->value('address', [
@@ -140,7 +141,7 @@ class CompaniesTable extends Table
 
         // Create the distance calculating condition
         $distanceComparison = new Comparison(new FunctionExpression($mainDatabase . '.DISTANCE', [
-            $options['field']['field'] => 'literal',
+            $options['field'] => 'literal',
             $type->toDatabase($options['coordinates'], $this->connection()->driver())
         ]), $options['radius'], null, '<=');
 

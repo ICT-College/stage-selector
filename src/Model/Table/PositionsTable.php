@@ -4,8 +4,11 @@ namespace App\Model\Table;
 
 use Cake\Database\Expression\Comparison;
 use Cake\Database\Expression\QueryExpression;
+use Cake\Database\ExpressionInterface;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
+use Search\Manager;
+use Search\Type\Callback;
 
 class PositionsTable extends Table
 {
@@ -71,10 +74,93 @@ class PositionsTable extends Table
         parent::initialize($config);
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Search.Searchable');
+        $this->addBehavior('Search.Search');
 
         $this->belongsTo('Companies');
         $this->belongsTo('StudyPrograms');
+    }
+
+    public function searchConfiguration()
+    {
+        $search = new Manager($this);
+        $search->value('company_id', [
+            'field' => $this->aliasField('company_id')
+        ]);
+        $search->like('company_name', [
+            'before' => true,
+            'after' => true,
+            'field' => 'Companies.name'
+        ]);
+        $search->like('company_house_number', [
+            'before' => true,
+            'after' => true,
+            'field' => 'Companies.address'
+        ]);
+        $search->like('company_street', [
+            'before' => true,
+            'after' => true,
+            'field' => 'Companies.address'
+        ]);
+        $search->like('company_address', [
+            'before' => true,
+            'after' => true,
+            'field' => 'Companies.address'
+        ]);
+        $search->value('company_postcode', [
+            'field' => 'Companies.postcode'
+        ]);
+        $search->like('company_city', [
+            'before' => true,
+            'after' => true,
+            'field' => 'Companies.city'
+        ]);
+        $search->value('company_country', [
+            'field' => 'Companies.country'
+        ]);
+        $search->value('study_program_id', [
+            'field' => $this->aliasField('study_program_id')
+        ]);
+        $search->callback('learning_pathway', [
+            'callback' => function (Query $query, array $args, Callback $searchType) {
+                return $query->find('orValue', [
+                    'value' => $args[$searchType->name()],
+                    'field' => $searchType->name(),
+                    'or' => [
+                        'BOL' => 'GV',
+                        'BBL' => 'GV'
+                    ]
+                ]);
+            }
+        ]);
+        $search->like('description', [
+            'before' => true,
+            'after' => true,
+            'field' => $this->aliasField('description')
+        ]);
+        $search->callback('radius', [
+            'callback' => function (Query $query, array $args, Callback $searchType) {
+                $options = [
+                    'radius' => $args[$searchType->name()],
+                    'field' => 'Companies.coordinates'
+                ];
+
+                if (isset($args['company_address'])) {
+                    $options['address'] = $args['company_address'];
+                }
+                if (isset($args['company_postcode'])) {
+                    $options['postcode'] = $args['company_postcode'];
+                }
+                if (isset($args['company_city'])) {
+                    $options['city'] = $args['company_city'];
+                }
+                if (isset($args['company_country'])) {
+                    $options['country'] = $args['company_country'];
+                }
+
+                return $query->find('radius', $options);
+            },
+        ]);
+        return $search;
     }
 
     /**
@@ -89,30 +175,23 @@ class PositionsTable extends Table
     {
         $otherComparisons = [];
 
-        // Loop through the query parts
-        $query->traverse(function ($value, $clause) use (&$otherComparisons) {
-            /* @var QueryExpression $value */
-
-            // Ignore all non where clauses
-            if ($clause !== 'where') {
+        $query->clause('where')->traverse(function (ExpressionInterface $expression) use (&$otherComparisons) {
+            if (!$expression instanceof Comparison) {
                 return;
             }
 
-            // Loop through conditions
-            $value->traverse(function (Comparison $comparison) use (&$otherComparisons) {
-                switch ($comparison->getField()) {
-                    // Add address related conditions to $addressComparisons
-                    case 'Companies.address':
-                    case 'Companies.postcode':
-                    case 'Companies.city':
-                    case 'Companies.country':
-                        break;
+            switch ($expression->getField()) {
+                // Add address related conditions to $addressComparisons
+                case 'Companies.address':
+                case 'Companies.postcode':
+                case 'Companies.city':
+                case 'Companies.country':
+                    break;
 
-                    // Add other conditions to $otherComparisons
-                    default:
-                        $otherComparisons[] = $comparison;
-                }
-            });
+                // Add other conditions to $otherComparisons
+                default:
+                    $otherComparisons[] = $expression;
+            }
         });
 
         // Override the query conditions with the non address conditions
@@ -125,17 +204,17 @@ class PositionsTable extends Table
             ];
 
             // Convert position address fields to company address fields
-            if (isset($options['company_address'])) {
-                $radiusOptions['address'] = $options['company_address'];
+            if (isset($options['address'])) {
+                $radiusOptions['address'] = $options['address'];
             }
-            if (isset($options['company_postcode'])) {
-                $radiusOptions['postcode'] = $options['company_postcode'];
+            if (isset($options['postcode'])) {
+                $radiusOptions['postcode'] = $options['postcode'];
             }
-            if (isset($options['company_city'])) {
-                $radiusOptions['city'] = $options['company_city'];
+            if (isset($options['city'])) {
+                $radiusOptions['city'] = $options['city'];
             }
-            if (isset($options['company_country'])) {
-                $radiusOptions['country'] = $options['company_country'];
+            if (isset($options['country'])) {
+                $radiusOptions['country'] = $options['country'];
             }
 
             $query->find('radius', $radiusOptions);
@@ -166,25 +245,26 @@ class PositionsTable extends Table
      */
     public function findOrValue(Query $query, array $options)
     {
-        if ((isset($options[$options['field']['name']])) &&
-            (isset($options['field']['or'][$options[$options['field']['name']]]))
-        ) {
-            if (is_array($options[$options['field']['name']])) {
+        $value = $options['value'];
+        $field = $options['field'];
+
+        if (isset($options['or'][$value])) {
+            if (is_array($value)) {
                 $query->where([
-                    $options['field']['field'] . ' IN' => [
-                        $options['field']['or'][$options[$options['field']['name']]],
-                    ] + $options[$options['field']['name']]
+                    $field . ' IN' => [
+                        $options['or'][$value],
+                    ] + $value
                 ]);
             } else {
                 $query->where([
-                    $options['field']['field'] . ' IN' => [
-                        $options['field']['or'][$options[$options['field']['name']]],
-                        $options[$options['field']['name']]
+                    $field . ' IN' => [
+                        $options['or'][$value],
+                        $value
                     ]
                 ]);
             }
         } else {
-            $query->where([$options['field']['field'] => $options[$options['field']['name']]]);
+            $query->where([$field => $value]);
         }
 
         return $query;
