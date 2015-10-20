@@ -2,7 +2,7 @@
     'action' => 'index'
 ], [
     'class' => 'btn btn-default'
-]) ?>
+]) ?>&nbsp;
 <?php if (!empty($user->student_number)): ?>
     <?= $this->Form->postLink(__('Invite'), [
         'action' => 'invite',

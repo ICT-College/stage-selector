@@ -2,7 +2,7 @@
     'action' => 'index'
 ], [
     'class' => 'btn btn-default'
-]) ?>
+]) ?>&nbsp;
 <?= $this->Form->postLink(__('Invite'), [
     'controller' => 'Users',
     'action' => 'invite',
