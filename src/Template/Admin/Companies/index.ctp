@@ -1,10 +1,13 @@
+<?= $this->start('search') ?>
+    <?= $this->element('search') ?>
+<?= $this->end() ?>
 <div class="text-center"><?= $this->Paginator->numbers() ?></div>
 
 <table class="table table-hover">
     <thead>
     <tr>
-        <th><?= h(__('ID')) ?></th>
-        <th><?= h(__('Name')) ?></th>
+        <th><?= $this->Paginator->sort('stagemarkt_id', __('ID')) ?></th>
+        <th><?= $this->Paginator->sort('name', __('Name')) ?></th>
         <th><?= h(__('Address')) ?></th>
         <th><?= h(__('Contact')) ?></th>
         <th>&nbsp;</th>

@@ -18,34 +18,12 @@ use Cake\ORM\Query;
 use Cake\ORM\Table;
 use CvoTechnologies\Gearman\Gearman;
 use CvoTechnologies\Gearman\JobAwareTrait;
+use Search\Manager;
 
 class CompaniesTable extends Table
 {
 
     use JobAwareTrait;
-
-    public $filterArgs = [
-        'name' => [
-            'type' => 'like'
-        ],
-        'address' => [
-            'type' => 'value'
-        ],
-        'postcode' => [
-            'type' => 'value'
-        ],
-        'city' => [
-            'type' => 'value'
-        ],
-        'country' => [
-            'type' => 'value'
-        ],
-        'radius' => [
-            'type' => 'finder',
-            'field' => 'coordinates',
-            'finder' => 'radius'
-        ]
-    ];
 
     /**
      * {@inheritDoc}
@@ -55,7 +33,47 @@ class CompaniesTable extends Table
         parent::initialize($config);
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Search.Searchable');
+//        $this->addBehavior('Search.Searchable');
+        $this->addBehavior('Search.Search');
+    }
+
+    public function searchConfiguration()
+    {
+        $search = new Manager($this);
+        $search
+            ->like('name', [
+                'field' => $this->aliasField('name')
+            ])
+            ->value('address', [
+                'field' => $this->aliasField('address')
+            ])
+            ->value('postcode', [
+                'field' => $this->aliasField('postcode')
+            ])
+            ->value('city', [
+                'field' => $this->aliasField('city')
+            ])
+            ->value('country', [
+                'field' => $this->aliasField('country')
+            ])
+            ->finder('radius', [
+                'field' => $this->aliasField('coordinates')
+            ])
+            ->like('q', [
+                'before' => true,
+                'after' => true,
+                'field' => [
+                    $this->aliasField('name'),
+                    $this->aliasField('address'),
+                    $this->aliasField('postcode'),
+                    $this->aliasField('city'),
+                    $this->aliasField('country'),
+                    $this->aliasField('stagemarkt_id'),
+                    $this->aliasField('email'),
+                    $this->aliasField('telephone')
+                ]
+            ]);
+        return $search;
     }
 
     /**

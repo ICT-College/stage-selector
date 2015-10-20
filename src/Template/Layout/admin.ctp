@@ -31,7 +31,15 @@ if (!$this->exists('header')) {
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-0 col-sm-2 col-lg-2">
-            <?= $this->element('menu') ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $this->element('menu') ?>
+                </div>
+                <div class="col-md-12">
+                    <?= $this->fetch('search') ?>
+                </div>
+            </div>
+
         </div>
         <div class="col-xs-12 col-sm-10 col-lg-10">
             <?= $this->Flash->render() ?>

@@ -10,6 +10,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use CvoTechnologies\Gearman\Gearman;
 use CvoTechnologies\Gearman\JobAwareTrait;
+use Search\Manager;
 
 class UsersTable extends Table
 {
@@ -23,6 +24,8 @@ class UsersTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
+
+        $this->addBehavior('Search.Search');
 
         $this->displayField('name');
         $this->belongsTo('Students', [
@@ -51,6 +54,18 @@ class UsersTable extends Table
         $this->dispatchEvent('Model.User.invited', ['user' => $user, 'shard' => $shard], $this);
 
         return $user;
+    }
+
+    public function searchConfiguration()
+    {
+        $search = new Manager($this);
+        $search
+            ->like('q', [
+                'before' => true,
+                'after' => true,
+                'field' => [$this->aliasField('firstname'), $this->aliasField('lastname')]
+            ]);
+        return $search;
     }
 
     /**

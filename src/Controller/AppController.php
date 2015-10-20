@@ -71,7 +71,6 @@ class AppController extends Controller
                 'Crud.ApiPagination',
             ]
         ]);
-        $this->loadComponent('Search.Prg');
 
         if ($this->Auth->user() != null) {
             $this->set('loggedUser', $this->Auth->user());

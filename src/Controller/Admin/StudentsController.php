@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 use App\Form\InviteStudentForm;
 use App\Form\StudentsSyncForm;
 use Cake\Cache\Cache;
+use Cake\Event\Event;
 use Cake\I18n\Time;
 
 class StudentsController extends AppController
@@ -18,6 +19,12 @@ class StudentsController extends AppController
     public function initialize()
     {
         parent::initialize();
+
+        if ($this->request->action === 'index') {
+            $this->Crud->addListener('Crud.Search');
+
+            $this->loadComponent('Search.Prg');
+        }
 
         $this->modelClass = 'Users';
     }
