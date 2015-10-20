@@ -18,8 +18,6 @@ class CompaniesController extends AppController
 
             $this->loadComponent('Search.Prg');
         }
-
-        $this->Crud->config('actions.add', null);
     }
 
     public function index()
