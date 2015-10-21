@@ -3,6 +3,7 @@
         <ul class="nav nav-pills nav-stacked">
             <li>
                 <?= $this->Html->link(__('Home'), [
+                    'plugin' => false,
                     'controller' => 'Pages',
                     'action' => 'display',
                     'home'
@@ -14,12 +15,14 @@
 
             <li>
                 <?= $this->Html->link(__('Students'), [
+                    'plugin' => false,
                     'controller' => 'Students',
                     'action' => 'index'
                 ]) ?>
             </li>
             <li>
                 <?= $this->Html->link(__('Companies'), [
+                    'plugin' => false,
                     'controller' => 'Companies',
                     'action' => 'index',
                     'prefix' => 'admin'
@@ -31,6 +34,7 @@
 
             <li>
                 <?= $this->Html->link(__('Sync students'), [
+                    'plugin' => false,
                     'controller' => 'Pages',
                     'action' => 'display',
                     'students_sync'
@@ -39,6 +43,7 @@
 
             <li>
                 <?= $this->Html->link(__('Users'), [
+                    'plugin' => false,
                     'controller' => 'Users',
                     'action' => 'index'
                 ]) ?>

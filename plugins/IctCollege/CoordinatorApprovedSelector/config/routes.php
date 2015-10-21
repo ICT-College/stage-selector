@@ -1,6 +1,9 @@
 <?php
 
-\Cake\Routing\Router::scope('/api/coordinator_approved_selector', ['plugin' => 'IctCollege/CoordinatorApprovedSelector'], function (\Cake\Routing\RouteBuilder $routeBuilder) {
+use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
+
+Router::scope('/api/coordinator_approved_selector', ['plugin' => 'IctCollege/CoordinatorApprovedSelector'], function (RouteBuilder $routeBuilder) {
     $routeBuilder->extensions(['json']);
     $routeBuilder->resources('InternshipApplications', [
         'only' => ['index', 'create', 'positionDelete'],
@@ -12,4 +15,10 @@
             ]
         ]
     ]);
+});
+Router::prefix('admin', ['plugin' => 'IctCollege/CoordinatorApprovedSelector'], function (RouteBuilder $routeBuilder) {
+    $routeBuilder->scope('/students/:student_id', ['plugin' => 'IctCollege/CoordinatorApprovedSelector'], function (RouteBuilder $routeBuilder) {
+        $routeBuilder->connect('/intership-applications/:action/*', ['controller' => 'InternshipApplications']);
+        $routeBuilder->fallbacks();
+    });
 });
