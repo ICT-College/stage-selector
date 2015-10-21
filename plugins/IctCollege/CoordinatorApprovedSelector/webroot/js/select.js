@@ -410,12 +410,16 @@ function loadModalContent(id) {
 
             if (state == 'add') {
                 modalBody.find('.position-select').attr('data-state', 'add').removeClass('btn-danger').addClass('btn-success').text('Add to selection');
+
+                if (selected.length >= 4) {
+                    modalBody.find('.position-select').attr('disabled', 'disabled');
+                }
             } else {
                 modalBody.find('.position-select').attr('data-state', 'delete').addClass('btn-danger').removeClass('btn-success').text('Delete from selection');
             }
 
-            if (selected.length >= 4) {
-                modalBody.find('.position-select').attr('disabled', 'disabled');
+            if (selected.length < 4) {
+                modalBody.find('.position-select').removeAttr('disabled');
             }
 
             $('.loading-modal').modal('unlock').modal('hide').one('hidden.bs.modal', function() {
