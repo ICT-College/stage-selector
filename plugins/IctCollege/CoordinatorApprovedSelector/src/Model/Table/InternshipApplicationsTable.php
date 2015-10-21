@@ -7,6 +7,7 @@ use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Manager;
 
 class InternshipApplicationsTable extends Table
 {
@@ -18,7 +19,19 @@ class InternshipApplicationsTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('Search.Search');
+
         $this->belongsTo('Positions');
+    }
+
+    /**
+     *
+     */
+    public function searchConfiguration()
+    {
+        $manager = new Manager($this);
+
+        return $manager;
     }
 
     /**
