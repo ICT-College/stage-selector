@@ -3,21 +3,18 @@
 <?= $this->start('header') ?>
 <div class="header clearfix">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <h3 class="text-muted">Stage Selector</h3>
         </div>
 
         <div class="col-md-4">
             <ul class="nav nav-pills nav-stacked nav-selection">
-                <!--                <li class="active"><a href="#">1. 0100Dev - Webdeveloper</a></li>-->
-                <!--                <li class="active"><a href="#">2. CVO Computers - Schoonmaakster</a></li>-->
                 <li><a href="#">1.</a></li>
                 <li><a href="#">2.</a></li>
             </ul>
         </div>
         <div class="col-md-4">
             <ul class="nav nav-pills nav-stacked nav-selection">
-                <!--                <li class="active"><a href="#">3. Allahagbar - Boem</a></li>-->
                 <li><a href="#">3.</a></li>
                 <li><a href="#">4.</a></li>
             </ul>

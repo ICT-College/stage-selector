@@ -81,3 +81,19 @@ body {
     word-break: break-all;
     word-wrap: break-word;
 }
+
+.positions td:not(:last-child) {
+    cursor: pointer;
+}
+
+.close:focus, .close:hover {
+    opacity: .9;
+    color: white;
+}
+
+.close {
+    opacity: .8;
+    color: white;
+
+    margin-top: -1px;
+}

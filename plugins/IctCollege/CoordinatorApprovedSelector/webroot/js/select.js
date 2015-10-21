@@ -34,49 +34,31 @@ $(function() {
     });
 
     // Did someone click a add or remove button? Catch it!
-    $(document).on('click', '[data-toggle="selection"]', function() {
+    $(document).on('click', '[data-toggle="selection"]', function(e) {
         // Make sure the button isn't disabled..
         if ($(this).attr('disabled') == 'disabled') {
             return;
         }
 
-        // Update the button's content to a awesome rotating refresh icon and disable it
-        $(this).html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled');
+        var state = $(this).attr('data-state');
 
-        var self = this;
-
-        $.ajax({
-            'url': '/api/coordinator_approved_selector/internship_applications' + (($(this).data('state') == 'add') ? '' : '/position-delete') + '.json',
-            'method': ($(this).data('state') == 'add') ? 'POST' : 'DELETE',
-            'data': {
-                'position_id': $(this).closest('tr').data('id')
-            },
-            'complete': function(data) {
-                if (data.success) {
-                    updateSelected(false);
-
-                    if ($(self).data('state') == 'add') {
-                        $(self).html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger pull-right').data('state', 'delete');
-                    } else {
-                        $(self).html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success pull-right').data('state', 'add');
-                    }
-                } else {
-                    if ($(self).data('state') == 'add') {
-                        $(self).html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success pull-right').data('state', 'add');
-                    } else {
-                        $(self).html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger pull-right').data('state', 'delete');
-                    }
-                }
-            }
-        });
-    });
-
-    $(document).on('click', '[data-id]', function (e) {
-        if ($(e.target).prop('tagName') == 'A' || $(e.target).prop('tagName') == 'SPAN') {
-            return;
+        if (state == 'add') {
+            state = 'delete';
+        } else {
+            state = 'add';
         }
 
-        loadModalContent($(this).data('id'));
+        updatePositionState($(this).closest('[data-position-id]').attr('data-position-id'), state);
+
+        e.stopImmediatePropagation();
+    });
+
+    $(document).on('click', '[data-position-id] td:not(:last-child), [data-toggle="modal"]', function (e) {
+        loadModalContent($(this).closest('[data-position-id]').data('position-id'));
+    });
+
+    $(document).on('click', '.nav-selection [data-position-id]', function (e) {
+        loadModalContent($(this).closest('[data-position-id]').data('position-id'));
     });
 
     var studyProgramInput = document.getElementById('study-program-id');
@@ -151,9 +133,19 @@ $(function() {
     });
 
     $('.position-modal .position-select').on('click', function() {
-        var id = $('.position-modal').modal('hide').find('.modal-content').data('id');
+        $('.position-modal').modal('hide');
 
-        $('tr[data-id=' + id + '] a[data-toggle="selection"]').click();
+        var id = $(this).closest('[data-position-id]').attr('data-position-id');
+
+        var state = $(this).attr('data-state');
+
+        if (state == 'add') {
+            state = 'delete';
+        } else {
+            state = 'add';
+        }
+
+        updatePositionState(id, state);
     });
 
     $('#radius').slider({
@@ -181,10 +173,6 @@ function updateSelected(load) {
         if (data.success) {
             selected = data.data;
 
-            selected.forEach(function(value, key) {
-
-            });
-
             $('.nav-selection li').remove();
             for (var i = 0; i < 4; i++) {
                 var select = selected[i];
@@ -192,15 +180,55 @@ function updateSelected(load) {
                 var side = ((count <= 2) ? 'first' : 'last');
 
                 if (select) {
-                    $('.nav-selection:' + side).append('<li class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + '</a></li>');
+                    $('.nav-selection:' + side).append('<li data-position-id="' + select.position.id + '" class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button></a></li>');
                 } else {
                     $('.nav-selection:' + side).append('<li><a href="#">' + count + '.</a></li>');
                 }
+            }
 
+            if (selected.length >= 4) {
+                $('[data-state="add"]').attr('disabled', 'disabled');
+            } else {
+                $('[data-state="add"]').removeAttr('disabled');
             }
 
             if (load) {
                 loadContent();
+            }
+        }
+    });
+}
+
+function updatePositionState(id, state) {
+    if (state == 'add') {
+        var oldState = 'delete';
+    } else {
+        var oldState = 'add';
+    }
+
+    // Update the button's content to a awesome rotating refresh icon and disable it
+    $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
+
+    $.ajax({
+        'url': '/api/coordinator_approved_selector/internship_applications' + ((oldState == 'add') ? '' : '/position-delete') + '.json',
+        'method': (oldState == 'add') ? 'POST' : 'DELETE',
+        'data': {
+            'position_id': id
+        },
+        'success': function(data) {
+            if (data.success) {
+                updateSelected(false);
+
+                if (state == 'add') {
+                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'add').html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success');
+                } else {
+                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
+                }
+            }
+        },
+        'error': function() {
+            if (icon) {
+                $('[data-position-id=' + id + '] [data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').data('state', 'error');
             }
         }
     });
@@ -250,7 +278,24 @@ function loadContent() {
                         }
                     });
 
-                    $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description + '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="' + state + '" class="btn btn-' + ((state == 'add') ? 'success' : 'danger') + ' pull-right"><span class="glyphicon glyphicon-' + ((state == 'add') ? 'plus' : 'remove') + '"></span></a></td></tr>');
+                    var content = '<tr data-position-id="' + value.id + '">';
+                        content += '<th scope="row">' + value.amount + '</th>';
+                        content += '<td>' + value.study_program.description + '</td>';
+                        content += '<td>' + value.company.name + '<br/>Tel: 0612346578</td>';
+                        content += '<td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td>';
+                        content += '<td>';
+                            content += '<div class="pull-right">';
+                                content += '<a href="#' + value.id + '" data-toggle="modal" class="btn btn-primary">';
+                                    content += '<span class="glyphicon glyphicon-info-sign"></span>';
+                                content +='</a>&nbsp;';
+                                content += '<a href="#' + value.id + '" data-toggle="selection" data-state="' + state + '" class="btn btn-' + ((state == 'add') ? 'success' : 'danger') + '">';
+                                    content += '<span class="glyphicon glyphicon-' + ((state == 'add') ? 'plus' : 'remove') + '"></span>';
+                                content +='</a>';
+                            content += '</div>';
+                        content += '</td>';
+                    content += '</tr>';
+
+                    $('.positions > tbody').append(content);
                 });
 
                 if (data.data.length == 0) {
@@ -289,6 +334,12 @@ function loadContent() {
                     $('.pagination').parent().show();
                 }
 
+                if (selected.length == 4) {
+                    $('[data-state="add"]').attr('disabled', 'disabled');
+                } else {
+                    $('[data-state="add"]').removeAttr('disabled');
+                }
+
                 $('.loading-modal').modal('unlock').modal('hide');
 
                 $('.positions > tbody').show(50);
@@ -302,7 +353,7 @@ function loadModalContent(id) {
 
     $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
         $.get('/api/positions/' + id + '.json', function (data) {
-            modalBody.find('.modal-content').data('id', id);
+            modalBody.attr('data-position-id', id);
 
             modalBody.find('.study-program-title').text(data.data.study_program.description + ' at ' + data.data.company.name);
             modalBody.find('.study-program-description').text(data.data.study_program.description);
@@ -341,7 +392,6 @@ function loadModalContent(id) {
             //modalBody.find('.company-correspondence-address-address').text(data.data.company.address);
             //modalBody.find('.company-correspondence-address-city').text(data.data.company.city);
             //modalBody.find('.company-correspondence-address-postcode').text(data.data.company.postcode);
-            console.log(data);
 
             modalBody.find('.company-email').text(data.data.company.email);
             modalBody.find('.company-website').text(data.data.company.website);
@@ -350,13 +400,22 @@ function loadModalContent(id) {
 
             modalBody.find('iframe').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + data.data.company.address + ' ' + data.data.company.postcode + ' ' + data.data.company.city + '&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI');
 
-            var state = $('tr[data-id=' + id + '] a[data-toggle="selection"]').data('state');
+            var state = 'add';
+
+            selected.forEach(function (value, key) {
+                if (value.position.id == id) {
+                    state = 'delete';
+                }
+            });
 
             if (state == 'add') {
-                modalBody.find('.position-select').removeClass('btn-danger').addClass('btn-success').text('Add to selection');
+                modalBody.find('.position-select').attr('data-state', 'add').removeClass('btn-danger').addClass('btn-success').text('Add to selection');
             } else {
+                modalBody.find('.position-select').attr('data-state', 'delete').addClass('btn-danger').removeClass('btn-success').text('Delete from selection');
+            }
 
-                modalBody.find('.position-select').addClass('btn-danger').removeClass('btn-success').text('Delete from selection');
+            if (selected.length >= 4) {
+                modalBody.find('.position-select').attr('disabled', 'disabled');
             }
 
             $('.loading-modal').modal('unlock').modal('hide').one('hidden.bs.modal', function() {
