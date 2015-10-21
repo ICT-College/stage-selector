@@ -31,9 +31,11 @@ if (!$this->exists('header')) {
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <?= $this->fetch('header') ?>
+    </div>
 
+    <div class="container">
         <?= $this->Flash->render() ?>
 
         <?= $this->fetch('content') ?>

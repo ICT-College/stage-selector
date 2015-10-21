@@ -1,3 +1,5 @@
+var selected = [];
+
 $(function() {
 
     // Update icon when toggling the #filters collapse
@@ -42,20 +44,29 @@ $(function() {
         $(this).html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled');
 
         var self = this;
-        setTimeout(function() {
-            // Update the button's content to the "next state".
-            if ($(self).data('state') == 'add') {
-                $(self).html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger pull-right').data('state', 'delete');
-            } else {
-                $(self).html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success pull-right').data('state', 'add');
-            }
-        }, 1000);
 
         $.ajax({
             'url': '/api/coordinator_approved_selector/internship_applications' + (($(this).data('state') == 'add') ? '' : '/position-delete') + '.json',
             'method': ($(this).data('state') == 'add') ? 'POST' : 'DELETE',
             'data': {
                 'position_id': $(this).closest('tr').data('id')
+            },
+            'complete': function(data) {
+                if (data.success) {
+                    updateSelected(false);
+
+                    if ($(self).data('state') == 'add') {
+                        $(self).html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger pull-right').data('state', 'delete');
+                    } else {
+                        $(self).html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success pull-right').data('state', 'add');
+                    }
+                } else {
+                    if ($(self).data('state') == 'add') {
+                        $(self).html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success pull-right').data('state', 'add');
+                    } else {
+                        $(self).html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger pull-right').data('state', 'delete');
+                    }
+                }
             }
         });
     });
@@ -157,11 +168,43 @@ $(function() {
     // Open the filters collapse after 500ms has passed. This gives an awesome effect.
     setTimeout(function() {
         $('#filters').collapse('show');
-
-        loadContent();
     }, 500);
 
+    // Startup behaviour
+    $('.loading-modal').modal('show').modal('lock');
+
+    updateSelected(true);
 });
+
+function updateSelected(load) {
+    $.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(data) {
+        if (data.success) {
+            selected = data.data;
+
+            selected.forEach(function(value, key) {
+
+            });
+
+            $('.nav-selection li').remove();
+            for (var i = 0; i < 4; i++) {
+                var select = selected[i];
+                var count = i + 1;
+                var side = ((count <= 2) ? 'first' : 'last');
+
+                if (select) {
+                    $('.nav-selection:' + side).append('<li class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + '</a></li>');
+                } else {
+                    $('.nav-selection:' + side).append('<li><a href="#">' + count + '.</a></li>');
+                }
+
+            }
+
+            if (load) {
+                loadContent();
+            }
+        }
+    });
+}
 
 function loadContent() {
     //Hide collapse and set spinning icon
@@ -199,7 +242,15 @@ function loadContent() {
                 $('.positions > tbody > tr').remove();
 
                 data.data.forEach(function (value, key) {
-                    $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description + '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="add" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus"></span></a></td></tr>');
+                    var state = 'add';
+
+                    selected.forEach(function (selectValue, selectKey) {
+                        if (selectValue.position.id == value.id) {
+                            state = 'delete';
+                        }
+                    });
+
+                    $('.positions > tbody').append('<tr data-id="' + value.id + '"><th scope="row">' + value.amount + '</th><td>' + value.study_program.description + '</td><td>' + value.company.name + '<br/>Tel: 0612346578</td><td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td><td><a href="#toggle-' + value.id + '" data-toggle="selection" data-state="' + state + '" class="btn btn-' + ((state == 'add') ? 'success' : 'danger') + ' pull-right"><span class="glyphicon glyphicon-' + ((state == 'add') ? 'plus' : 'remove') + '"></span></a></td></tr>');
                 });
 
                 if (data.data.length == 0) {

@@ -3,7 +3,7 @@
 <?= $this->start('header') ?>
 <div class="header clearfix">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <h3 class="text-muted">Stage Selector</h3>
         </div>
 
