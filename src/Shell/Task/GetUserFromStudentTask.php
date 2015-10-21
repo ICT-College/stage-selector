@@ -33,6 +33,7 @@ class GetUserFromStudentTask extends Shell
             'email',
             'learning_pathway',
             'study_program_id',
+            'groupcode'
         ])->where([
             'student_number' => $workload['student_number']
         ])->first();
@@ -61,6 +62,7 @@ class GetUserFromStudentTask extends Shell
             'email' => $student->email,
             'learning_pathway' => $student->learning_pathway,
             'study_program_id' => $student->study_program_id,
+            'groupcode' => $student->groupcode
         ]);
     }
 }

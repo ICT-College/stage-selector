@@ -92,7 +92,8 @@ class UsersTable extends Table
                     $concatWithInsertion,
                     $this->aliasField('student_number'),
                     $this->aliasField('firstname'),
-                    $this->aliasField('lastname')
+                    $this->aliasField('lastname'),
+                    $this->aliasField('groupcode'),
                 ]
             ]);
         return $search;

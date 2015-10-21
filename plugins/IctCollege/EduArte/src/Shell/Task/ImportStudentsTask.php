@@ -54,8 +54,8 @@ class ImportStudentsTask extends Shell
                     'learning_pathway' => trim(substr($value, 5, 4)),
                     'study_program_id' => substr($value, 0, 5)
                 ];
-
-            }
+            },
+            'Groepscode' => 'groupcode'
         ];
 
         foreach ($workload['results'] as $index => $remoteStudent) {
