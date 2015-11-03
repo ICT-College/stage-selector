@@ -42,6 +42,12 @@ use Cake\Routing\Router;
  */
 Router::defaultRouteClass('DashedRoute');
 
+/**
+ * Load all plugin routes.  See the Plugin documentation on
+ * how to customize the loading of plugin routes.
+ */
+Plugin::routes();
+
 Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
@@ -96,8 +102,3 @@ Router::scope('/api', function (RouteBuilder $routes) {
     $routes->resources('StudyPrograms');
 });
 
-/**
- * Load all plugin routes.  See the Plugin documentation on
- * how to customize the loading of plugin routes.
- */
-Plugin::routes();
