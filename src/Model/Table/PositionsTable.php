@@ -2,69 +2,23 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Position;
 use Cake\Database\Expression\Comparison;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\ExpressionInterface;
+use Cake\Event\Event;
+use Cake\ORM\Association;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
+use CvoTechnologies\Gearman\Gearman;
+use CvoTechnologies\Gearman\JobAwareTrait;
 use Search\Manager;
 use Search\Type\Callback;
 
 class PositionsTable extends Table
 {
 
-    public $filterArgs = [
-        'company_id' => [
-            'type' => 'value'
-        ],
-        'company_name' => [
-            'type' => 'like',
-            'field' => 'Companies.name'
-        ],
-        'company_house_number' => [
-            'type' => 'like',
-            'field' => 'Companies.address'
-        ],
-        'company_street' => [
-            'type' => 'like',
-            'field' => 'Companies.address'
-        ],
-        'company_address' => [
-            'type' => 'like',
-            'field' => 'Companies.address'
-        ],
-        'company_postcode' => [
-            'type' => 'value',
-            'field' => 'Companies.postcode'
-        ],
-        'company_city' => [
-            'type' => 'like',
-            'field' => 'Companies.city'
-        ],
-        'company_country' => [
-            'type' => 'value',
-            'field' => 'Companies.country'
-        ],
-        'radius' => [
-            'type' => 'finder',
-            'finder' => 'Radius',
-            'field' => 'Companies.coordinates'
-        ],
-        'study_program_id' => [
-            'type' => 'value'
-        ],
-        'learning_pathway' => [
-            'type' => 'finder',
-            'finder' => 'OrValue',
-            'or' => [
-                'BOL' => 'GV',
-                'BBL' => 'GV'
-            ]
-        ],
-        'description' => [
-            'type' => 'like'
-        ],
-    ];
+    use JobAwareTrait;
 
     /**
      * {@inheritDoc}
@@ -77,7 +31,12 @@ class PositionsTable extends Table
         $this->addBehavior('Search.Search');
 
         $this->belongsTo('Companies');
-        $this->belongsTo('StudyPrograms');
+        $this->belongsTo('StudyPrograms', [
+            'strategy' => Association::STRATEGY_SELECT
+        ]);
+        $this->belongsToMany('QualificationParts', [
+            'through' => 'PositionQualificationParts'
+        ]);
     }
 
     public function searchConfiguration()
@@ -268,5 +227,51 @@ class PositionsTable extends Table
         }
 
         return $query;
+    }
+
+    /**
+     * Updates coordinates or details when needed
+     *
+     * @param Event $event The event that was dispatched
+     * @param Position $position The position to check the details of
+     *
+     * @return void
+     */
+    public function afterSave(Event $event, Position $position)
+    {
+        $detailFields = [
+            'start',
+            'end'
+        ];
+        $detailsStored = false;
+        foreach ($detailFields as $field) {
+            if (!$position->has($field)) {
+                continue;
+            }
+            if (!$position->get($field)) {
+                continue;
+            }
+
+            $detailsStored = true;
+        }
+
+        if (!$detailsStored) {
+            $this->updateDetails($position);
+        }
+    }
+
+    /**
+     * Starts a background job to get more details of a position
+     *
+     * @param Position $position The position to get the details of
+     *
+     * @return void
+     */
+    public function updateDetails(Position $position)
+    {
+        $this->execute('position_details', [
+            'position' => $position,
+            'datasource' => $this->connection()->configName()
+        ], true, Gearman::PRIORITY_LOW);
     }
 }

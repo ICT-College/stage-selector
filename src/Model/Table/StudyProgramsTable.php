@@ -17,6 +17,7 @@ class StudyProgramsTable extends Table
 
         $this->addBehavior('Timestamp');
         $this->addBehavior('Search.Search');
+        $this->hasMany('QualificationParts');
     }
 
     public function searchConfiguration()
