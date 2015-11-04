@@ -4,6 +4,7 @@ namespace App\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
+use Cake\ORM\Entity;
 use Psr\Log\LogLevel;
 
 class GetUserFromStudentTask extends Shell
@@ -62,7 +63,7 @@ class GetUserFromStudentTask extends Shell
             'email' => $student->email,
             'learning_pathway' => $student->learning_pathway,
             'study_program_id' => $student->study_program_id,
-            'groupcode' => $student->groupcode
+            'groupcode' => $student->groupcode,
         ]);
     }
 }

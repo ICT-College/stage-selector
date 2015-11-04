@@ -43,6 +43,7 @@ class UsersTable extends Table
         $this->displayField('name');
 
         $this->belongsTo('Roles');
+        $this->belongsToMany('Shards');
 
         $this->addBehavior('Search.Search');
         $this->addBehavior('Acl.Acl', [
@@ -72,9 +73,23 @@ class UsersTable extends Table
 
     public function invite(User $user, Shard $shard)
     {
-        $user = $this->save($user, [
-            'associated' => false
+        $user = $this->patchEntity($user, [
+            'shards' => [
+                [
+                    'id' => 1,
+                    '_joinData' => [
+                        'role_id' => 1
+                    ]
+                ]
+            ]
         ]);
+
+        $user = $this->save($user, [
+            'associated' => [
+                'shards'
+            ]
+        ]);
+
         if (!$user) {
             return false;
         }
@@ -139,36 +154,36 @@ class UsersTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator->requirePresence('email')
-            ->add('email', [
-                'valid' => [
-                    'rule' => 'email',
-                    'message' => 'E-mail must be valid'
-                ],
-                'unique' => [
-                    'rule' => 'validateUnique',
-                    'provider' => 'table',
-                    'message' => 'E-mail must be unique'
-                ]
-            ])
-            ->requirePresence('firstname')
-            ->notEmpty('firstname', 'Firstname cannot be left blank')
-            ->requirePresence('lastname')
-            ->notEmpty('lastname', 'Lastname cannot be left blank')
-            ->add('student_number', [
-                'unique' => [
-                    'rule' => 'validateUnique',
-                    'provider' => 'table',
-                    'message' => 'Student number must be unique'
-                ]
-            ])
-            ->add('student_id', [
-                'unique' => [
-                    'rule' => 'validateUnique',
-                    'provider' => 'table',
-                    'message' => 'Only one user can be assigned to a student'
-                ]
-            ]);
+//        $validator->requirePresence('email')
+//            ->add('email', [
+//                'valid' => [
+//                    'rule' => 'email',
+//                    'message' => 'E-mail must be valid'
+//                ],
+//                'unique' => [
+//                    'rule' => 'validateUnique',
+//                    'provider' => 'table',
+//                    'message' => 'E-mail must be unique'
+//                ]
+//            ])
+//            ->requirePresence('firstname')
+//            ->notEmpty('firstname', 'Firstname cannot be left blank')
+//            ->requirePresence('lastname')
+//            ->notEmpty('lastname', 'Lastname cannot be left blank')
+//            ->add('student_number', [
+//                'unique' => [
+//                    'rule' => 'validateUnique',
+//                    'provider' => 'table',
+//                    'message' => 'Student number must be unique'
+//                ]
+//            ])
+//            ->add('student_id', [
+//                'unique' => [
+//                    'rule' => 'validateUnique',
+//                    'provider' => 'table',
+//                    'message' => 'Only one user can be assigned to a student'
+//                ]
+//            ]);
 
         return $validator;
     }

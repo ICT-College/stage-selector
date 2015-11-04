@@ -24,8 +24,10 @@ class ShardsTable extends Table
     {
         parent::initialize($config);
 
+        $this->belongsToMany('Users');
+
         $this->addBehavior('Acl.Acl', [
-            'type' => 'requester'
+            'type' => 'controlled'
         ]);
     }
 }

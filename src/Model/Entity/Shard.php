@@ -10,9 +10,10 @@ class Shard extends Entity
     /**
      * parentNode
      *
-     * @return array|null
+     * @return null
      */
-    public function parentNode() {
+    public function parentNode()
+    {
         return null;
     }
 }
