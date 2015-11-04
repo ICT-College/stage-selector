@@ -28,4 +28,25 @@ class User extends Entity
     {
         return $this->firstname . ((!empty($this->insertion)) ? ' ' . $this->insertion : '') . ' ' . $this->lastname;
     }
+
+    /**
+     * parentNode
+     *
+     * @return array|null
+     */
+    public function parentNode() {
+        if (!$this->id) {
+            return null;
+        }
+
+        if (empty($this->get('role_id'))) {
+            return null;
+        } else {
+            return [
+                'Roles' => [
+                    'id' => $this->get('role_id')
+                ]
+            ];
+        }
+    }
 }

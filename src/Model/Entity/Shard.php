@@ -7,4 +7,12 @@ use Cake\ORM\Entity;
 class Shard extends Entity
 {
 
+    /**
+     * parentNode
+     *
+     * @return array|null
+     */
+    public function parentNode() {
+        return null;
+    }
 }

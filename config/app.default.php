@@ -333,6 +333,10 @@ return [
         ]
     ],
 
+    'Acl' => [
+        'database' => 'main'
+    ],
+
     /**
      * Configures logging options
      */

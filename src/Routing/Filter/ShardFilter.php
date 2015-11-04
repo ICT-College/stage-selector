@@ -2,6 +2,7 @@
 
 namespace App\Routing\Filter;
 
+use App\Model\Table\ShardsTable;
 use Cake\Core\App;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
@@ -43,7 +44,9 @@ class ShardFilter extends DispatcherFilter
      */
     public function selectorRoute(Event $event)
     {
-        $this->_selector->setupRoutes($event->subject());
+        if($this->_selector != null) {
+            $this->_selector->setupRoutes($event->subject());
+        }
     }
 
     /**
@@ -58,9 +61,16 @@ class ShardFilter extends DispatcherFilter
         /* @var Request $request */
         $request = $event->data['request'];
 
+        $subdomains = $request->subdomains();
+
+        if (!isset($subdomains[0])) {
+            return;
+        }
+
+        /* @var ShardsTable $shardsTable */
         $shardsTable = TableRegistry::get('Shards');
         $shard = $shardsTable->find()->where([
-            'subdomain' => $request->subdomains()[0]
+            'subdomain' => $subdomains[0]
         ])->firstOrFail();
 
         $className = App::className($shard->selector, 'Selector', 'Selector');

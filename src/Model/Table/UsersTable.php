@@ -6,9 +6,12 @@ use App\Model\Entity\User;
 use Cake\Database\Expression\FunctionExpression;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
+use Cake\Event\Event;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Association;
+use Cake\ORM\Entity;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use CvoTechnologies\Gearman\Gearman;
 use CvoTechnologies\Gearman\JobAwareTrait;
@@ -21,15 +24,30 @@ class UsersTable extends Table
     use MailerAwareTrait;
 
     /**
+     * Connection name for this Table
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        return 'main';
+    }
+
+    /**
      * @param array $config
      */
     public function initialize(array $config)
     {
         parent::initialize($config);
 
-        $this->addBehavior('Search.Search');
-
         $this->displayField('name');
+
+        $this->belongsTo('Roles');
+
+        $this->addBehavior('Search.Search');
+        $this->addBehavior('Acl.Acl', [
+            'type' => 'requester'
+        ]);
 
         try {
             // We only need to set the students relation when the secured alias is set.
@@ -100,13 +118,17 @@ class UsersTable extends Table
     }
 
     /**
-     * Connection name for this Table
+     * afterSave
      *
-     * @return string
+     * @param Event $event
+     * @param Entity $entity
      */
-    public static function defaultConnectionName()
-    {
-        return 'main';
+    public function afterSave(Event $event, Entity $entity) {
+        /* @var \Acl\Model\Table\ArosTable $arosTable */
+        $arosTable = TableRegistry::get('Aros');
+        $aro = $this->node($entity)->firstOrFail();
+        $aro->alias = $entity->email;
+        $arosTable->save($aro);
     }
 
     /**

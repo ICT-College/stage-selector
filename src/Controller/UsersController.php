@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
 
-use IctCollege\CoordinatorApprovedSelector\Controller\AppController;
-
 class UsersController extends AppController
 {
 
