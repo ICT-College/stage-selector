@@ -18,6 +18,9 @@ Router::scope('/api/coordinator_approved_selector', ['plugin' => 'IctCollege/Coo
 });
 Router::prefix('admin', ['plugin' => 'IctCollege/CoordinatorApprovedSelector'], function (RouteBuilder $routeBuilder) {
     $routeBuilder->scope('/students/:student_id', ['plugin' => 'IctCollege/CoordinatorApprovedSelector'], function (RouteBuilder $routeBuilder) {
-        $routeBuilder->connect('/internship-applications/:action/*', ['controller' => 'InternshipApplications']);
+        $routeBuilder->scope('/internship-applications', ['controller' => 'InternshipApplications'], function (RouteBuilder $routeBuilder) {
+            $routeBuilder->connect('/', ['action' => 'index']);
+            $routeBuilder->connect('/:action/*');
+        });
     });
 });

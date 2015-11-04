@@ -28,6 +28,14 @@
                     'prefix' => 'admin'
                 ]) ?>
             </li>
+            <li>
+                <?= $this->Html->link(__('Periods'), [
+                    'plugin' => false,
+                    'controller' => 'Periods',
+                    'action' => 'index',
+                    'prefix' => 'admin'
+                ]) ?>
+            </li>
 
             <li class="dropdown-header"><?= h(__('Advanced')) ?></li>
             <li role="separator" class="divider"></li>
