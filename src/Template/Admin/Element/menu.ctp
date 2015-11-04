@@ -13,41 +13,8 @@
             <li class="dropdown-header"><?= h(__('Management')) ?></li>
             <li role="separator" class="divider"></li>
 
-            <li>
-                <?= $this->Html->link(__('Students'), [
-                    'plugin' => false,
-                    'controller' => 'Students',
-                    'action' => 'index'
-                ]) ?>
-            </li>
-            <li>
-                <?= $this->Html->link(__('Companies'), [
-                    'plugin' => false,
-                    'controller' => 'Companies',
-                    'action' => 'index',
-                    'prefix' => 'admin'
-                ]) ?>
-            </li>
-            <li>
-                <?= $this->Html->link(__('Periods'), [
-                    'plugin' => false,
-                    'controller' => 'Periods',
-                    'action' => 'index',
-                    'prefix' => 'admin'
-                ]) ?>
-            </li>
-
             <li class="dropdown-header"><?= h(__('Advanced')) ?></li>
             <li role="separator" class="divider"></li>
-
-            <li>
-                <?= $this->Html->link(__('Sync students'), [
-                    'plugin' => false,
-                    'controller' => 'Pages',
-                    'action' => 'display',
-                    'students_sync'
-                ]) ?>
-            </li>
 
             <li>
                 <?= $this->Html->link(__('Users'), [

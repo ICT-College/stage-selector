@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Admin;
+namespace App\Controller\Coordinator;
 
 use Cake\Datasource\ConnectionManager;
 use CvoTechnologies\Gearman\JobAwareTrait;

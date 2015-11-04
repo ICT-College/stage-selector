@@ -12,6 +12,12 @@
 
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <?= $this->Html->link(__('Invite'), '#', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#inviteModal'
+                    ]) ?>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= $loggedUser['firstname'] ?> <span class="caret"></span></a>
                     <ul class="dropdown-menu">

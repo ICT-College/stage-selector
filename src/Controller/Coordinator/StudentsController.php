@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Admin;
+namespace App\Controller\Coordinator;
 
 use App\Form\InviteStudentForm;
 use App\Form\StudentsSyncForm;

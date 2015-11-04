@@ -49,5 +49,7 @@ if (!$this->exists('header')) {
     </div>
 </div>
 
+<?= $this->element('invite') ?>
+
 </body>
 </html>

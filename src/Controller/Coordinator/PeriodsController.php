@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Admin;
+namespace App\Controller\Coordinator;
 
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;

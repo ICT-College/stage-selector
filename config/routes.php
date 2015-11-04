@@ -88,6 +88,11 @@ Router::scope('/', function (RouteBuilder $routes) {
 
         $routeBuilder->fallbacks();
     });
+    $routes->prefix('coordinator', function (RouteBuilder $routeBuilder) {
+        $routeBuilder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+
+        $routeBuilder->fallbacks();
+    });
     $routes->scope('/users', ['controller' => 'Users'], function (RouteBuilder $routeBuilder) {
         $routeBuilder->namePrefix('users_');
 
