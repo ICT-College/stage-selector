@@ -36,7 +36,7 @@ class UsersController extends AppController
                 $authorized = $this->Acl->check(['foreign_key' => $user['id'], 'model' => 'Users'], 'shards/' . $shardSubdomain);
 
                 if (!$authorized && $shardSubdomain != 'main') {
-                    $authorized = $this->Acl->check($user, 'shards/main');
+                    $authorized = $this->Acl->check(['foreign_key' => $user['id'], 'model' => 'Users'], 'shards/main');
                 }
 
                 if ($authorized) {
