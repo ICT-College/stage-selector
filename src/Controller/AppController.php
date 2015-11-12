@@ -43,9 +43,13 @@ class AppController extends Controller
     {
         parent::initialize();
 
+        $this->loadComponent('Acl.Acl');
         $this->loadComponent('Flash');
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Auth', [
+            'authorize' => [
+                'Shards'
+            ],
             'authenticate' => [
                 'Form' => [
                     'fields' => ['username' => 'email']
@@ -56,7 +60,8 @@ class AppController extends Controller
                 'action' => 'login',
                 'prefix' => false,
                 'plugin' => false
-            ]
+            ],
+            'unauthorizedRedirect' => false
         ]);
         $this->loadComponent('Crud.Crud', [
             'actions' => [

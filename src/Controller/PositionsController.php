@@ -9,8 +9,6 @@ use Cake\ORM\Query;
 class PositionsController extends AppController
 {
 
-
-
     /**
      * {@inheritDoc}
      */
