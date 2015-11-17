@@ -80,7 +80,7 @@ class InternshipApplicationsTable extends Table
         $rules->addCreate(function (Entity $entity, array $options) {
             return $options['repository']->find()->where(['student_id' => $entity->student_id])->count() <= $options['max'] - 1;
         }, 'maxPositions', ['max' => 4]);
-        $rules->addCreate(new IsUnique(['position_id']), 'uniquePosition');
+        $rules->addCreate(new IsUnique(['position_id', 'student_id']), 'uniquePosition');
 
         return parent::buildRules($rules);
     }

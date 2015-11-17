@@ -42,6 +42,16 @@ class InternshipApplicationsController extends AppController
         /* @var \Cake\ORM\Query $query */
         $query = $event->subject()->query;
 
+        $studentId = $this->Auth->user('student_id');
+        $internship = $this->InternshipApplications->Periods->Internships->find('active', [
+            'student' => $studentId
+        ])->firstOrFail();
+
+        $query->where([
+            'student_id' => $studentId,
+            'period_id' => $internship->period_id
+        ]);
+
         $query->contain([
             'Positions' => [
                 'Companies',
