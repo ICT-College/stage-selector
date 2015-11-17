@@ -92,7 +92,12 @@ class PositionDetailsTask extends Shell
 
             $qualificationPartEntity = $this->Positions->QualificationParts->save($qualificationPartEntity);
 
-            if (!$qualificationPartEntity->isNew()) {
+            $relationExists = $this->Positions->QualificationParts->junction()->exists([
+                'position_id' => $position->id,
+                'qualification_part_id' => $qualificationPartEntity->id
+            ]);
+
+            if ($relationExists) {
                 continue;
             }
 

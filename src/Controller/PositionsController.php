@@ -35,6 +35,7 @@ class PositionsController extends AppController
         $query->contain([
             'Companies',
             'StudyPrograms',
+            'QualificationParts'
         ]);
     }
 }
