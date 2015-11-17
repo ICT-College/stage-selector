@@ -180,7 +180,11 @@ function updateSelected(load) {
                 var side = ((count <= 2) ? 'first' : 'last');
 
                 if (select) {
-                    $('.nav-selection:' + side).append('<li data-position-id="' + select.position.id + '" class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button></a></li>');
+                    if (!select.accepted_coordinator) {
+                        $('.nav-selection:' + side).append('<li data-position-id="' + select.position.id + '" class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button></a></li>');
+                    } else {
+                        $('.nav-selection:' + side).append('<li class="disabled"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' </a></li>');
+                    }
                 } else {
                     $('.nav-selection:' + side).append('<li><a href="#">' + count + '.</a></li>');
                 }
@@ -227,9 +231,7 @@ function updatePositionState(id, state) {
             }
         },
         'error': function() {
-            if (icon) {
-                $('[data-position-id=' + id + '] [data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').data('state', 'error');
-            }
+            $('[data-position-id=' + id + '] [data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').data('state', 'error');
         }
     });
 }
@@ -271,10 +273,20 @@ function loadContent() {
 
                 data.data.forEach(function (value, key) {
                     var state = 'add';
+                    var color = 'success';
+                    var icon = 'plus';
 
                     selected.forEach(function (selectValue, selectKey) {
                         if (selectValue.position.id == value.id) {
-                            state = 'delete';
+                            if (selectValue.accepted_coordinator) {
+                                state = 'accepted';
+                                color = 'default disabled';
+                                icon = 'ok';
+                            } else {
+                                state = 'delete';
+                                color = 'danger';
+                                icon = 'remove';
+                            }
                         }
                     });
 
@@ -288,8 +300,8 @@ function loadContent() {
                                 content += '<a href="#' + value.id + '" data-toggle="modal" class="btn btn-primary">';
                                     content += '<span class="glyphicon glyphicon-info-sign"></span>';
                                 content +='</a>&nbsp;';
-                                content += '<a href="#' + value.id + '" data-toggle="selection" data-state="' + state + '" class="btn btn-' + ((state == 'add') ? 'success' : 'danger') + '">';
-                                    content += '<span class="glyphicon glyphicon-' + ((state == 'add') ? 'plus' : 'remove') + '"></span>';
+                                content += '<a href="#' + value.id + '" data-toggle="selection" data-state="' + state + '" class="btn btn-' + color + '">';
+                                    content += '<span class="glyphicon glyphicon-' + icon + '"></span>';
                                 content +='</a>';
                             content += '</div>';
                         content += '</td>';
