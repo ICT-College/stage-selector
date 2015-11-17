@@ -21,3 +21,5 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<?= $this->Html->link(__('View applications'), ['plugin' => 'IctCollege/CoordinatorApprovedSelector', 'controller' => 'InternshipApplications', 'action' => 'index', 'student_id' => $student->student_id], ['class' => 'btn btn-default']); ?>
