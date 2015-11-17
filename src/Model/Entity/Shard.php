@@ -14,6 +14,6 @@ class Shard extends Entity
      */
     public function parentNode()
     {
-        return null;
+        return 'shards';
     }
 }
