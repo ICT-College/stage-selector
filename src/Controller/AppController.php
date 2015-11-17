@@ -86,4 +86,59 @@ class AppController extends Controller
             $this->loadComponent('Search.Prg');
         }
     }
+
+    /**
+     * Action add wrapper for Acl aco sync
+     *
+     * @return \Cake\Network\Response
+     * @throws \Exception
+     */
+    public function add()
+    {
+        return $this->Crud->execute();
+    }
+
+    /**
+     * Action edit wrapper for Acl aco sync
+     *
+     * @return \Cake\Network\Response
+     * @throws \Exception
+     */
+    public function edit()
+    {
+        return $this->Crud->execute();
+    }
+
+    /**
+     * Action index wrapper for Acl aco sync
+     *
+     * @return \Cake\Network\Response
+     * @throws \Exception
+     */
+    public function index()
+    {
+        return $this->Crud->execute();
+    }
+
+    /**
+     * Action view wrapper for Acl aco sync
+     *
+     * @return \Cake\Network\Response
+     * @throws \Exception
+     */
+    public function view()
+    {
+        return $this->Crud->execute();
+    }
+
+    /**
+     * Action delete wrapper for Acl aco sync
+     *
+     * @return \Cake\Network\Response
+     * @throws \Exception
+     */
+    public function delete()
+    {
+        return $this->Crud->execute();
+    }
 }
