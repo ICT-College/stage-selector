@@ -44,8 +44,8 @@ class InternshipsTable extends Table
     public function findActive(Query $query, array $options)
     {
         $query->where([
-            'active' => true,
-            'student_id' => $options['student']
+            $this->aliasField('active') => true,
+            $this->aliasField('student_id') => $options['student']
         ]);
 
         return $query;
