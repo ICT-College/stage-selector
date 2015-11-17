@@ -1,6 +1,6 @@
 <?php
 
-namespace IctCollege\CoordinatorApprovedSelector\Controller\Admin;
+namespace IctCollege\CoordinatorApprovedSelector\Controller\Coordinator;
 
 use Cake\Event\Event;
 
