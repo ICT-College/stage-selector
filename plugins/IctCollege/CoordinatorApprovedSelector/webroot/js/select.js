@@ -281,7 +281,7 @@ function loadContent() {
                     var content = '<tr data-position-id="' + value.id + '">';
                         content += '<th scope="row">' + value.amount + '</th>';
                         content += '<td>' + value.study_program.description + '</td>';
-                        content += '<td>' + value.company.name + '<br/>Tel: 0612346578</td>';
+                        content += '<td>' + value.company.name + '<br/>Tel: ' + value.company.telephone + '</td>';
                         content += '<td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td>';
                         content += '<td>';
                             content += '<div class="pull-right">';
