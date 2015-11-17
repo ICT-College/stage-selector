@@ -19,20 +19,20 @@
             <td>
                 <?= $this->Html->link($student->name, [
                     'action' => 'view',
-                    $student->id
+                    $student->student_id
                 ]) ?>
             </td>
             <td><?= $student->email ?></td>
             <td>
                 <?= $this->Html->link(__('Edit'), [
                     'action' => 'edit',
-                    $student->id
+                    $student->student_id
                 ], [
                     'class' => 'btn btn-default'
                 ]) ?>
                 <?= $this->Html->link(__('Delete'), [
                     'action' => 'delete',
-                    $student->id
+                    $student->student_id
                 ], [
                     'confirm' => __('Are you sure?'),
                     'class' => 'btn btn-danger'
