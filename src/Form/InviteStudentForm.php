@@ -55,7 +55,11 @@ class InviteStudentForm extends Form
             return;
         }
 
-        $user = $users->invite($user, $shard);
+        /* @var \App\Model\Table\PeriodsTable $periods */
+        $periods = TableRegistry::get('Periods');
+        $period = $periods->get($data['period_id']);
+
+        $user = $users->invite($user, $shard, $period);
         if (!$user) {
             return;
         }

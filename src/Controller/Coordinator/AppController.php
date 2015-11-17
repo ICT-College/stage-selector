@@ -2,6 +2,8 @@
 namespace App\Controller\Coordinator;
 
 use App\Controller\AppController as BaseController;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 class AppController extends BaseController
 {
@@ -35,6 +37,17 @@ class AppController extends BaseController
                 ]
             ]
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->set('periods', TableRegistry::get('Periods')->find('list')->toArray());
+
     }
 
     public function implementedEvents()

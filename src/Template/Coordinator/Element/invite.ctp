@@ -10,7 +10,10 @@
                     <p><?= h(__('Here you\'re able to invite students for Stage Selector. When you invite a student, the student will receive an e-mail with more information.')) ?></p>
 
                     <?= $this->Form->input('student_number', [
-                        'style' => 'width: 150px;'
+                        'style' => 'width: 300px;'
+                    ]) ?>
+                    <?= $this->Form->input('period_id', [
+                        'style' => 'width: 300px;'
                     ]) ?>
                 </div>
                 <div class="modal-footer">

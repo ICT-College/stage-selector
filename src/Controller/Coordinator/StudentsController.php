@@ -7,6 +7,7 @@ use Cake\Cache\Cache;
 use Cake\Database\Expression\Comparison;
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 
 class StudentsController extends AppController
 {

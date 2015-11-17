@@ -36,6 +36,8 @@ class PeriodsTable extends Table
         }catch(MissingDatasourceConfigException $e) {}
 
         $this->hasMany('Internships');
+
+        $this->displayField('start');
     }
 
     public function searchConfiguration()

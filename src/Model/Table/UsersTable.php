@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\Period;
 use App\Model\Entity\Shard;
 use App\Model\Entity\User;
 use Cake\Database\Expression\FunctionExpression;
@@ -10,6 +11,7 @@ use Cake\Event\Event;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Association;
 use Cake\ORM\Entity;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
@@ -44,6 +46,10 @@ class UsersTable extends Table
 
         $this->belongsTo('Roles');
         $this->belongsToMany('Shards');
+        $this->hasMany('Internships', [
+            'bindingKey' => 'student_id',
+            'foreignKey' => 'student_id'
+        ]);
 
         $this->addBehavior('Search.Search');
         $this->addBehavior('Acl.Acl', [
@@ -71,7 +77,7 @@ class UsersTable extends Table
         ], false, Gearman::PRIORITY_HIGH);
     }
 
-    public function invite(User $user, Shard $shard)
+    public function invite(User $user, Shard $shard, Period $period)
     {
         $user = $this->patchEntity($user, [
             'shards' => [
@@ -81,12 +87,20 @@ class UsersTable extends Table
                         'role_id' => 1
                     ]
                 ]
+            ],
+            'internships' => [
+                [
+                    'period_id' => $period->id,
+                    'student_id' => $user->student_id,
+                    'active' => true
+                ]
             ]
         ]);
 
         $user = $this->save($user, [
             'associated' => [
-                'shards'
+                'Shards',
+                'Internships'
             ]
         ]);
 
