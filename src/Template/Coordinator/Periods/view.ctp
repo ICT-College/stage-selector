@@ -24,10 +24,17 @@
     </thead>
     <?php foreach ($period->internships as $internship): ?>
         <tr>
-            <td><?= h($internship->user->name); ?></td>
+            <td><?= $this->Html->link(
+                    $internship->user->name,
+                    ['controller' => 'internships', 'action' => 'view', $internship->id]
+                ); ?></td>
             <td>
                 <?php if ($internship->position): ?>
-                    <?= h($internship->position->study_program->description . ' - ' . $internship->position->company->name); ?>
+                    <?= h($internship->position->study_program->description); ?> -
+                    <?= $this->Html->link(
+                        $internship->position->company->name,
+                        ['controller' => 'Companies', 'action' => 'view', $internship->position->company->id
+                    ]); ?>
                 <?php else: ?>
                     <?= h(__('None')); ?>
                 <?php endif; ?>
