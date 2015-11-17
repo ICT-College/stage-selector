@@ -19,6 +19,14 @@ class UserMailer extends Mailer
         ];
     }
 
+    /**
+     * Send an invite to an user
+     *
+     * @param User $user The user tp invite
+     * @param Shard $shard
+     *
+     * @return void
+     */
     public function invite(User $user, Shard $shard)
     {
         $this->to($user->email)

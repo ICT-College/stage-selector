@@ -25,6 +25,7 @@ class GetUserFromStudentTask extends Shell
 
         $this->loadModel('Students');
 
+        // Get student using student ID
         $student = $this->Students->find()->select([
             'id',
             'firstname',

@@ -145,7 +145,7 @@ class CompaniesTable extends Table
             $type->toDatabase($options['coordinates'], $this->connection()->driver())
         ]), $options['radius'], null, '<=');
 
-        // Add the address and distance conditions in a OR clause
+        // Add the address and distance conditions in an OR clause
         $query->where([
             'OR' => [
                 $distanceComparison,
