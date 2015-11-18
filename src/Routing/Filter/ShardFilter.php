@@ -3,6 +3,7 @@
 namespace App\Routing\Filter;
 
 use App\Model\Table\ShardsTable;
+use App\ShardAwareTrait;
 use Cake\Core\App;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
@@ -15,6 +16,8 @@ use Cake\Routing\RouteBuilder;
 
 class ShardFilter extends DispatcherFilter
 {
+
+    use ShardAwareTrait;
 
     /**
      * Default priority for all methods in this filter

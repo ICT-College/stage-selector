@@ -1,8 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\ShardAwareTrait;
 use Cake\Datasource\ConnectionManager;
-use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -13,6 +13,8 @@ use Cake\ORM\TableRegistry;
  */
 class UsersController extends AppController
 {
+
+    use ShardAwareTrait;
 
     /**
      * @inheritDoc
@@ -34,20 +36,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
-                $shardSubdomain = 'main';
-
-                try {
-                    $connection = ConnectionManager::get('default');
-
-                    $shardTable = TableRegistry::get('Shards');
-                    $shard = $shardTable->find()->where([
-                        'datasource' => $connection->config()['name']
-                    ])->firstOrFail();
-
-                    $shardSubdomain = $shard->subdomain;
-                } catch (MissingDatasourceConfigException $e) {
-                    // When default isn't set, we want the $shardSubdomain remain default without showing an error to the visitor.
-                }
+                $shardSubdomain = $this->shardSubdomain();
 
                 $authorized = $this->Acl->check(['foreign_key' => $user['id'], 'model' => 'Users'], 'shards/' . $shardSubdomain);
 

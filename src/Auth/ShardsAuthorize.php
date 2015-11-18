@@ -15,8 +15,8 @@
 namespace App\Auth;
 
 use Acl\Auth\BaseAuthorize;
+use App\ShardAwareTrait;
 use Cake\Datasource\ConnectionManager;
-use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Error\Debugger;
 use Cake\Network\Request;
 use Cake\ORM\TableRegistry;
@@ -31,6 +31,8 @@ use Cake\ORM\TableRegistry;
 class ShardsAuthorize extends BaseAuthorize
 {
 
+    use ShardAwareTrait;
+
     /**
      * Authorize a user using the AclComponent to a Shard.
      * When we're trying to authorize for an action.
@@ -44,20 +46,7 @@ class ShardsAuthorize extends BaseAuthorize
         $Acl = $this->_registry->load('Acl');
         $user = [$this->_config['userModel'] => $user];
 
-        $shardSubdomain = 'main';
-
-        try {
-            $connection = ConnectionManager::get('default');
-
-            $shardTable = TableRegistry::get('Shards');
-            $shard = $shardTable->find()->where([
-                'datasource' => $connection->config()['name']
-            ])->firstOrFail();
-
-            $shardSubdomain = $shard->subdomain;
-        } catch (MissingDatasourceConfigException $e) {
-            // When default isn't set, we want the $shardSubdomain remain default without showing an error to the visitor.
-        }
+        $shardSubdomain = $this->shardSubdomain();
 
         $arosTable = TableRegistry::get('Aros');
         $aros = $arosTable->node($user);
