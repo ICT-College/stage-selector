@@ -24,6 +24,13 @@ class InternshipApplicationsTable extends Table
         parent::initialize($config);
 
         $this->addBehavior('Search.Search');
+        $this->addBehavior('CounterCache', [
+            'Positions' => [
+                'internship_application_count' => [
+                    'conditions' => ['InternshipApplications.accepted_coordinator' => false]
+                ]
+            ],
+        ]);
 
         $this->belongsTo('Positions');
         $this->belongsTo('Periods');
@@ -80,6 +87,11 @@ class InternshipApplicationsTable extends Table
         $rules->addCreate(function (Entity $entity, array $options) {
             return $options['repository']->find()->where(['student_id' => $entity->student_id])->count() <= $options['max'] - 1;
         }, 'maxPositions', ['max' => 4]);
+        $rules->addCreate(function (Entity $entity, array $options) {
+            $position = $options['repository']->Positions->get($entity->position_id);
+
+            return $position->available > 0;
+        }, 'positionMaxSelections');
         $rules->addCreate(new IsUnique(['position_id', 'student_id']), 'uniquePosition');
 
         return parent::buildRules($rules);

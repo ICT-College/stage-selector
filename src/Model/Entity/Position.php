@@ -9,8 +9,15 @@ use Muffin\Webservice\Model\ResourceBasedEntityTrait;
 class Position extends Entity
 {
 
+    protected $_virtual = ['available'];
+
     use ResourceBasedEntityTrait {
         applyResource as protected _applyResource;
+    }
+
+    protected function _getAvailable()
+    {
+        return $this->amount - ($this->internship_count + $this->internship_application_count);
     }
 
     /**

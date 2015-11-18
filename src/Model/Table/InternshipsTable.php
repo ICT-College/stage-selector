@@ -22,6 +22,13 @@ class InternshipsTable extends Table
         parent::initialize($config);
 
         $this->addBehavior('Search.Search');
+        $this->addBehavior('CounterCache', [
+            'Positions' => [
+                'internship_count' => [
+                    'conditions' => ['Internships.active' => true]
+                ]
+            ],
+        ]);
 
         try {
             // We only need to set the students relation when the secured alias is set.
