@@ -59,19 +59,32 @@ class ShardsAuthorize extends BaseAuthorize
             // When default isn't set, we want the $shardSubdomain remain default without showing an error to the visitor.
         }
 
-        $authorized = $Acl->check($user, 'shards/' . $shardSubdomain);
+        $arosTable = TableRegistry::get('Aros');
+        $aros = $arosTable->node($user);
 
-        if (!$authorized && $shardSubdomain != 'main') {
-            $authorized = $Acl->check($user, 'shards/main');
-        }
+        $authorized = false;
 
-        if ($authorized) {
-            $path = 'controllers/' . $this->action($request);
+        foreach ($aros as $aro) {
+            if ($aro->model != 'Users') {
+                continue;
+            }
 
-            $authorized = $Acl->check($user, $path);
+            $authorized = $Acl->check($aro->id, 'shards/' . $shardSubdomain);
 
-            if (!$authorized) {
-                Debugger::log('Unable to authorize for path: ' . $path);
+            if (!$authorized && $shardSubdomain != 'main') {
+                $authorized = $Acl->check($aro->id, 'shards/main');
+            }
+
+            if ($authorized) {
+                $path = 'controllers/' . $this->action($request);
+
+                $authorized = $Acl->check($aro->id, $path);
+
+                if ($authorized) {
+                    break;
+                } else {
+                    Debugger::log('Unable to authorize for path: ' . $path);
+                }
             }
         }
 
