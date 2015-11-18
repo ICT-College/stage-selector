@@ -7,6 +7,9 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Entity;
 use Psr\Log\LogLevel;
 
+/**
+ * @property \App\Model\Table\UsersTable Users
+ */
 class GetUserFromStudentTask extends Shell
 {
 
@@ -46,10 +49,15 @@ class GetUserFromStudentTask extends Shell
         }
 
         $conditions = ['student_id' => $student->id];
-        $user = ($this->Users->exists($conditions)) ? $this->Users->find()->where($conditions)->first() : $this->Users->newEntity([
-            'student_id' => $student->id,
-        ]);
+        if (($this->Users->exists($conditions))) {
+            $user = $this->Users->find()->where($conditions)->first();
+        } else {
+            $user = $this->Users->newEntity($conditions, [
+                'validate' => false
+            ]);
+        }
 
+        /* @var \App\Model\Entity\User $user */
         if ($user->isNew()) {
             $this->log(__('User entity initialized based on student entity with id {0}', $student->id), LogLevel::INFO);
         } else {
@@ -65,6 +73,8 @@ class GetUserFromStudentTask extends Shell
             'learning_pathway' => $student->learning_pathway,
             'study_program_id' => $student->study_program_id,
             'groupcode' => $student->groupcode,
+        ], [
+            'validate' => false
         ]);
     }
 }

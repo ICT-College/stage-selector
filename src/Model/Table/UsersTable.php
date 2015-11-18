@@ -101,12 +101,12 @@ class UsersTable extends Table
                     'active' => true
                 ]
             ]
+        ], [
+            'validate' => false
         ]);
 
         if ($user->isNew()) {
-            $user = $this->patchEntity($user, [
-                'activation_token' => Text::uuid()
-            ]);
+            $user->activation_token = Text::uuid();
         }
 
         $user = $this->save($user, [
