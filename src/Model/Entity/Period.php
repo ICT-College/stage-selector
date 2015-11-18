@@ -10,6 +10,6 @@ class Period extends Entity
 
     public function _getTitle()
     {
-        return $this->start->toDateString() . ' t/m ' . $this->end->toDateString();
+        return __('{0} untill {1}',  $this->start->toDateString(), $this->end->toDateString());
     }
 }
