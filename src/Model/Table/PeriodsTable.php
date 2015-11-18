@@ -37,7 +37,7 @@ class PeriodsTable extends Table
 
         $this->hasMany('Internships');
 
-        $this->displayField('start');
+        $this->displayField('title');
     }
 
     public function searchConfiguration()
