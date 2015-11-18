@@ -7,8 +7,17 @@ use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 
+/**
+ * @property string activation_token
+ * @property bool active
+ */
 class User extends Entity
 {
+
+    public function activate()
+    {
+        $this->active = true;
+    }
 
     /**
      * Hashes user password

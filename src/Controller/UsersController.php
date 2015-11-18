@@ -5,8 +5,24 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\ORM\TableRegistry;
 
+/**
+ * Class UsersController
+ *
+ * @property \App\Model\Table\UsersTable Users
+ * @package App\Controller
+ */
 class UsersController extends AppController
 {
+
+    /**
+     * @inheritDoc
+     */
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->Auth->allow('activate');
+    }
 
     /**
      * Login action for Users controller
@@ -61,5 +77,43 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             return $this->redirect($this->Auth->logout());
         }
+    }
+
+    public function activate($activationToken)
+    {
+        /* @var \App\Model\Entity\User $user */
+        $user = $this->Users->find()
+            ->where([
+                'active' => false,
+                'activation_token' => $activationToken,
+            ])
+            ->firstOrFail();
+
+        $this->set('user', $user);
+
+        if (!$this->request->is('put')) {
+            return null;
+        }
+
+        /* @var \App\Model\Entity\User $user */
+        $user = $this->Users->patchEntity($user, $this->request->data(), [
+            'fieldList' => [
+                'password',
+                'password_verification'
+            ]
+        ]);
+
+        $user->activate();
+        $user->activation_token = null;
+
+        if (!$this->Users->save($user)) {
+            $this->Flash->error(__('Could not save user'));
+
+            return null;
+        }
+
+        $this->Auth->setUser($user->toArray());
+
+        return $this->redirect(['_name' => 'selector']);
     }
 }

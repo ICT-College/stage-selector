@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Text;
 use Cake\Validation\Validator;
 use CvoTechnologies\Gearman\Gearman;
 use CvoTechnologies\Gearman\JobAwareTrait;
@@ -97,6 +98,12 @@ class UsersTable extends Table
             ]
         ]);
 
+        if ($user->isNew()) {
+            $user = $this->patchEntity($user, [
+                'activation_token' => Text::uuid()
+            ]);
+        }
+
         $user = $this->save($user, [
             'associated' => [
                 'Shards',
@@ -168,36 +175,40 @@ class UsersTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-//        $validator->requirePresence('email')
-//            ->add('email', [
-//                'valid' => [
-//                    'rule' => 'email',
-//                    'message' => 'E-mail must be valid'
-//                ],
-//                'unique' => [
-//                    'rule' => 'validateUnique',
-//                    'provider' => 'table',
-//                    'message' => 'E-mail must be unique'
-//                ]
-//            ])
-//            ->requirePresence('firstname')
-//            ->notEmpty('firstname', 'Firstname cannot be left blank')
-//            ->requirePresence('lastname')
-//            ->notEmpty('lastname', 'Lastname cannot be left blank')
-//            ->add('student_number', [
-//                'unique' => [
-//                    'rule' => 'validateUnique',
-//                    'provider' => 'table',
-//                    'message' => 'Student number must be unique'
-//                ]
-//            ])
-//            ->add('student_id', [
-//                'unique' => [
-//                    'rule' => 'validateUnique',
-//                    'provider' => 'table',
-//                    'message' => 'Only one user can be assigned to a student'
-//                ]
-//            ]);
+        $validator->requirePresence('email', 'create')
+            ->add('email', [
+                'valid' => [
+                    'rule' => 'email',
+                    'message' => 'E-mail must be valid'
+                ],
+                'unique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => 'E-mail must be unique'
+                ]
+            ])
+            ->requirePresence('firstname', 'create')
+            ->notEmpty('firstname', 'Firstname cannot be left blank')
+            ->requirePresence('lastname', 'create')
+            ->notEmpty('lastname', 'Lastname cannot be left blank')
+            ->add('student_number', [
+                'unique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => 'Student number must be unique'
+                ]
+            ])
+            ->add('student_id', [
+                'unique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => 'Only one user can be assigned to a student'
+                ]
+            ])
+            ->add('password_verification', 'no-misspelling', [
+                'rule' => ['compareWith', 'password'],
+                'message' => 'Passwords are not equal',
+            ]);
 
         return $validator;
     }
