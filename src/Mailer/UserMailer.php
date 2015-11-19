@@ -34,7 +34,8 @@ class UserMailer extends Mailer
             ->template('invite', 'student')
             ->set([
                 'user' => $user,
-                'shard' => $shard
+                'shard' => $shard,
+                'selectorUrl' => \Cake\Routing\Router::url(['_name' => 'selector'], true)
             ]);
 
         if ($user->active) {
