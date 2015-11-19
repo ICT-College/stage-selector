@@ -76,6 +76,9 @@ class PositionsTable extends Table
         $search->value('company_country', [
             'field' => 'Companies.country'
         ]);
+        $search->value('stagemarkt_id', [
+            'field' => 'Companies.stagemarkt_id'
+        ]);
         $search->value('study_program_id', [
             'field' => $this->aliasField('study_program_id')
         ]);
