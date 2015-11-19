@@ -178,6 +178,11 @@ return [
             'client' => null,
             'tls' => null,
         ],
+        'worker' => [
+            'className' => 'CvoTechnologies/Gearman.Worker',
+            'transport' => 'default',
+            'background' => true
+        ]
     ],
 
     /**
@@ -191,7 +196,7 @@ return [
      */
     'Email' => [
         'default' => [
-            'transport' => 'default',
+            'transport' => 'worker',
             'from' => 'you@localhost',
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
@@ -313,7 +318,7 @@ return [
     'Webservices' => [
         'stagemarkt' => [
             'className' => 'Muffin\Webservice\Connection',
-            'service' => 'Stagemarkt\Webservice\Driver\Stagemarkt',
+            'service' => 'IctCollege\Stagemarkt\Webservice\Driver\Stagemarkt',
             'license' => '',
         ]
     ],
@@ -330,6 +335,12 @@ return [
         ],
         'company_details' => [
             'className' => 'CompanyDetails'
+        ],
+        'position_details' => [
+            'className' => 'PositionDetails'
+        ],
+        'get_user_from_student' => [
+            'className' => 'GetUserFromStudent'
         ]
     ],
 
