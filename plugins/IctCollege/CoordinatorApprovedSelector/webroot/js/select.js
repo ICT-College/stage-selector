@@ -239,7 +239,7 @@ function updatePositionState(id, state) {
 function loadContent() {
     //Hide collapse and set spinning icon
     $('#filters').parents('.panel').find('.panel-title .glyphicon .spinning').last().remove();
-    $('#filters').collapse('hide').parents('.panel').find('.panel-title').append('<span class="glyphicon glyphicon-refresh spinning pull-right"></span>');
+    $('#filters').parents('.panel').find('.panel-title').append('<span class="glyphicon glyphicon-refresh spinning pull-right"></span>');
 
     //Receive records and create an object with only usefull filters
     var filters = {};
@@ -291,7 +291,7 @@ function loadContent() {
                     });
 
                     var content = '<tr data-position-id="' + value.id + '">';
-                        content += '<th scope="row">' + value.amount + '</th>';
+                        content += '<th scope="row">' + value.available + '</th>';
                         content += '<td>' + value.study_program.description + '</td>';
                         content += '<td>' + value.company.name + '<br/>Tel: ' + value.company.telephone + '</td>';
                         content += '<td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td>';

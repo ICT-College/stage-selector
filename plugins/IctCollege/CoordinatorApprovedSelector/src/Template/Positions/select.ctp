@@ -71,10 +71,11 @@
                     </div>
 
                     <?= $this->Form->input('radius', [
-                        'data-slider-min' => 0,
+                        'data-slider-min' => 5,
                         'data-slider-max' => 50,
                         'data-slider-step' => 1,
-                        'data-slider-value' => 0,
+                        'data-slider-value' => 10,
+                        'value' => 10,
                         'label' => [
                             'text' => __('Search in area') . ' <span class="glyphicon glyphicon-info-sign"><span>',
                             'data-toggle' => 'tooltip',
