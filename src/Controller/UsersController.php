@@ -76,7 +76,12 @@ class UsersController extends AppController
                 'active' => false,
                 'activation_token' => $activationToken,
             ])
-            ->firstOrFail();
+            ->first();
+
+        if (!$user) {
+            $this->Flash->error(__('Your account is already activated or your one-time token is invalid.'));
+            return $this->redirect('/');
+        }
 
         $this->set('user', $user);
 
