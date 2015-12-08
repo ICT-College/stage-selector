@@ -10,6 +10,7 @@ use Cake\Event\Event;
 use Cake\ORM\Association;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
+use Cake\Validation\Validator;
 use CvoTechnologies\Gearman\Gearman;
 use CvoTechnologies\Gearman\JobAwareTrait;
 use Search\Manager;
@@ -37,6 +38,24 @@ class PositionsTable extends Table
         $this->belongsToMany('QualificationParts', [
             'through' => 'PositionQualificationParts'
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->requirePresence('learning_pathway', 'create')
+            ->add('learning_pathway', [
+                'valid' => [
+                    'rule' => ['inList', ['GV', 'VMBO', 'BBL', 'BOL', 'HBO']],
+                ]
+            ])
+            ->requirePresence('company_id', 'create')
+            ->requirePresence('study_program_id', 'create');
+
+        return $validator;
     }
 
     public function searchConfiguration()

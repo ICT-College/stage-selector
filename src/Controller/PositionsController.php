@@ -16,7 +16,8 @@ class PositionsController extends AppController
     {
         return parent::implementedEvents() + [
             'Crud.beforeFind' => 'beforeFindQuery',
-            'Crud.beforePaginate' => 'beforeFindQuery'
+            'Crud.beforePaginate' => 'beforeFindQuery',
+            'Crud.beforeSave' => 'beforeSave'
         ];
     }
 
@@ -37,5 +38,26 @@ class PositionsController extends AppController
             'StudyPrograms',
             'QualificationParts'
         ]);
+    }
+
+    public function beforeSave(Event $event)
+    {
+        $this->loadModel('Internships');
+
+        /* @var \Cake\ORM\Entity $entity */
+        $entity = $event->subject()->entity;
+
+        $internship = $this->Internships->find('active', [
+            'student' => $this->Auth->user('student_id')
+        ])
+            ->contain([
+                'Periods'
+            ])
+            ->firstOrFail();
+
+        $entity->amount = 1;
+
+        $entity->start = $internship->period->start;
+        $entity->end = $internship->period->end;
     }
 }
