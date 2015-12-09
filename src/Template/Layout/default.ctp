@@ -26,6 +26,7 @@ if (!$this->exists('header')) {
 
     <?= $this->Html->script('jquery.min.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
+    <?= $this->Html->script('autocomplete') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('script') ?>
