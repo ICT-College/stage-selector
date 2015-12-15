@@ -26,7 +26,10 @@ class StudyProgramsTable extends Table
         $search->like('q', [
             'before' => true,
             'after' => true,
-            'field' => $this->aliasField('description')
+            'field' => [
+                $this->aliasField('id'),
+                $this->aliasField('description')
+            ]
         ]);
         return $search;
     }

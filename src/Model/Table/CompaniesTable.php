@@ -64,6 +64,7 @@ class CompaniesTable extends Table
                 'before' => true,
                 'after' => true,
                 'field' => [
+                    $this->aliasField('id'),
                     $this->aliasField('name'),
                     $this->aliasField('address'),
                     $this->aliasField('postcode'),
