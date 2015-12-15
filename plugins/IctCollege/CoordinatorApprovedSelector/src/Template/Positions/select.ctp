@@ -33,6 +33,21 @@
 </div>
 <?= $this->end() ?>
 
+<button class="position-create-open-modal">position-create-open-modal</button>
+<script>
+    $(function () {
+        $('.position-create-open-modal').click(function () {
+            $('.position-create-modal').modal('show');
+        });
+        $('.position-create').click(function () {
+            $.post('/api/positions.json', $('.position-create-modal form').serializeArray(), function (result) {
+                console.log(result);
+                updatePositionState(result.data.id, 'delete');
+            });
+        })
+    });
+</script>
+
 <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="footersHeading">
         <h4 class="panel-title">
@@ -171,3 +186,40 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade position-create-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title study-program-title"></h4>
+            </div>
+            <div class="modal-body">
+                <?= $this->Form->create(false); ?>
+                <?= $this->Form->input('learning_pathway', [
+                    'options' => [
+                        'BBL' => 'BBL',
+                        'BOL' => 'BOL',
+                        'VMBO' => 'VMBO',
+                        'HBO' => 'HBO'
+                    ],
+                    'label' => __('Learning pathway')
+                ]); ?>
+                <?= $this->Form->autocomplete('company_id', [
+                    'label' => __('Company'),
+                    'autocompleteUrl' => ['plugin' => false, 'controller' => 'Companies', 'action' => 'index', '_ext' => 'json', '_method' => 'GET'],
+                ]) ?>
+                <?= $this->Form->autocomplete('study_program_id', [
+                    'label' => __('Study program'),
+                    'autocompleteUrl' => ['plugin' => false, 'controller' => 'StudyPrograms', 'action' => 'index', '_ext' => 'json', '_method' => 'GET'],
+                    'autocompleteValue' => 'description'
+                ]) ?>
+                <?= $this->Form->end(); ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Sluit</button>
+                <button type="button" class="btn btn-success position-create">Voeg toe</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
