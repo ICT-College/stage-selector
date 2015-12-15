@@ -26,7 +26,7 @@ class ImportStudentsTask extends Shell
             'Roepnaam' => 'firstname',
             'Voorvoegsel' => 'insertion',
             'Achternaam' => 'lastname',
-            'E-mail' => 'email',
+            'E-mail school' => 'email',
             '(W)Postcode en plaats' => function ($value) {
                 return array_combine([
                     'postcode',
