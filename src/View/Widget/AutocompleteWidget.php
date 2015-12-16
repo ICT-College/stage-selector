@@ -16,26 +16,34 @@ class AutocompleteWidget extends BasicWidget
     {
         $data['data-autocomplete-url'] = Router::url($data['autocompleteUrl']);
         if (isset($data['autocompleteKey'])) {
-            $data['data-autocomplete-key'] = $data['autocompleteKey'];
+            $data['data-autocomplete-key'] = (($data['autocompleteKey'] === false) ? 'none' : $data['autocompleteKey']);
         }
         if (isset($data['autocompleteValue'])) {
             $data['data-autocomplete-value'] = $data['autocompleteValue'];
         }
+        if (isset($data['autocompleteStrict'])) {
+            $data['data-autocomplete-strict'] = ($data['autocompleteStrict']) ? '1' : '0';
+        }
 
-        unset($data['autocompleteUrl'],$data['autocompleteKey'], $data['autocompleteValue']);
+        $hiddenInput = null;
 
-        $hiddenWidget = new \Cake\View\Widget\BasicWidget($this->_templates);
+        if (!isset($data['autocompleteKey']) || $data['autocompleteKey'] !== false) {
+            $hiddenWidget = new \Cake\View\Widget\BasicWidget($this->_templates);
 
-        $hiddenInputId = uniqid('autocomplete');
-        $hiddenInput = $hiddenWidget->render([
-            'name' => $data['name'],
-            'type' => 'hidden',
-            'data-autocomplete-id' => $hiddenInputId
-        ], $context);
+            $hiddenInputId = uniqid('autocomplete');
+            $hiddenInput = $hiddenWidget->render([
+                'name' => $data['name'],
+                'type' => 'hidden',
+                'data-autocomplete-id' => $hiddenInputId
+            ], $context);
+
+            $data['data-autocomplete-value-id'] = $hiddenInputId;
+        }
 
         $data['name'] = $data['name'] . '_value';
         $data['type'] = 'text';
-        $data['data-autocomplete-value-id'] = $hiddenInputId;
+
+        unset($data['autocompleteUrl'],$data['autocompleteKey'], $data['autocompleteValue'], $data['autocompleteStrict']);
 
         return parent::render($data, $context) . $hiddenInput;
     }

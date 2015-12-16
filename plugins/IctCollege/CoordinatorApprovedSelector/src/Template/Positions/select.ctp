@@ -43,19 +43,28 @@
     <div id="filters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="footersHeading">
         <div class="panel-body">
             <div class="row">
-                <?= $this->Form->create(false, ['type' => 'get', 'id' => 'filter']) ?>
+                <?= $this->Form->create(false) ?>
 
                 <div class="col-md-5">
                     <?= $this->Form->input('description', ['label' => __('Description')]) ?>
-                    <?= $this->Form->input('company_name', ['label' => __('Company name')]) ?>
+                    <?= $this->Form->input('company_name', [
+                        'type' => 'autocomplete',
+                        'label' => __('Company name'),
+                        'autocompleteUrl' => '/api/companies.json',
+                        'autocompleteValue' => 'name',
+                        'autocompleteKey' => false,
+                        'autocompleteStrict' => false
+                    ]) ?>
                     <?= $this->Form->input('study_program_id', [
-                        'type' => 'text',
+                        'type' => 'autocomplete',
                         'label' => [
                             'text' => __('CREBO number/name') . ' <span class="glyphicon glyphicon-info-sign"><span>',
                             'data-toggle' => 'tooltip',
                             'title' => __('You can either enter a CREBO number of enter a crebo name.'),
                             'escape' => false
-                        ]
+                        ],
+                        'autocompleteUrl' => '/api/study_programs.json',
+                        'autocompleteValue' => 'description'
                     ]) ?>
                 </div>
 
@@ -127,6 +136,12 @@
     </ul>
 </div>
 
+<div class="text-center">
+    <?= $this->Form->button(__('Add own internship'), [
+        'class' => 'btn btn-primary position-create-open-modal',
+    ]); ?>
+</div>
+
 <div class="modal fade position-modal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -137,8 +152,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <strong>Functie</strong>: <span class="study-program-description"></span><br/>
-                        <strong>Omschrijving</strong>: <br/>
+                        <strong><?= __('Position') ?></strong>: <span class="study-program-description"></span><br/>
+                        <strong><?= __('Description') ?></strong>: <br/>
                         <p class="position-description"></p>
 
                         <address>
@@ -147,9 +162,9 @@
                             <span class="company-address-city"></span> <span class="company-address-postcode"></span>
                         </address>
 
-                        <strong>Email</strong>: <span class="company-email"></span><br/>
-                        <strong>Website</strong>: <a class="company-website" target="_blank"></a><br/>
-                        <strong>Telephone</strong>: <span class="company-telephone"></span>
+                        <strong><?= __('E-mail') ?></strong>: <span class="company-email"></span><br/>
+                        <strong><?= __('Website') ?></strong>: <a class="company-website" target="_blank"></a><br/>
+                        <strong><?= __('Telephone') ?></strong>: <span class="company-telephone"></span>
                     </div>
                     <div class="col-md-6">
                         <iframe style="width: 100%;"></iframe>
@@ -165,9 +180,55 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Sluit</button>
-                <button type="button" class="btn btn-success position-select">Voeg toe</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
+                <button type="button" class="btn btn-success position-select"><?= __('Add') ?></button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade position-create-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?= __('Add internship') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= __('Didn\'t find an internship in our list but you\'ve contacted a company on your own? This company properly didn\'t update there details correctly at the internship registry. Because of that, it isn\'t in in our list (yet). Here you\'re able to add an internship for yourself.<br/><br/>Please fill in the 3 fields on the right, after you\'ve filled in all fields it will be added to your selection.') ?>
+                    </div>
+                    <div class="col-md-8">
+                        <?= $this->Form->create(false); ?>
+                        <?= $this->Form->input('learning_pathway', [
+                            'options' => [
+                                'BBL' => 'BBL',
+                                'BOL' => 'BOL',
+                                'VMBO' => 'VMBO',
+                                'HBO' => 'HBO'
+                            ],
+                            'label' => __('Learning pathway')
+                        ]); ?>
+                        <?= $this->Form->input('company_id', [
+                            'type' => 'autocomplete',
+                            'label' => __('Company'),
+                            'autocompleteUrl' => ['plugin' => false, 'controller' => 'Companies', 'action' => 'index', '_ext' => 'json', '_method' => 'GET'],
+                        ]) ?>
+                        <?= $this->Form->input('study_program_id', [
+                            'type' => 'autocomplete',
+                            'label' => __('Study program'),
+                            'autocompleteUrl' => ['plugin' => false, 'controller' => 'StudyPrograms', 'action' => 'index', '_ext' => 'json', '_method' => 'GET'],
+                            'autocompleteValue' => 'description'
+                        ]) ?>
+                        <?= $this->Form->end(); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
+                <button type="button" class="btn btn-success position-create"><?= __('Add') ?></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
