@@ -16,6 +16,11 @@ class User extends Entity
 
     use ShardAwareTrait;
 
+    protected $_virtual = ['name'];
+
+    /**
+     * Activates an user
+     */
     public function activate()
     {
         $this->active = true;
