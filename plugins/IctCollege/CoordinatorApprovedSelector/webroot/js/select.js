@@ -61,75 +61,15 @@ $(function() {
         loadModalContent($(this).closest('[data-position-id]').data('position-id'));
     });
 
-    var studyProgramInput = document.getElementById('study-program-id');
-    var studyProgramTimer;
-
-    var studyProgramAwesomplete = new Awesomplete(studyProgramInput, {
-        autoFirst: true
+    $('.position-create-open-modal').click(function () {
+        $('.position-create-modal').modal('show');
     });
 
-    $(studyProgramInput).on('keyup', function(e) {
-        if ([13, 40, 38].indexOf(e.keyCode) != -1) {
-            return;
-        }
-
-        if (studyProgramTimer != null) {
-            clearTimeout(studyProgramTimer);
-        }
-
-        studyProgramAwesomplete.list = [];
-
-        studyProgramTimer = setTimeout(function() {
-            var search = $(studyProgramInput).val();
-
-            $.get('/api/study_programs.json', { limit: 5, q: search }, function(data) {
-                if (data.success) {
-                    var results = data.data.map(function(e) {
-                        return e.id + ' - ' + e.description;
-                    });
-
-                    studyProgramAwesomplete.list = results;
-                } else {
-                    studyProgramAwesomplete.list = [];
-                }
-            });
-        }, 50);
-    });
-
-    // Autocomplete with AJAX call for companies input
-    var companyInput = document.getElementById('company-name');
-    var companyTimeoutTimer;
-
-    var companyInputAwesomplete = new Awesomplete(companyInput, {
-        autoFirst: true
-    });
-
-    $(companyInput).on('keyup', function(e) {
-        if ([13, 40, 38].indexOf(e.keyCode) != -1) {
-            return;
-        }
-
-        if (companyTimeoutTimer != null) {
-            clearTimeout(companyTimeoutTimer);
-        }
-
-        companyInputAwesomplete.list = [];
-
-        companyTimeoutTimer = setTimeout(function() {
-            var search = $(companyInput).val();
-
-            $.get('/api/companies.json', { limit: 5, name: search }, function(data) {
-                if (data.success) {
-                    var results = data.data.map(function(e) {
-                        return e.name;
-                    });
-
-                    companyInputAwesomplete.list = results;
-                } else {
-                    companyInputAwesomplete.list = [];
-                }
-            });
-        }, 50);
+    $('.position-create').click(function () {
+        $.post('/api/positions.json', $('.position-create-modal form').serializeArray(), function (result) {
+            console.log(result);
+            updatePositionState(result.data.id, 'delete');
+        });
     });
 
     $('.position-modal .position-select').on('click', function() {

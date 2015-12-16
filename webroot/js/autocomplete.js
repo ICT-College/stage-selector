@@ -13,6 +13,7 @@ function generateUUID() {
 $(function () {
     $('[data-autocomplete-url]').each(function () {
         $(this).data('autocomplete-uuid', generateUUID());
+
         var autocomplete = {};
         autocomplete.keyField = $(this).data('autocomplete-key') ? $(this).data('autocomplete-key') : 'id';
         autocomplete.valueField = $(this).data('autocomplete-value') ? $(this).data('autocomplete-value') : 'name';
@@ -25,12 +26,37 @@ $(function () {
         });
 
         $(this)[0].addEventListener('awesomplete-selectcomplete', function () {
-            var key = $(this).val().split('-')[0].replace(/\D/g, '');
-            var value = $(this).val().split('-').slice(1).join(' - ');
+            var valueString = $(this).val().split(' - ');
+
+            if ($(this).data('autocomplete-key') != 'none') {
+                var key = valueString[0].replace(/\D/g, '');
+                var value = valueString.slice(1).join(' - ');
+
+                $('[data-autocomplete-id=' + $(this).data('autocomplete-value-id') + ']').val(key);
+            } else {
+                var value = valueString;
+            }
 
             $(this).val(value);
-            $('[data-autocomplete-id=' + $(this).data('autocomplete-value-id') + ']').val(key);
         });
+
+        if ($(this).data('autocomplete-strict') != '0') {
+
+            $(this).on('blur', function (e) {
+                var key = '';
+                var value = '';
+
+                if ($(this).val() != '') {
+                    var valueString = $(this).closest('.awesomplete').find('li[aria-selected="true"]').text().split(' - ');
+                    key = valueString[0].replace(/\D/g, '');
+                    value = valueString.slice(1).join(' - ');
+                }
+
+                $(this).val(value);
+                $('[data-autocomplete-id=' + $(this).data('autocomplete-value-id') + ']').val(key);
+            });
+
+        }
 
         $(this).on('keyup', function(e) {
             if ([13, 40, 38].indexOf(e.keyCode) != -1) {
@@ -51,7 +77,11 @@ $(function () {
                 $.get(self.data('autocomplete-url'), { limit: 5, q: query }, function(data) {
                     if (data.success) {
                         var results = data.data.map(function(e) {
-                            return e[autocompletes[uuid].keyField] + ' - ' + e[autocompletes[uuid].valueField];
+                            if (autocompletes[uuid].keyField == 'none') {
+                                return e[autocompletes[uuid].valueField];
+                            } else {
+                                return e[autocompletes[uuid].keyField] + ' - ' + e[autocompletes[uuid].valueField];
+                            }
                         });
 
                         autocompletes[self.data('autocomplete-uuid')].awesomplete.list = results;
