@@ -1,4 +1,4 @@
-<?= $this->Html->script(['awesomplete.min.js', 'bootstrap-slider.min.js', 'IctCollege/CoordinatorApprovedSelector.select'], ['block' => true]) ?>
+<?= $this->Html->script(['handlebars.min-latest.js', 'awesomplete.min.js', 'bootstrap-slider.min.js', 'IctCollege/CoordinatorApprovedSelector.select'], ['block' => true]) ?>
 <?= $this->Html->css(['awesomplete.css', 'bootstrap-slider.min.css'], ['block' => true]) ?>
 <?= $this->start('header') ?>
 <div class="header clearfix">
@@ -126,8 +126,40 @@
     </tr>
     </thead>
     <tbody>
-    <tr><td colspan="5">Geen zoekresultaten</td></tr>
+
     </tbody>
+
+    <script id="positions" type="text/x-handlebars-template">
+        {{#each positions}}
+            <tr data-position-id="{{id}}">
+                <th scope="row">{{availability}}</th>
+                <td>{{study_program.description}}</td>
+                <td>
+                    {{company.name}}<br/>
+                    Tel: {{company.telephone}}
+                </td>
+                <td>
+                    {{company.address}}<br/>
+                    {{company.postcode}} {{company.city}}
+                </td>
+                <td>
+                    <div class="pull-right">
+                        <a href="#" data-toggle="modal" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </a>
+                        &nbsp;
+                        <a href="#" data-toggle="selection" data-state="{{state}}" class="btn btn-{{color}}">
+                            <span class="glyphicon glyphicon-{{icon}}"></span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {{else}}
+            <tr>
+                <td colspan="5"><?= __('No search results') ?></td>
+            </tr>
+        {{/each}}
+    </script>
 </table>
 
 <div class="text-center" style="display: none;">

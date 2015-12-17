@@ -1,425 +1,156 @@
-var selected = [];
+/**
+ * Select array wich holds all classes.
+ *
+ * @constructor
+ */
+var select = [];
 
-$(function() {
+/**
+ * Loader class which controls the loading modal
+ *
+ * @type {{isLoading: boolean, start: Function, end: Function}}
+ */
+select.Loader = {
+    /**
+     * Loader variables
+     */
+    isLoading: false,
 
-    // Update icon when toggling the #filters collapse
-    $('#filters').on('show.bs.collapse', function() {
-        $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-down');
-    });
-
-    $('#filters').on('hide.bs.collapse', function() {
-        $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-up');
-    });
-
-    // Open/close a collapse when you click on the header
-    $('.panel-heading').on('click', function() {
-        $(this).parents('.panel').find('.panel-collapse').collapse('toggle');
-    });
-
-    // Catch filter form submit, we won't submit it through a normal GET but awesome AJAX request :-)
-    $('#filter').submit(function(e) {
-        e.preventDefault();
-
-        $('.positions').data('page', 1);
-
-        loadContent();
-
-        return false;
-    });
-
-    $(document).on('click', '.pagination > li > a', function() {
-        $('.positions').data('page', $(this).html());
-
-        loadContent();
-    });
-
-    // Did someone click a add or remove button? Catch it!
-    $(document).on('click', '[data-toggle="selection"]', function(e) {
-        // Make sure the button isn't disabled..
-        if ($(this).attr('disabled') == 'disabled') {
-            return;
+    /**
+     * Loader methods
+     */
+    start: function() {
+        if (this.isLoading) {
+            return true;
         }
 
-        var state = $(this).attr('data-state');
+        $('.loading-modal').modal('show').modal('lock');
+    },
 
-        if (state == 'add') {
-            state = 'delete';
-        } else {
-            state = 'add';
+    stop: function() {
+        $('.loading-modal').modal('unlock').modal('hide');
+
+        this.isLoading = false;
+    }
+};
+
+/**
+ * Request class which handles all requests for us
+ *
+ * @type {{inRequest: boolean, get: Function, post: Function, request: Function}}
+ */
+select.Request = {
+    /**
+     * Request variables
+     */
+    inRequest: false,
+
+    /**
+     * Request methods
+     */
+    get: function(uri, data, callback, loader) {
+        this.request('GET', uri, data, callback, loader);
+    },
+
+    post: function(uri, data, callback, loader) {
+        this.request('POST', uri, data, callback, loader);
+    },
+
+    request: function(method, uri, data, callback, loader) {
+        // Loader is by default true
+        if (typeof loader == 'undefined') {
+            loader = true;
         }
 
-        updatePositionState($(this).closest('[data-position-id]').attr('data-position-id'), state);
+        if (loader) {
+            select.Loader.start();
+        }
 
-        e.stopImmediatePropagation();
-    });
-
-    $(document).on('click', '[data-position-id] td:not(:last-child), [data-toggle="modal"]', function (e) {
-        loadModalContent($(this).closest('[data-position-id]').data('position-id'));
-    });
-
-    $(document).on('click', '.nav-selection [data-position-id]', function (e) {
-        loadModalContent($(this).closest('[data-position-id]').data('position-id'));
-    });
-
-    $('.position-create-open-modal').click(function () {
-        $('.position-create-modal').modal('show');
-    });
-
-    $('.position-create').click(function () {
-        var map = {};
-        $('input, select', '.position-create-modal form').each(function() {
-            map[$(this).attr("name")] = $(this).val();
+        $.ajax({
+            method: method,
+            url: uri,
+            data: data
+        }).done(function(response) {
+            callback(true, response);
+        }).fail(function(jqXHR, textStatus) {
+            callback(false, response, textStatus);
+        }).always(function() {
+            if (loader) {
+                select.Loader.stop();
+            }
         });
-
-        updatePositionState(null, 'delete', map);
-    });
-
-    $('.position-modal .position-select').on('click', function() {
-        $('.position-modal').modal('hide');
-
-        var id = $(this).closest('[data-position-id]').attr('data-position-id');
-
-        var state = $(this).attr('data-state');
-
-        if (state == 'add') {
-            state = 'delete';
-        } else {
-            state = 'add';
-        }
-
-        updatePositionState(id, state);
-    });
-
-    $('#radius').slider({
-        formatter: function(value) {
-            return value + 'km';
-        }
-    });
-
-    // All tooltips are tooltips, dammit bootstrap!
-    $('[data-toggle="tooltip"]').tooltip();
-
-    // Open the filters collapse after 500ms has passed. This gives an awesome effect.
-    setTimeout(function() {
-        $('#filters').collapse('show');
-    }, 500);
-
-    // Startup behaviour
-    $('.loading-modal').modal('show').modal('lock');
-
-    updateSelected(true);
-});
-
-function updateSelected(load) {
-    $.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(data) {
-        if (data.success) {
-            selected = data.data;
-
-            $('.nav-selection li').remove();
-            for (var i = 0; i < 4; i++) {
-                var select = selected[i];
-                var count = i + 1;
-                var side = ((count <= 2) ? 'first' : 'last');
-
-                if (select) {
-                    if (!select.accepted_coordinator) {
-                        $('.nav-selection:' + side).append('<li data-position-id="' + select.position.id + '" class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button></a></li>');
-                    } else {
-                        $('.nav-selection:' + side).append('<li class="disabled"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' </a></li>');
-                    }
-                } else {
-                    $('.nav-selection:' + side).append('<li><a href="#">' + count + '.</a></li>');
-                }
-            }
-
-            if (selected.length >= 4) {
-                $('[data-state="add"]').attr('disabled', 'disabled');
-            } else {
-                $('[data-state="add"]').removeAttr('disabled');
-            }
-
-            if (load) {
-                loadContent();
-            }
-        }
-    });
-}
-
-function updatePositionState(id, state, positionData) {
-    if (state == 'add') {
-        var oldState = 'delete';
-    } else {
-        var oldState = 'add';
     }
+};
 
-    // Update the button's content to a awesome rotating refresh icon and disable it
-    $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
+select.Selection = {
+    /**
+     * Selection variables
+     */
+    current: [ ],
 
-    $.ajax({
-        'url': '/api/coordinator_approved_selector/internship_applications' + ((oldState == 'add') ? '' : '/position-delete') + '.json',
-        'method': (oldState == 'add') ? 'POST' : 'DELETE',
-        'data': (typeof positionData === "undefined") ? {
-            'position_id': id
-        } : {
-            position: positionData
-        },
-        'success': function(data) {
-            console.log(data);
+    /**
+     * Selection methods
+     */
+    refresh: function() {
+        select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, data) {
             if (data.success) {
-                updateSelected(false);
+                selected = data.data;
 
-                if (state == 'add') {
-                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'add').html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success');
-                } else {
-                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
-                }
-            }
-        },
-        'error': function() {
-            $('[data-position-id=' + id + '] [data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').data('state', 'error');
-        }
-    });
-}
+                $('.nav-selection li').remove();
+                for (var i = 0; i < 4; i++) {
+                    var select = selected[i];
+                    var count = i + 1;
+                    var side = ((count <= 2) ? 'first' : 'last');
 
-function loadContent() {
-    //Hide collapse and set spinning icon
-    $('#filters').parents('.panel').find('.panel-title .glyphicon .spinning').last().remove();
-    $('#filters').parents('.panel').find('.panel-title').append('<span class="glyphicon glyphicon-refresh spinning pull-right"></span>');
-
-    //Receive records and create an object with only usefull filters
-    var filters = {};
-
-    $('#filters').find('input[type!="submit"], select').each(function() {
-        var filter = $(this).attr('name');
-        var value = $(this).val();
-
-        if (value != undefined && value != '' && value != 0 && value != null) {
-            filters[filter] = value;
-        }
-    });
-
-    if (filters['study_program_id']) {
-        filters['study_program_id'] = filters['study_program_id'].split('-')[0].replace(/\D/g,'');
-    }
-
-    if (!filters['company_address'] && !filters['company_postcode'] && !filters['company_city']) {
-        delete filters['radius'];
-    }
-
-    filters['page'] = $('.positions').data('page');
-
-    $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
-        $.get('/api/positions.json', filters, function (data) {
-            $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
-            $('.pagination').parent().hide();
-
-            $('.positions > tbody').hide(50, function () {
-                $('.positions > tbody > tr').remove();
-
-                data.data.forEach(function (value, key) {
-                    var state = 'add';
-                    var color = 'success';
-                    var icon = 'plus';
-
-                    selected.forEach(function (selectValue, selectKey) {
-                        if (selectValue.position.id == value.id) {
-                            if (selectValue.accepted_coordinator) {
-                                state = 'accepted';
-                                color = 'default disabled';
-                                icon = 'ok';
-                            } else {
-                                state = 'delete';
-                                color = 'danger';
-                                icon = 'remove';
-                            }
+                    if (select) {
+                        if (!select.accepted_coordinator) {
+                            $('.nav-selection:' + side).append('<li data-position-id="' + select.position.id + '" class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button></a></li>');
+                        } else {
+                            $('.nav-selection:' + side).append('<li class="disabled"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' </a></li>');
                         }
-                    });
-
-                    var content = '<tr data-position-id="' + value.id + '">';
-                        content += '<th scope="row">' + value.available + '</th>';
-                        content += '<td>' + value.study_program.description + '</td>';
-                        content += '<td>' + value.company.name + '<br/>Tel: ' + value.company.telephone + '</td>';
-                        content += '<td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td>';
-                        content += '<td>';
-                            content += '<div class="pull-right">';
-                                content += '<a href="#' + value.id + '" data-toggle="modal" class="btn btn-primary">';
-                                    content += '<span class="glyphicon glyphicon-info-sign"></span>';
-                                content +='</a>&nbsp;';
-                                content += '<a href="#' + value.id + '" data-toggle="selection" data-state="' + state + '" class="btn btn-' + color + '">';
-                                    content += '<span class="glyphicon glyphicon-' + icon + '"></span>';
-                                content +='</a>';
-                            content += '</div>';
-                        content += '</td>';
-                    content += '</tr>';
-
-                    $('.positions > tbody').append(content);
-                });
-
-                if (data.data.length == 0) {
-                    $('.positions > tbody').append('<tr><td colspan="5">Geen zoekresultaten</td></tr>')
-                }
-
-                var currentPage = data.pagination.current_page;
-                var number = data.pagination.current_page - 4;
-                var lastSetPage = (data.pagination.page_count - 3);
-                if (number < 1) {
-                    number = 1;
-                }
-                if (lastSetPage < 1) {
-                    lastSetPage = 1;
-                }
-                if (currentPage <= data.pagination.page_count && currentPage >= lastSetPage) {
-                    number = currentPage - (8 - (data.pagination.page_count - currentPage));
-                }
-                if (number < 1) {
-                    number = 1;
-                }
-
-                $('.pagination li').remove();
-
-                if (data.pagination.page_count > 1 && data.data.length != 0) {
-                    for (var i = 1; i <= 9; i++) {
-                        if (number > data.pagination.page_count) {
-                            break;
-                        }
-
-                        $('.pagination').append('<li class="' + ((currentPage == number) ? 'active' : '') + '"><a href="javascript:;">' + number + '</a></li>');
-
-                        number++;
+                    } else {
+                        $('.nav-selection:' + side).append('<li><a href="#">' + count + '.</a></li>');
                     }
-
-                    $('.pagination').parent().show();
                 }
 
-                if (selected.length == 4) {
+                if (selected.length >= 4) {
                     $('[data-state="add"]').attr('disabled', 'disabled');
                 } else {
                     $('[data-state="add"]').removeAttr('disabled');
                 }
 
-                $('.loading-modal').modal('unlock').modal('hide');
-
-                $('.positions > tbody').show(50);
-            });
+                if (load) {
+                    loadContent();
+                }
+            }
         });
-    });
-}
+    },
 
-function loadModalContent(id) {
-    var modalBody = $('.position-modal');
+    add: function(id) {
 
-    $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
-        $.get('/api/positions/' + id + '.json', function (data) {
-            modalBody.attr('data-position-id', id);
+        this.refresh();
+    },
 
-            modalBody.find('.study-program-title').text(data.data.study_program.description + ' at ' + data.data.company.name);
-            modalBody.find('.study-program-description').text(data.data.study_program.description);
-            modalBody.find('.company-name').text(data.data.company.name);
-            modalBody.find('.position-description').text(((data.data.description == '') ? 'No description' : data.data.description));
+    remove: function(id) {
 
-            modalBody.find('.qualification-parts').html('');
-            modalBody.find('.qualification-parts').last().attr('start', 0);
-            var count = 1;
-
-            for (var qualificationPartIndex in data.data.qualification_parts) {
-                var qualificationPart = data.data.qualification_parts[qualificationPartIndex];
-
-                var listItem = $('<li>', {
-                    'text': qualificationPart.description + '.'
-                });
-
-                if ((data.data.qualification_parts.length/2) >= count) {
-                    console.log('links');
-                    modalBody.find('.qualification-parts').first().append(listItem);
-                } else {
-                    console.log('rechts');
-                    if (modalBody.find('.qualification-parts').last().attr('start') == 0) {
-                        modalBody.find('.qualification-parts').last().attr('start', count);
-                    }
-
-                    modalBody.find('.qualification-parts').last().append(listItem)
-                }
-
-                count++;
-            }
-
-            modalBody.find('.company-address-address').text(data.data.company.address);
-            modalBody.find('.company-address-postcode').text(data.data.company.city);
-            modalBody.find('.company-address-city').text(data.data.company.postcode);
-            //modalBody.find('.company-correspondence-address-address').text(data.data.company.address);
-            //modalBody.find('.company-correspondence-address-city').text(data.data.company.city);
-            //modalBody.find('.company-correspondence-address-postcode').text(data.data.company.postcode);
-
-            modalBody.find('.company-email').text(data.data.company.email);
-            modalBody.find('.company-website').text(data.data.company.website);
-            modalBody.find('.company-website').attr('href', data.data.company.website);
-            modalBody.find('.company-telephone').text(data.data.company.telephone);
-
-            modalBody.find('iframe').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + data.data.company.address + ' ' + data.data.company.postcode + ' ' + data.data.company.city + '&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI');
-
-            var state = 'add';
-
-            selected.forEach(function (value, key) {
-                if (value.position.id == id) {
-                    state = 'delete';
-                }
-            });
-
-            if (state == 'add') {
-                modalBody.find('.position-select').attr('data-state', 'add').removeClass('btn-danger').addClass('btn-success').text('Add to selection');
-
-                if (selected.length >= 4) {
-                    modalBody.find('.position-select').attr('disabled', 'disabled');
-                }
-            } else {
-                modalBody.find('.position-select').attr('data-state', 'delete').addClass('btn-danger').removeClass('btn-success').text('Delete from selection');
-            }
-
-            if (selected.length < 4) {
-                modalBody.find('.position-select').removeAttr('disabled');
-            }
-
-            $('.loading-modal').modal('unlock').modal('hide').one('hidden.bs.modal', function() {
-                $('.position-modal').modal('show').one('shown.bs.modal', function() {
-                    modalBody.find('iframe').height(modalBody.find('.col-md-6').first().height());
-                });
-            });
-        });
-    });
-}
+        this.refresh();
+    }
+};
 
 /**
- * Adds a parameter to a given URL
- *
- * Copyright to that awesome guy from Stackoverflow: http://stackoverflow.com/a/10997390/2391566
- *
- * @param url URL to be modified
- * @param param Param key to be added
- * @param paramVal Param value to be added
- * @returns baseuRL The modified base url
+ * Initialize method for starting the page
  */
-function setParameter (url, param, paramVal){
-    var parts = url.split('?');
-    var baseUrl = parts[0];
-    var oldQueryString = parts[1];
-    var newParameters = [];
-    if (oldQueryString) {
-        var oldParameters = oldQueryString.split('&');
-        for (var i = 0; i < oldParameters.length; i++) {
-            if(oldParameters[i].split('=')[0] != param) {
-                newParameters.push(oldParameters[i]);
-            }
-        }
-    }
-    if (paramVal !== '' && paramVal !== null && typeof paramVal !== 'undefined') {
-        newParameters.push(param + '=' + encodeURI(paramVal));
-    }
-    if (newParameters.length > 0) {
-        return baseUrl + '?' + newParameters.join('&');
-    } else {
-        return baseUrl;
-    }
-}
+select.initialize = function() {
+
+    select.Selection.refresh();
+};
+
+/**
+ * Initialize when DOM is ready
+ */
+$(function() {
+    select.initialize();
+});
 
 /**
  * Add ability to lock a modal
