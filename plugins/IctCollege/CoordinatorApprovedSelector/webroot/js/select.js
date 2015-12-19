@@ -14,23 +14,49 @@ select.Loader = {
     /**
      * Loader variables
      */
-    isLoading: false,
+    loadings: 0, // Holds how many times we're loading something.
 
     /**
      * Loader methods
      */
-    start: function() {
-        if (this.isLoading) {
-            return true;
+    start: function(callback) {
+        if (select.Loader.loadings > 0) { // If it's higher than zero, we don't want the modal to be shown again.
+            select.Loader.loadings++;
+
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+
+            return;
         }
 
-        $('.loading-modal').modal('show').modal('lock');
+        select.Loader.loadings++;
+
+        $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+        });
     },
 
-    stop: function() {
-        $('.loading-modal').modal('unlock').modal('hide');
+    stop: function(callback) {
+        if (select.Loader.loadings > 1) { // if it's higher than one, we don't want the modal to be hidden yet.
+            select.Loader.loadings--;
 
-        this.isLoading = false;
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+
+            return;
+        }
+
+        $('.loading-modal').modal('unlock').modal('hide').one('shown.bs.modal', function() {
+            select.Loader.loadings--;
+
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+        });
     }
 };
 
@@ -48,24 +74,15 @@ select.Request = {
     /**
      * Request methods
      */
-    get: function(uri, data, callback, loader) {
-        this.request('GET', uri, data, callback, loader);
+    get: function(uri, data, callback) {
+        this.request('GET', uri, data, callback);
     },
 
-    post: function(uri, data, callback, loader) {
-        this.request('POST', uri, data, callback, loader);
+    post: function(uri, data, callback) {
+        this.request('POST', uri, data, callback);
     },
 
-    request: function(method, uri, data, callback, loader) {
-        // Loader is by default true
-        if (typeof loader == 'undefined') {
-            loader = true;
-        }
-
-        if (loader) {
-            select.Loader.start();
-        }
-
+    request: function(method, uri, data, callback) {
         $.ajax({
             method: method,
             url: uri,
@@ -74,10 +91,6 @@ select.Request = {
             callback(true, response);
         }).fail(function(jqXHR, textStatus) {
             callback(false, response, textStatus);
-        }).always(function() {
-            if (loader) {
-                select.Loader.stop();
-            }
         });
     }
 };
@@ -92,37 +105,28 @@ select.Selection = {
      * Selection methods
      */
     refresh: function() {
-        select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, data) {
-            if (data.success) {
-                selected = data.data;
+        select.Loader.start(function() {
+            select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, data) {
+                if (success && data.success) {
+                    select.Selection.current = data.data;
 
-                $('.nav-selection li').remove();
-                for (var i = 0; i < 4; i++) {
-                    var select = selected[i];
-                    var count = i + 1;
-                    var side = ((count <= 2) ? 'first' : 'last');
-
-                    if (select) {
-                        if (!select.accepted_coordinator) {
-                            $('.nav-selection:' + side).append('<li data-position-id="' + select.position.id + '" class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button></a></li>');
-                        } else {
-                            $('.nav-selection:' + side).append('<li class="disabled"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' </a></li>');
-                        }
+                    if (select.Selection.current.length >= 4) {
+                        $('[data-state="add"]').attr('disabled', 'disabled');
                     } else {
-                        $('.nav-selection:' + side).append('<li><a href="#">' + count + '.</a></li>');
+                        $('[data-state="add"]').removeAttr('disabled');
                     }
-                }
-
-                if (selected.length >= 4) {
-                    $('[data-state="add"]').attr('disabled', 'disabled');
                 } else {
-                    $('[data-state="add"]').removeAttr('disabled');
+
                 }
 
-                if (load) {
-                    loadContent();
-                }
-            }
+                var template = Handlebars.compile($('#selection').html());
+
+                $('.selection').html(template({
+                    selection: select.Selection.current
+                }));
+
+                select.Loader.stop();
+            });
         });
     },
 
@@ -168,5 +172,42 @@ $.extend($.fn.modal.Constructor.prototype, {
         if (this.options.locked) return;
 
         _hide.apply(this, arguments);
+    }
+});
+
+/**
+ * Add to helper to Handlebars,
+ * this helper will count to the first defined int
+ * and it will pass the same index from the context
+ */
+Handlebars.registerHelper('to', function(to, context, options) {
+    var ret = "";
+
+    for(var i=0; i < to; i++) {
+        var data = context[i];
+
+        if (typeof data == 'undefined') {
+            data = {exists: false};
+        } else {
+            data.exists = true;
+        }
+
+        data.index = i;
+        data.first = i === 0;
+        data.last = i === (to - 1);
+        data.count = context.length;
+        data.current = i + 1;
+
+        ret = ret + options.fn(data);
+    }
+
+    return ret;
+});
+
+Handlebars.registerHelper('modulo', function(from, number, match) {
+    if (from % number === match) {
+        return true;
+    } else {
+        return false;
     }
 });

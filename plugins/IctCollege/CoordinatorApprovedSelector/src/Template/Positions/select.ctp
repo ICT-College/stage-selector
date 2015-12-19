@@ -7,18 +7,53 @@
             <h3 class="text-muted">Stage Selector</h3>
         </div>
 
-        <div class="col-md-4">
-            <ul class="nav nav-pills nav-stacked nav-selection">
-                <li><a href="#">1.</a></li>
-                <li><a href="#">2.</a></li>
-            </ul>
+        <div class="selection">
+            <div class="col-md-4">
+                <ul class="nav nav-pills nav-stacked nav-selection">
+                    <li><a href="#">1.</a></li>
+                    <li><a href="#">2.</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="nav nav-pills nav-stacked nav-selection">
+                    <li><a href="#">3.</a></li>
+                    <li><a href="#">4.</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="col-md-4">
-            <ul class="nav nav-pills nav-stacked nav-selection">
-                <li><a href="#">3.</a></li>
-                <li><a href="#">4.</a></li>
-            </ul>
-        </div>
+
+        <script id="selection" type="text/x-handlebars-template">
+            {{#to 4 selection}}
+                {{#if (modulo current 2 1)}}
+                    <div class="col-md-4">
+                        <ul class="nav nav-pills nav-stacked nav-selection">
+                {{/if}}
+
+                {{#if exists}}
+                    {{#if accepted_coordinator}}
+                        <li class="disabled">
+                            <a href="#">
+                                {{current}}. {{position.company.name}} - {{position.study_program.description}}
+                            </a>
+                        </li>
+                    {{else}}
+                        <li data-position-id="{{position.id}}" class="active">
+                            <a href="#">
+                                {{current}}. {{position.company.name}} - {{position.study_program.description}}
+                                <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </a>
+                        </li>
+                    {{/if}}
+                {{else}}
+                    <li><a href="#">{{current}}.</a></li>
+                {{/if}}
+
+                {{#if (modulo current 2 0)}}
+                        </ul>
+                    </div>
+                {{/if}}
+            {{/to}}
+        </script>
 
         <div class="col-md-1">
             <?= $this->Form->button('<span class="glyphicon glyphicon-chevron-right"></span>', [
