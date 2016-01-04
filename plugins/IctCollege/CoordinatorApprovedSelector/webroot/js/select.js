@@ -67,11 +67,6 @@ select.Loader = {
  */
 select.Request = {
     /**
-     * Request variables
-     */
-    inRequest: false,
-
-    /**
      * Request methods
      */
     get: function(uri, data, callback) {
@@ -95,15 +90,24 @@ select.Request = {
     }
 };
 
+/**
+ * Selections class which handles everything to do with the selections.
+ *
+ * @type {{current: Array, refresh: Function, add: Function, remove: Function}}
+ */
 select.Selection = {
     /**
      * Selection variables
      */
-    current: [ ],
+    current: [ ], // Holds the current set of selections
 
     /**
      * Selection methods
      */
+    initialize: function() {
+        select.Selection.refresh();
+    },
+
     refresh: function() {
         select.Loader.start(function() {
             select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, data) {
@@ -115,15 +119,13 @@ select.Selection = {
                     } else {
                         $('[data-state="add"]').removeAttr('disabled');
                     }
-                } else {
 
+                    var template = Handlebars.compile($('#selection').html());
+
+                    $('.selection').html(template({
+                        selection: select.Selection.current
+                    }));
                 }
-
-                var template = Handlebars.compile($('#selection').html());
-
-                $('.selection').html(template({
-                    selection: select.Selection.current
-                }));
 
                 select.Loader.stop();
             });
@@ -142,11 +144,173 @@ select.Selection = {
 };
 
 /**
+ * Positions class which handles everything to do with positions
+ *
+ * @type {{load: Function}}
+ */
+select.Positions = {
+
+    /**
+     * Positions methods
+     */
+    initialize: function() {
+        select.Positions.load();
+    },
+
+    load: function() {
+        select.Loader.start(function() {
+            var filters = select.Filters.get();
+
+            select.Request.get('/api/positions.json', filters, function(success, data) {
+                if (success) {
+
+                    $('.positions > tbody').hide(50, function () {
+                        $('.positions > tbody > tr').remove();
+
+                        var positions = [];
+
+                        data.data.forEach(function (value, key) {
+                            value.state = 'add';
+                            value.color = 'success';
+                            value.icon = 'plus';
+
+                            select.Selection.current.forEach(function (selectValue, selectKey) {
+                                if (selectValue.position.id == value.id) {
+                                    if (selectValue.accepted_coordinator) {
+                                        value.state = 'accepted';
+                                        value.color = 'default disabled';
+                                        value.icon = 'ok';
+                                    } else {
+                                        value.state = 'delete';
+                                        value.color = 'danger';
+                                        value.icon = 'remove';
+                                    }
+                                }
+                            });
+
+                            positions.push(value);
+                        });
+
+                        var template = Handlebars.compile($('#positions').html());
+
+                        $('.positions > tbody').html(template({
+                            positions: positions
+                        }));
+
+                        var template = Handlebars.compile($('#pagination').html());
+
+                        $('.pagination').parent().html(template({pagination: {
+                            page: data.pagination.current_page,
+                            pageCount: data.pagination.page_count
+                        }}));
+
+                        if (select.Selection.current.length == 4) {
+                            $('[data-state="add"]').attr('disabled', 'disabled');
+                        } else {
+                            $('[data-state="add"]').removeAttr('disabled');
+                        }
+
+                        $('.positions > tbody').show(50);
+
+                        select.Loader.stop();
+                    });
+                }
+            });
+        });
+    }
+};
+
+/**
+ * Filters class which handles mostly things to do with the filters
+ *
+ * @type {{initialize: Function}}
+ */
+select.Filters = {
+
+    /**
+     * Positions variables
+     */
+    page: 1,
+
+    /**
+     * Filters methods
+     */
+    initialize: function() {
+        select.Filters.bind();
+
+        // Initialize slider
+        $('#radius').slider({
+            formatter: function(value) {
+                return value + 'km';
+            }
+        });
+
+        // Collapse the filters to show
+        $('#filters').collapse('show');
+    },
+
+    bind: function() {
+        $('#filters')
+            // Update arrow when collapses
+            .on('show.bs.collapse', function() {
+                $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-down');
+            })
+            .on('hide.bs.collapse', function() {
+                $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-up');
+            })
+            // Catch filter form submit, we won't submit it using a default GET but through a fancy AJAX request.
+            .on('submit', function(e) {
+                e.preventDefault();
+
+                select.Filters.page = 1;
+
+                select.Positions.load();
+
+                return false;
+            });
+
+        // Open/close a collapse when you click on the header
+        $('.panel-heading').on('click', function() {
+            $(this).parents('.panel').find('.panel-collapse').collapse('toggle');
+        });
+    },
+
+    get: function() {
+        var filters = {};
+
+        $('#filters').find('input[type!="submit"], select').each(function() {
+            var filter = $(this).attr('name');
+            var value = $(this).val();
+
+            if (value != undefined && value != '' && value != 0 && value != null) {
+                filters[filter] = value;
+            }
+        });
+
+        if (filters['study_program_id']) {
+            filters['study_program_id'] = filters['study_program_id'].split('-')[0].replace(/\D/g,'');
+        }
+
+        if (!filters['company_address'] && !filters['company_postcode'] && !filters['company_city']) {
+            delete filters['radius'];
+        }
+
+        filters['page'] = $('.positions').data('page');
+
+        return filters;
+    }
+};
+
+/**
  * Initialize method for starting the page
  */
 select.initialize = function() {
+    // All tooltips are tooltips
+    $('[data-toggle="tooltip"]').tooltip();
 
-    select.Selection.refresh();
+    select.Filters.initialize();
+    select.Selection.initialize();
+    select.Positions.initialize();
 };
 
 /**
@@ -176,9 +340,10 @@ $.extend($.fn.modal.Constructor.prototype, {
 });
 
 /**
- * Add to helper to Handlebars,
- * this helper will count to the first defined int
- * and it will pass the same index from the context
+ * Add to helper to Handlebars.
+ *
+ * This helper will count to the first defined int
+ * and it will pass the same index from the context.
  */
 Handlebars.registerHelper('to', function(to, context, options) {
     var ret = "";
@@ -204,10 +369,102 @@ Handlebars.registerHelper('to', function(to, context, options) {
     return ret;
 });
 
+/**
+ * Add modulo helper to Handlebars.
+ *
+ * This helper will do then modulo expression
+ * and it will return true or false.
+ */
 Handlebars.registerHelper('modulo', function(from, number, match) {
     if (from % number === match) {
         return true;
     } else {
         return false;
     }
+});
+
+/**
+ * Add paginate helper to Handlebars.
+ *
+ * Thanks to https://github.com/olalonde/handlebars-paginate for creating
+ * this awesome pagination helper.
+ */
+Handlebars.registerHelper('paginate', function(pagination, options) {
+    var type = options.hash.type || 'middle';
+    var ret = '';
+    var pageCount = Number(pagination.pageCount);
+    var page = Number(pagination.page);
+    var limit;
+    if (options.hash.limit) limit = +options.hash.limit;
+
+    //page pageCount
+    var newContext = {};
+    switch (type) {
+        case 'middle':
+            if (typeof limit === 'number') {
+                var i = 0;
+                var leftCount = Math.ceil(limit / 2) - 1;
+                var rightCount = limit - leftCount - 1;
+                if (page + rightCount > pageCount)
+                    leftCount = limit - (pageCount - page) - 1;
+                if (page - leftCount < 1)
+                    leftCount = page - 1;
+                var start = page - leftCount;
+
+                while (i < limit && i < pageCount) {
+                    newContext = { n: start };
+                    if (start === page) newContext.active = true;
+                    ret = ret + options.fn(newContext);
+                    start++;
+                    i++;
+                }
+            }
+            else {
+                for (var i = 1; i <= pageCount; i++) {
+                    newContext = { n: i };
+                    if (i === page) newContext.active = true;
+                    ret = ret + options.fn(newContext);
+                }
+            }
+            break;
+        case 'previous':
+            if (page === 1) {
+                newContext = { disabled: true, n: 1 }
+            }
+            else {
+                newContext = { n: page - 1 }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+        case 'next':
+            newContext = {};
+            if (page === pageCount) {
+                newContext = { disabled: true, n: pageCount }
+            }
+            else {
+                newContext = { n: page + 1 }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+        case 'first':
+            if (page === 1) {
+                newContext = { disabled: true, n: 1 }
+            }
+            else {
+                newContext = { n: 1 }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+        case 'last':
+            if (page === pageCount) {
+                newContext = { disabled: true, n: pageCount }
+            }
+            else {
+                newContext = { n: pageCount }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+    }
+
+    return ret;
 });

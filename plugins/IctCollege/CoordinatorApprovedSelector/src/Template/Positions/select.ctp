@@ -197,11 +197,35 @@
     </script>
 </table>
 
-<div class="text-center" style="display: none;">
+<div class="text-center">
     <ul class="pagination">
 
     </ul>
 </div>
+
+<script id="pagination" type="text/x-handlebars-template">
+    <ul class="pagination">
+        {{#paginate pagination type="previous"}}
+            <li {{#if disabled}}class="disabled"{{/if}} data-page-number="{{n}}">
+                <a href="#page-{{n}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {{/paginate}}
+
+        {{#paginate pagination type="middle" limit="7"}}
+            <li {{#if active}}class="active"{{/if}} data-page-number="{{n}}"><a href="#page-{{n}}">{{n}}</a></li>
+        {{/paginate}}
+
+        {{#paginate pagination type="next"}}
+            <li {{#if disabled}}class="disabled"{{/if}} data-page-number="{{n}}">
+                <a href="#page-{{n}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {{/paginate}}
+    </ul>
+</script>
 
 <div class="text-center">
     <?= $this->Form->button(__('Add own internship'), [
