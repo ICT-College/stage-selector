@@ -295,7 +295,7 @@ select.Filters = {
             delete filters['radius'];
         }
 
-        filters['page'] = $('.positions').data('page');
+        filters['page'] = select.Filters.page;
 
         return filters;
     }
