@@ -24,7 +24,7 @@
 
         <script id="selection" type="text/x-handlebars-template">
             {{#to 4 selection}}
-                {{#if (modulo current 2 1)}}
+                {{#if (side 'open' 4 index)}}
                     <div class="col-md-4">
                         <ul class="nav nav-pills nav-stacked nav-selection">
                 {{/if}}
@@ -48,7 +48,7 @@
                     <li><a href="#">{{current}}.</a></li>
                 {{/if}}
 
-                {{#if (modulo current 2 0)}}
+                {{#if (side 'close' 4 index)}}
                         </ul>
                     </div>
                 {{/if}}
@@ -234,49 +234,64 @@
 </div>
 
 <div class="modal fade position-modal">
+
+</div>
+
+<script id="position-modal" type="text/x-handlebars-template">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title study-program-title"></h4>
+                <h4 class="modal-title study-program-title">{{details.study_program.description}} <?= __('at'); ?> {{details.company.name}}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <strong><?= __('Position') ?></strong>: <span class="study-program-description"></span><br/>
+                        <strong><?= __('Position') ?></strong>: <span class="study-program-description">{{details.study_program.description}}</span><br/>
                         <strong><?= __('Description') ?></strong>: <br/>
-                        <p class="position-description"></p>
+                        {{#if details.description}}
+                            <p class="position-description">{{details.description}}</p>
+                        {{else}}
+                            <i><?= __('No description available for this position.'); ?></i><br/><br/>
+                        {{/if}}
 
                         <address>
                             <strong><?= h(__('Adres')); ?></strong><br/>
-                            <span class="company-address-address"></span><br/>
-                            <span class="company-address-city"></span> <span class="company-address-postcode"></span>
+                            {{details.company.address}}<br/>
+                            {{details.company.city}} {{details.company.postcode}}
                         </address>
 
-                        <strong><?= __('E-mail') ?></strong>: <span class="company-email"></span><br/>
-                        <strong><?= __('Website') ?></strong>: <a class="company-website" target="_blank"></a><br/>
-                        <strong><?= __('Telephone') ?></strong>: <span class="company-telephone"></span>
+                        <strong><?= __('E-mail') ?></strong>: {{details.company.email}}<br/>
+                        <strong><?= __('Website') ?></strong>: <a target="_blank">{{details.company.website}}</a><br/>
+                        <strong><?= __('Telephone') ?></strong>: {{details.company.telephone}}
                     </div>
                     <div class="col-md-6">
-                        <iframe style="width: 100%;"></iframe>
+                        <iframe style="width: 100%;" src="https://www.google.com/maps/embed/v1/place?q={{details.company.address}} {{details.company.postcode}} {{details.company.city}}&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI"></iframe>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <ol class="qualification-parts"></ol>
-                    </div>
-                    <div class="col-md-6">
-                        <ol class="qualification-parts"></ol>
-                    </div>
+                    {{#each details.qualification_parts as |qualification_part current|}}
+                        {{#if (side 'open' ../details.qualification_parts.length current)}}
+                            <div class="col-md-6">
+                                <ol class="qualification-parts">
+                        {{/if}}
+
+                        <li value="{{qualification_part.number}}">{{qualification_part.description}}</li>
+
+                        {{#if (side 'close' ../details.qualification_parts.length current)}}
+                                </ol>
+                            </div>
+                        {{/if}}
+                    {{/each}}
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
                 <button type="button" class="btn btn-success position-select"><?= __('Add') ?></button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</script>
 
 <div class="modal fade position-create-modal">
     <div class="modal-dialog modal-lg">

@@ -43,6 +43,7 @@ select.Loader = {
         if (select.Loader.loadings > 1) { // if it's higher than one, we don't want the modal to be hidden yet.
             select.Loader.loadings--;
 
+            // Maybe we should queue all callbacks for when the loading modal is really closed.
             if (typeof callback != 'undefined') {
                 callback();
             }
@@ -78,6 +79,11 @@ select.Request = {
     },
 
     request: function(method, uri, data, callback) {
+        if (typeof data == 'function') {
+            callback = data;
+            data = {};
+        }
+
         $.ajax({
             method: method,
             url: uri,
@@ -85,7 +91,7 @@ select.Request = {
         }).done(function(response) {
             callback(true, response);
         }).fail(function(jqXHR, textStatus) {
-            callback(false, response, textStatus);
+            callback(false, textStatus);
         });
     }
 };
@@ -110,9 +116,9 @@ select.Selection = {
 
     refresh: function() {
         select.Loader.start(function() {
-            select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, data) {
-                if (success && data.success) {
-                    select.Selection.current = data.data;
+            select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, response) {
+                if (success && response.success) {
+                    select.Selection.current = response.data;
 
                     if (select.Selection.current.length >= 4) {
                         $('[data-state="add"]').attr('disabled', 'disabled');
@@ -165,11 +171,11 @@ select.Positions = {
         select.Loader.start(function() {
             var filters = select.Filters.get();
 
-            select.Request.get('/api/positions.json', filters, function(success, data) {
-                if (success) {
+            select.Request.get('/api/positions.json', filters, function(success, response) {
+                if (success && response.success) {
                     var positions = [];
 
-                    data.data.forEach(function (value, key) {
+                    response.data.forEach(function (value, key) {
                         value.state = 'add';
                         value.color = 'success';
                         value.icon = 'plus';
@@ -201,8 +207,8 @@ select.Positions = {
 
                     $('.pagination').parent().html(template({
                         pagination: {
-                            page: data.pagination.current_page,
-                            pageCount: data.pagination.page_count
+                            page: response.pagination.current_page,
+                            pageCount: response.pagination.page_count
                         }
                     }));
 
@@ -211,9 +217,9 @@ select.Positions = {
                     } else {
                         $('[data-state="add"]').removeAttr('disabled');
                     }
-
-                    select.Loader.stop();
                 }
+
+                select.Loader.stop();
             });
         });
     }
@@ -301,6 +307,54 @@ select.Filters = {
 };
 
 /**
+ * Details class which handles all the things to do with the details modal
+ *
+ * @type {{initialize: Function, bind: Function, load: Function}}
+ */
+select.Details = {
+
+    initialize: function() {
+        select.Details.bind();
+    },
+
+    bind: function() {
+        $(document)
+            .on('click', '[data-position-id] td:not(:last-child), [data-toggle="modal"]', function (e) {
+                var id = $(this).closest('[data-position-id]').data('position-id');
+
+                select.Details.load(id);
+            })
+            .on('click', '.nav-selection [data-position-id]', function (e) {
+                var id = $(this).closest('[data-position-id]').data('position-id');
+
+                select.Details.load(id);
+            });
+    },
+
+    load: function(id) {
+        select.Loader.start(function() {
+            select.Request.get('/api/positions/' + id + '.json', function(success, response) {
+                if (success && response.success) {
+                    var template = Handlebars.compile($('#position-modal').html());
+
+                    $('.position-modal').html(template({
+                        details: response.data
+                    }));
+
+                    select.Loader.stop(function() {
+                        $('.position-modal').modal('show').one('shown.bs.modal', function() {
+                            $('.position-modal').find('iframe').height($('.position-modal').find('.col-md-6').first().height());
+                        });
+                    });
+                } else {
+                    select.Loader.stop();
+                }
+            });
+        });
+    }
+};
+
+/**
  * Initialize method for starting the page
  */
 select.initialize = function() {
@@ -310,6 +364,7 @@ select.initialize = function() {
     select.Filters.initialize();
     select.Selection.initialize();
     select.Positions.initialize();
+    select.Details.initialize();
 };
 
 /**
@@ -369,14 +424,54 @@ Handlebars.registerHelper('to', function(to, context, options) {
 });
 
 /**
- * Add modulo helper to Handlebars.
+ * Add side helper to Handlebars.
  *
- * This helper will do then modulo expression
- * and it will return true or false.
+ * This helper will calculate which side and what to happen
+ * and it will return true or false when something needs to happen.
  */
-Handlebars.registerHelper('modulo', function(from, number, match) {
-    if (from % number === match) {
-        return true;
+Handlebars.registerHelper('side', function(state, totalItems, currentItem, sides) {
+    if (typeof sides == 'object' || typeof sides == 'undefined') {
+        sides = 2;
+    }
+
+    var itemsPerSlide = Math.ceil(totalItems / sides);
+
+    var array = [];
+
+    for (var i = 0; i<= totalItems; i++) {
+        array.push(i * itemsPerSlide);
+    }
+
+    if (state === 'open') {
+        if (currentItem == 0) {
+            return true;
+        }
+
+        var isFirst = false;
+
+        array.forEach(function(item, index) {
+            if (currentItem == item) {
+                isFirst = true;
+                return false;
+            }
+        });
+
+        return isFirst;
+    } else if(state == 'close') {
+        if ((currentItem + 1) == totalItems) {
+            return true;
+        }
+
+        var isLast = false;
+
+        array.forEach(function(item, index) {
+            if (currentItem+1 == item) {
+                isLast = true;
+                return false;
+            }
+        });
+
+        return isLast;
     } else {
         return false;
     }
