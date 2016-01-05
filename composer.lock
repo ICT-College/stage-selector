@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e9fa347983c7e353fd9d0362ba3ef0c1",
-    "content-hash": "5c7fa65401964cc80dc7017c3a77c231",
+    "hash": "edd000ee074929f1b0708b07066cf3cf",
+    "content-hash": "faf150e47abf067db37e47370e0ffee1",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -590,16 +590,16 @@
         },
         {
             "name": "ictcollege/cakephp-stagemarkt",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ICT-College/cakephp-stagemarkt.git",
-                "reference": "2c3a7dcc9569950bc82f66be25bdda2df43df61b"
+                "reference": "af7d47872039eb8b4cd9727bbae7ff90144926c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ICT-College/cakephp-stagemarkt/zipball/2c3a7dcc9569950bc82f66be25bdda2df43df61b",
-                "reference": "2c3a7dcc9569950bc82f66be25bdda2df43df61b",
+                "url": "https://api.github.com/repos/ICT-College/cakephp-stagemarkt/zipball/af7d47872039eb8b4cd9727bbae7ff90144926c6",
+                "reference": "af7d47872039eb8b4cd9727bbae7ff90144926c6",
                 "shasum": ""
             },
             "require-dev": {
@@ -625,7 +625,7 @@
                 }
             ],
             "description": "CakePHP webservice for Stagemarkt",
-            "time": "2015-11-17 12:27:05"
+            "time": "2016-01-05 18:06:43"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -2415,7 +2415,6 @@
     "stability-flags": {
         "cakephp/cakephp": 20,
         "muffin/webservice": 20,
-        "ictcollege/cakephp-stagemarkt": 20,
         "friendsofcake/search": 20,
         "cakephp/acl": 20,
         "sameer-shelavale/php-countries-array": 20,
