@@ -14,7 +14,6 @@ use Cake\Validation\Validator;
 use CvoTechnologies\Gearman\Gearman;
 use CvoTechnologies\Gearman\JobAwareTrait;
 use Search\Manager;
-use Search\Type\Callback;
 
 class PositionsTable extends Table
 {
@@ -102,7 +101,7 @@ class PositionsTable extends Table
             'field' => $this->aliasField('study_program_id')
         ]);
         $search->callback('learning_pathway', [
-            'callback' => function (Query $query, array $args, Callback $searchType) {
+            'callback' => function (Query $query, array $args, $searchType) {
                 return $query->find('orValue', [
                     'value' => $args[$searchType->name()],
                     'field' => $searchType->name(),
@@ -119,7 +118,7 @@ class PositionsTable extends Table
             'field' => $this->aliasField('description')
         ]);
         $search->callback('radius', [
-            'callback' => function (Query $query, array $args, Callback $searchType) {
+            'callback' => function (Query $query, array $args, $searchType) {
                 $options = [
                     'radius' => $args[$searchType->name()],
                     'field' => 'Companies.coordinates'
