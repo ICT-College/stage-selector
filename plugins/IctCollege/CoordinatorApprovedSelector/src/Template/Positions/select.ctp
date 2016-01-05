@@ -59,8 +59,8 @@
             <?= $this->Form->button('<span class="glyphicon glyphicon-chevron-right"></span>', [
                 'type' => 'submit',
                 'escape' => false,
-                'disabled' => 'disabled',
                 'class' => 'btn btn-success pull-right',
+                'data-toggle' => 'continue',
                 'style' => 'height: 50px;'
             ]) ?>
         </div>
@@ -334,6 +334,46 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
                 <button type="button" class="btn btn-success position-create"><?= __('Add') ?></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade continue-success">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?= __('Successfully saved') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= __('We\'ve saved your internships, they will be reviewed by the coordinator and you\'ll receive an email when you\'re able to continue.'); ?>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade continue-error">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?= __('Error while saving') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= __('You haven\'t selected 4 internships yet. Please select 4 internships before continuing.'); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

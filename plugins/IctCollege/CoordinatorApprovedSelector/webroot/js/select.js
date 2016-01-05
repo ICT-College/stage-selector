@@ -258,6 +258,14 @@ select.Positions = {
         $('.position-create').click(function () {
             select.Positions.create();
         });
+
+        $('[data-toggle="continue"]').click(function() {
+            if (select.Selection.current.length >= 4) {
+                $('.continue-success').modal('show');
+            } else {
+                $('.continue-error').modal('show');
+            }
+        });
     },
 
     load: function(page) {
@@ -442,6 +450,7 @@ select.Details = {
 
     bind: function() {
         $(document)
+            // Click handlers to open the details box
             .on('click', '[data-position-id] td:not(:last-child), [data-toggle="modal"]', function (e) {
                 var id = $(this).closest('[data-position-id]').data('position-id');
 
