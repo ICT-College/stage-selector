@@ -28,8 +28,10 @@ class StudentMadePositions extends AbstractMigration
     public function change()
     {
         $positions = $this->table('positions');
-        $positions->addColumn('student_made', 'boolean', [
-            'after' => 'study_program_id'
-        ]);
+        $positions
+            ->addColumn('student_made', 'boolean', [
+                'after' => 'study_program_id'
+            ])
+            ->update();
     }
 }
