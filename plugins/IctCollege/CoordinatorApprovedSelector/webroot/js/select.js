@@ -326,9 +326,15 @@ select.Positions = {
     create: function() {
         $('.position-create-modal').modal('hide').one('hidden.bs.modal', function () {
             select.Loader.start(function() {
-                select.Request.post('/api/positions.json', $('.position-create-modal form').serializeArray(), function (success, response) {
+                var position = {};
+
+                $('input, select', '.position-create-modal form').each(function() {
+                    position[$(this).attr('name')] = $(this).val();
+                });
+
+                select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', { position: position }, function(success, response) {
                     if (success && response.success) {
-                        select.Selection.add(response.data.id);
+                        select.Selection.refresh();
 
                         select.Loader.stop();
                     } else {
