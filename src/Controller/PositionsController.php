@@ -39,43 +39,4 @@ class PositionsController extends AppController
             'QualificationParts'
         ]);
     }
-
-    public function beforeSave(Event $event)
-    {
-        $this->loadModel('Internships');
-
-        /* @var \Cake\ORM\Entity $entity */
-        $entity = $event->subject()->entity;
-
-        $positionConditions = [
-            'company_id' => $entity->company_id,
-            'study_program_id' => $entity->study_program_id,
-            'student_made' => true
-        ];
-        if ($this->Positions->exists($positionConditions)) {
-            $existingEntity = $this->Positions
-                ->find()
-                ->where($positionConditions)
-                ->firstOrFail();
-
-            $entity->isNew(false);
-            $entity->id = $existingEntity->id;
-            $entity->amount = $existingEntity->amount + 1;
-        } else {
-            $internship = $this->Internships->find('active', [
-                'student' => $this->Auth->user('student_id')
-            ])
-                ->contain([
-                    'Periods'
-                ])
-                ->firstOrFail();
-
-            $entity->amount = 1;
-
-            $entity->start = $internship->period->start;
-            $entity->end = $internship->period->end;
-        }
-
-        $entity->student_made = true;
-    }
 }

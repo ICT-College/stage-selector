@@ -260,7 +260,30 @@ class PositionsTable extends Table
      */
     public function beforeSave(Event $event, Position $position)
     {
-        if ((!$position->student_made) || ($position->amount > 0)) {
+        if (!$position->student_made) {
+            return null;
+        }
+        if ($position->isNew()) {
+            $positionConditions = [
+                'company_id' => $position->company_id,
+                'study_program_id' => $position->study_program_id,
+                'student_made' => true
+            ];
+            if ($this->exists($positionConditions)) {
+                $existingEntity = $this
+                    ->find()
+                    ->where($positionConditions)
+                    ->firstOrFail();
+
+                $position->isNew(false);
+                $position->id = $existingEntity->id;
+                $position->amount = $existingEntity->amount + 1;
+            } else {
+                $position->amount = 1;
+            }
+        }
+
+        if ($position->amount > 0) {
             return null;
         }
 

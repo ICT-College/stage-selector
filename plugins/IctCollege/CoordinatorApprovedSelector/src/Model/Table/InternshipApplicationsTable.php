@@ -90,6 +90,10 @@ class InternshipApplicationsTable extends Table
             return $options['repository']->find()->where(['student_id' => $entity->student_id])->count() <= $options['max'] - 1;
         }, 'maxPositions', ['max' => 4]);
         $rules->addCreate(function (Entity $entity, array $options) {
+            if (isset($entity->position)) {
+                return true;
+            }
+
             $position = $options['repository']->Positions->get($entity->position_id);
 
             return $position->available > 0;
@@ -97,6 +101,13 @@ class InternshipApplicationsTable extends Table
         $rules->addCreate(new IsUnique(['position_id', 'student_id']), 'uniquePosition');
 
         return parent::buildRules($rules);
+    }
+
+    public function beforeSave(Event $event, Entity $application)
+    {
+        if (!empty($application->position)) {
+            $application->position->student_made = true;
+        }
     }
 
     public function afterDelete(Event $event, Entity $application)

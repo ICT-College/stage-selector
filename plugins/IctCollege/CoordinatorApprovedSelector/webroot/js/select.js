@@ -66,10 +66,12 @@ $(function() {
     });
 
     $('.position-create').click(function () {
-        $.post('/api/positions.json', $('.position-create-modal form').serializeArray(), function (result) {
-            console.log(result);
-            updatePositionState(result.data.id, 'delete');
+        var map = {};
+        $('input, select', '.position-create-modal form').each(function() {
+            map[$(this).attr("name")] = $(this).val();
         });
+
+        updatePositionState(null, 'delete', map);
     });
 
     $('.position-modal .position-select').on('click', function() {
@@ -143,7 +145,7 @@ function updateSelected(load) {
     });
 }
 
-function updatePositionState(id, state) {
+function updatePositionState(id, state, positionData) {
     if (state == 'add') {
         var oldState = 'delete';
     } else {
@@ -156,10 +158,13 @@ function updatePositionState(id, state) {
     $.ajax({
         'url': '/api/coordinator_approved_selector/internship_applications' + ((oldState == 'add') ? '' : '/position-delete') + '.json',
         'method': (oldState == 'add') ? 'POST' : 'DELETE',
-        'data': {
+        'data': (typeof positionData === "undefined") ? {
             'position_id': id
+        } : {
+            position: positionData
         },
         'success': function(data) {
+            console.log(data);
             if (data.success) {
                 updateSelected(false);
 
