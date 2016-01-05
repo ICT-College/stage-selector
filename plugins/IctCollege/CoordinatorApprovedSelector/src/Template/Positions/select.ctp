@@ -207,19 +207,19 @@
     <ul class="pagination">
         {{#paginate pagination type="previous"}}
             <li {{#if disabled}}class="disabled"{{/if}} data-page-number="{{n}}">
-                <a href="#page-{{n}}" aria-label="Previous">
+                <a href="#page-{{n}}" onclick="select.Positions.load({{n}});" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
         {{/paginate}}
 
         {{#paginate pagination type="middle" limit="7"}}
-            <li {{#if active}}class="active"{{/if}} data-page-number="{{n}}"><a href="#page-{{n}}">{{n}}</a></li>
+            <li {{#if active}}class="active"{{/if}}><a href="#page-{{n}}" onclick="select.Positions.load({{n}});">{{n}}</a></li>
         {{/paginate}}
 
         {{#paginate pagination type="next"}}
             <li {{#if disabled}}class="disabled"{{/if}} data-page-number="{{n}}">
-                <a href="#page-{{n}}" aria-label="Next">
+                <a href="#page-{{n}}" onclick="select.Positions.load({{n}});" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

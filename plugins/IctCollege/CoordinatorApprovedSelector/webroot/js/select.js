@@ -50,7 +50,7 @@ select.Loader = {
             return;
         }
 
-        $('.loading-modal').modal('unlock').modal('hide').one('shown.bs.modal', function() {
+        $('.loading-modal').modal('unlock').modal('hide').one('hidden.bs.modal', function() {
             select.Loader.loadings--;
 
             if (typeof callback != 'undefined') {
@@ -157,63 +157,62 @@ select.Positions = {
         select.Positions.load();
     },
 
-    load: function() {
+    load: function(page) {
+        if (typeof page != 'undefined') {
+            select.Filters.page = page;
+        }
+
         select.Loader.start(function() {
             var filters = select.Filters.get();
 
             select.Request.get('/api/positions.json', filters, function(success, data) {
                 if (success) {
+                    var positions = [];
 
-                    $('.positions > tbody').hide(50, function () {
-                        $('.positions > tbody > tr').remove();
+                    data.data.forEach(function (value, key) {
+                        value.state = 'add';
+                        value.color = 'success';
+                        value.icon = 'plus';
 
-                        var positions = [];
-
-                        data.data.forEach(function (value, key) {
-                            value.state = 'add';
-                            value.color = 'success';
-                            value.icon = 'plus';
-
-                            select.Selection.current.forEach(function (selectValue, selectKey) {
-                                if (selectValue.position.id == value.id) {
-                                    if (selectValue.accepted_coordinator) {
-                                        value.state = 'accepted';
-                                        value.color = 'default disabled';
-                                        value.icon = 'ok';
-                                    } else {
-                                        value.state = 'delete';
-                                        value.color = 'danger';
-                                        value.icon = 'remove';
-                                    }
+                        select.Selection.current.forEach(function (selectValue, selectKey) {
+                            if (selectValue.position.id == value.id) {
+                                if (selectValue.accepted_coordinator) {
+                                    value.state = 'accepted';
+                                    value.color = 'default disabled';
+                                    value.icon = 'ok';
+                                } else {
+                                    value.state = 'delete';
+                                    value.color = 'danger';
+                                    value.icon = 'remove';
                                 }
-                            });
-
-                            positions.push(value);
+                            }
                         });
 
-                        var template = Handlebars.compile($('#positions').html());
+                        positions.push(value);
+                    });
 
-                        $('.positions > tbody').html(template({
-                            positions: positions
-                        }));
+                    var template = Handlebars.compile($('#positions').html());
 
-                        var template = Handlebars.compile($('#pagination').html());
+                    $('.positions > tbody').html(template({
+                        positions: positions
+                    }));
 
-                        $('.pagination').parent().html(template({pagination: {
+                    var template = Handlebars.compile($('#pagination').html());
+
+                    $('.pagination').parent().html(template({
+                        pagination: {
                             page: data.pagination.current_page,
                             pageCount: data.pagination.page_count
-                        }}));
-
-                        if (select.Selection.current.length == 4) {
-                            $('[data-state="add"]').attr('disabled', 'disabled');
-                        } else {
-                            $('[data-state="add"]').removeAttr('disabled');
                         }
+                    }));
 
-                        $('.positions > tbody').show(50);
+                    if (select.Selection.current.length == 4) {
+                        $('[data-state="add"]').attr('disabled', 'disabled');
+                    } else {
+                        $('[data-state="add"]').removeAttr('disabled');
+                    }
 
-                        select.Loader.stop();
-                    });
+                    select.Loader.stop();
                 }
             });
         });
