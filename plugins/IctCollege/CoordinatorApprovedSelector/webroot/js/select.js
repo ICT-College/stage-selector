@@ -111,10 +111,10 @@ select.Selection = {
      * Selection methods
      */
     initialize: function() {
-        select.Selection.refresh();
+        select.Selection.refresh(true);
     },
 
-    refresh: function() {
+    refresh: function(initialize) {
         select.Loader.start(function() {
             select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, response) {
                 if (success && response.success) {
@@ -131,6 +131,10 @@ select.Selection = {
                     $('.selection').html(template({
                         selection: select.Selection.current
                     }));
+
+                    if (typeof initialize != 'undefined' && initialize) {
+                        select.Positions.initialize();
+                    }
                 }
 
                 select.Loader.stop();
@@ -139,8 +143,20 @@ select.Selection = {
     },
 
     add: function(id) {
+        // Update the button's content to a awesome rotating refresh icon and disable it
+        $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
 
-        this.refresh();
+        select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', {
+            'position_id': id
+        }, function(success, response) {
+            if (success && response.success) {
+                select.Selection.refresh();
+
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
+            } else {
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').data('state', 'error');
+            }
+        });
     },
 
     remove: function(id) {
@@ -155,6 +171,11 @@ select.Selection = {
  * @type {{load: Function}}
  */
 select.Positions = {
+
+    /**
+     * Positions variables
+     */
+    current: {}, // Current set of loaded positions
 
     /**
      * Positions methods
@@ -173,6 +194,8 @@ select.Positions = {
 
             select.Request.get('/api/positions.json', filters, function(success, response) {
                 if (success && response.success) {
+                    select.Positions.current = response.data;
+
                     var positions = [];
 
                     response.data.forEach(function (value, key) {
@@ -363,7 +386,7 @@ select.initialize = function() {
 
     select.Filters.initialize();
     select.Selection.initialize();
-    select.Positions.initialize();
+    // select.Positions.initialize() done in the selection initialize
     select.Details.initialize();
 };
 
