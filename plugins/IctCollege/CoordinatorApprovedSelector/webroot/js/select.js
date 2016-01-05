@@ -91,6 +91,8 @@ select.Request = {
         }).done(function(response) {
             callback(true, response);
         }).fail(function(jqXHR, textStatus) {
+            console.log(jqXHR);
+            console.log(textStatus);
             callback(false, textStatus);
         });
     }
@@ -111,11 +113,52 @@ select.Selection = {
      * Selection methods
      */
     initialize: function() {
+        select.Selection.bind();
+
         select.Selection.refresh(true);
     },
 
-    refresh: function(initialize) {
-        select.Loader.start(function() {
+    bind: function() {
+        $(document)
+            .on('click', '[data-toggle="selection"]', function(e) {
+                // Make sure the button isn't disabled..
+                if ($(this).attr('disabled') == 'disabled') {
+                    return;
+                }
+
+                var id = $(this).closest('[data-position-id]').attr('data-position-id');
+
+                var state = $(this).attr('data-state');
+
+                if (state == 'add') {
+                    select.Selection.add(id);
+                } else if (state =='delete') {
+                    select.Selection.remove(id);
+                } else {
+
+                }
+
+                e.stopImmediatePropagation();
+            })
+            .on('click', '.position-modal .position-select', function() {
+                $('.position-modal').modal('hide');
+                console.log('hide');
+                var id = $(this).closest('[data-position-id]').attr('data-position-id');
+
+                var state = $(this).attr('data-state');
+                console.log(id);
+                if (state == 'add') {
+                    select.Selection.add(id);
+                } else if (state =='delete') {
+                    select.Selection.remove(id);
+                } else {
+
+                }
+            });
+    },
+
+    refresh: function(initialize, silence) {
+        var doRefresh = function() {
             select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, response) {
                 if (success && response.success) {
                     select.Selection.current = response.data;
@@ -137,9 +180,19 @@ select.Selection = {
                     }
                 }
 
-                select.Loader.stop();
+                if (typeof silence == 'unknown' || !silence) {
+                    select.Loader.stop();
+                }
             });
-        });
+        };
+
+        if (typeof silence == 'unknown' || !silence) {
+            select.Loader.start(function () {
+                doRefresh();
+            });
+        } else {
+            doRefresh();
+        }
     },
 
     add: function(id) {
@@ -150,18 +203,30 @@ select.Selection = {
             'position_id': id
         }, function(success, response) {
             if (success && response.success) {
-                select.Selection.refresh();
+                select.Selection.refresh(false, true);
 
                 $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
             } else {
-                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').data('state', 'error');
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
             }
         });
     },
 
     remove: function(id) {
+        // Update the button's content to a awesome rotating refresh icon and disable it
+        $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
 
-        this.refresh();
+        select.Request.request('DELETE', '/api/coordinator_approved_selector/internship_applications/position-delete.json', {
+            'position_id': id
+        }, function(success, response) {
+            if (success && response.success) {
+                select.Selection.refresh(false, true);
+
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'add').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-success');
+            } else {
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
+            }
+        });
     }
 };
 
@@ -358,10 +423,26 @@ select.Details = {
         select.Loader.start(function() {
             select.Request.get('/api/positions/' + id + '.json', function(success, response) {
                 if (success && response.success) {
+
+                    var selected = false;
+                    var disabled = false;
+
+                    select.Selection.current.forEach(function (value, key) {
+                        if (value.position.id == id) {
+                            selected = true;
+                        }
+                    });
+
+                    if (selected && select.Selection.current.length >= 4) {
+                        disabled = true;
+                    }
+
                     var template = Handlebars.compile($('#position-modal').html());
 
                     $('.position-modal').html(template({
-                        details: response.data
+                        details: response.data,
+                        selected: selected,
+                        disabled: disabled
                     }));
 
                     select.Loader.stop(function() {

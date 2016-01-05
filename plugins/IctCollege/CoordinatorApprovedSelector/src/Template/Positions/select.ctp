@@ -238,7 +238,7 @@
 </div>
 
 <script id="position-modal" type="text/x-handlebars-template">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" data-position-id="{{details.id}}">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -287,7 +287,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
-                <button type="button" class="btn btn-success position-select"><?= __('Add') ?></button>
+                <button type="button" class="btn btn-{{#if selected}}danger{{else}}success{{/if}} position-select" data-state="{{#if selected}}delete{{else}}add{{/if}}">{{#if selected}}<?= __('Remove') ?>{{else}}<?= __('Add') ?>{{/if}}</button>
             </div>
         </div>
     </div>
