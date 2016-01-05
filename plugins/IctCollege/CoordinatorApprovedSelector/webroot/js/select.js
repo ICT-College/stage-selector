@@ -247,6 +247,17 @@ select.Positions = {
      */
     initialize: function() {
         select.Positions.load();
+        select.Positions.bind();
+    },
+
+    bind: function() {
+        $('.position-create-open-modal').click(function () {
+            $('.position-create-modal').modal('show');
+        });
+
+        $('.position-create').click(function () {
+            select.Positions.create();
+        });
     },
 
     load: function(page) {
@@ -308,6 +319,24 @@ select.Positions = {
                 }
 
                 select.Loader.stop();
+            });
+        });
+    },
+
+    create: function() {
+        $('.position-create-modal').modal('hide').one('hidden.bs.modal', function () {
+            select.Loader.start(function() {
+                select.Request.post('/api/positions.json', $('.position-create-modal form').serializeArray(), function (success, response) {
+                    if (success && response.success) {
+                        select.Selection.add(response.data.id);
+
+                        select.Loader.stop();
+                    } else {
+                        select.Loader.stop(function() {
+                            $('.position-create-modal').modal('show');
+                        });
+                    }
+                });
             });
         });
     }
