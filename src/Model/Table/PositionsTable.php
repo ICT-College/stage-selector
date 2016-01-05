@@ -251,6 +251,25 @@ class PositionsTable extends Table
     }
 
     /**
+     * Delete positions made by students with the amount of available positions being set lower than 0
+     *
+     * @param Event $event The event that was dispatched
+     * @param Position $position The position to check
+     *
+     * @return true|null
+     */
+    public function beforeSave(Event $event, Position $position)
+    {
+        if ((!$position->student_made) || ($position->amount > 0)) {
+            return null;
+        }
+
+        $event->stopPropagation();
+
+        return $this->delete($position);
+    }
+
+    /**
      * Updates coordinates or details when needed
      *
      * @param Event $event The event that was dispatched

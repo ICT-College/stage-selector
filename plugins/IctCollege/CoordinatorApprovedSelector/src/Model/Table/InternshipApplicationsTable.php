@@ -2,6 +2,7 @@
 
 namespace IctCollege\CoordinatorApprovedSelector\Model\Table;
 
+use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\RulesChecker;
@@ -12,6 +13,7 @@ use Search\Manager;
 
 /**
  * @property \App\Model\Table\PeriodsTable Periods
+ * @property \App\Model\Table\PositionsTable Positions
  */
 class InternshipApplicationsTable extends Table
 {
@@ -95,5 +97,17 @@ class InternshipApplicationsTable extends Table
         $rules->addCreate(new IsUnique(['position_id', 'student_id']), 'uniquePosition');
 
         return parent::buildRules($rules);
+    }
+
+    public function afterDelete(Event $event, Entity $application)
+    {
+        $position = $this->Positions->get($application->position_id);
+        if (!$position->student_made) {
+            return;
+        }
+
+        $position->amount--;
+
+        $this->Positions->save($position);
     }
 }
