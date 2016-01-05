@@ -40,7 +40,7 @@
                         <li data-position-id="{{position.id}}" class="active">
                             <a href="#">
                                 {{current}}. {{position.company.name}} - {{position.study_program.description}}
-                                <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <button type="button" class="close" data-toggle="selection" data-state="delete" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </a>
                         </li>
                     {{/if}}
