@@ -184,9 +184,26 @@
                             <span class="glyphicon glyphicon-info-sign"></span>
                         </a>
                         &nbsp;
-                        <a data-toggle="selection" data-state="{{state}}" class="btn btn-{{color}}">
-                            <span class="glyphicon glyphicon-{{icon}}"></span>
-                        </a>
+                        {{#ifSame state 0}}
+                            <a data-toggle="selection" data-state="add" class="btn btn-success">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                        {{/ifSame}}
+                        {{#ifSame state 1}}
+                            <a data-toggle="selection" data-state="add" class="btn btn-success disabled">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                        {{/ifSame}}
+                        {{#ifSame state 2}}
+                            <a data-toggle="selection" data-state="delete" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        {{/ifSame}}
+                        {{#ifSame state 3}}
+                            <a data-toggle="selection" data-state="accepted" class="btn btn-default disabled">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </a>
+                        {{/ifSame}}
                     </div>
                 </td>
             </tr>

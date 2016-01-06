@@ -283,23 +283,22 @@ select.Positions = {
                     var positions = [];
 
                     response.data.forEach(function (value, key) {
-                        value.state = 'add';
-                        value.color = 'success';
-                        value.icon = 'plus';
+                        value.state = 0; // 0 = add, 1 = disabled add, 2 = remove, 3 = accepted
 
                         select.Selection.current.forEach(function (selectValue, selectKey) {
                             if (selectValue.position.id == value.id) {
                                 if (selectValue.accepted_coordinator) {
-                                    value.state = 'accepted';
-                                    value.color = 'default disabled';
-                                    value.icon = 'ok';
+                                    value.state = 3;
                                 } else {
-                                    value.state = 'delete';
-                                    value.color = 'danger';
-                                    value.icon = 'remove';
+                                    value.state = 2;
                                 }
                             }
                         });
+
+
+                        if (value.state == 0 && select.Selection.current.length >= 4) {
+                            value.state = 1;
+                        }
 
                         positions.push(value);
                     });
@@ -321,12 +320,6 @@ select.Positions = {
                         }));
                     } else {
                         $('.pagination').parent().css('display', 'none');
-                    }
-
-                    if (select.Selection.current.length == 4) {
-                        $('[data-state="add"]').attr('disabled', 'disabled');
-                    } else {
-                        $('[data-state="add"]').removeAttr('disabled');
                     }
                 }
 
