@@ -30,7 +30,7 @@
                 ], [
                     'class' => 'btn btn-default'
                 ]) ?>
-                <?= $this->Html->link(__('Delete'), [
+                <?= $this->Form->postLink(__('Delete'), [
                     'action' => 'delete',
                     $student->student_id
                 ], [
