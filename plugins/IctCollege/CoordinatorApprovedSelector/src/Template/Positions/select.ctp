@@ -263,7 +263,7 @@
                         </address>
 
                         <strong><?= __('E-mail') ?></strong>: {{details.company.email}}<br/>
-                        <strong><?= __('Website') ?></strong>: <a target="_blank">{{details.company.website}}</a><br/>
+                        <strong><?= __('Website') ?></strong>: <a href="{{details.company.website}}" target="_blank">{{details.company.website}}</a><br/>
                         <strong><?= __('Telephone') ?></strong>: {{details.company.telephone}}
                     </div>
                     <div class="col-md-6">
