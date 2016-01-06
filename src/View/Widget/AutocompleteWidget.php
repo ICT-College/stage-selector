@@ -38,9 +38,10 @@ class AutocompleteWidget extends BasicWidget
             ], $context);
 
             $data['data-autocomplete-value-id'] = $hiddenInputId;
+
+            $data['name'] = $data['name'] . '_value';
         }
 
-        $data['name'] = $data['name'] . '_value';
         $data['type'] = 'text';
 
         unset($data['autocompleteUrl'],$data['autocompleteKey'], $data['autocompleteValue'], $data['autocompleteStrict']);
