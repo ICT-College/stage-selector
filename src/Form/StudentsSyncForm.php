@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\ShardAwareTrait;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Validation\Validator;
@@ -8,6 +9,8 @@ use CvoTechnologies\Gearman\JobAwareTrait;
 
 class StudentsSyncForm extends Form
 {
+
+    use ShardAwareTrait;
 
     use JobAwareTrait {
         execute as executeJob;
@@ -62,7 +65,7 @@ class StudentsSyncForm extends Form
         }
 
         $this->executeJob('importEduArteStudents', [
-            'shard' => 1,
+            'shard' => $this->shard()->id,
             'results' => $results
         ], false);
 
