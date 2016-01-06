@@ -71,7 +71,7 @@
 <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="footersHeading">
         <h4 class="panel-title">
-            Filters
+            <?= __('Filters'); ?>
             <span class="glyphicon glyphicon-chevron-up"></span>
         </h4>
     </div>
@@ -104,7 +104,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <?= $this->Form->input('company_address', ['label' => __('Adres')]) ?>
+                    <?= $this->Form->input('company_address', ['label' => __('Address')]) ?>
                     <div class="row">
                         <div class="col-md-6">
                             <?= $this->Form->input('company_postcode', ['label' => __('Postcode')]) ?>
