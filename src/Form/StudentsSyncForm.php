@@ -65,7 +65,7 @@ class StudentsSyncForm extends Form
         }
 
         $this->executeJob('importEduArteStudents', [
-            'shard' => $this->shard()->id,
+            'shard' => $this->shard(),
             'results' => $results
         ], false);
 

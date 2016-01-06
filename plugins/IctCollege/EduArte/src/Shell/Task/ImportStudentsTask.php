@@ -2,6 +2,7 @@
 
 namespace IctCollege\EduArte\Shell\Task;
 
+use App\ShardAwareTrait;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\Time;
@@ -9,14 +10,12 @@ use Cake\I18n\Time;
 class ImportStudentsTask extends Shell
 {
 
+    use ShardAwareTrait;
+
     public function main(array $workload, \GearmanJob $job)
     {
-        $this->loadModel('Shards');
-
-        $shard = $this->Shards->get($workload['shard']);
-
-        ConnectionManager::alias($shard->datasource, 'default');
-        ConnectionManager::alias($shard->secured_datasource, 'secured');
+        $this->shard($workload['shard'])
+            ->useShardDatabase();
 
         $this->loadModel('Students');
 
