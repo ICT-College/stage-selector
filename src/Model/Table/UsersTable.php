@@ -5,6 +5,7 @@ use Acl\Controller\Component\AclComponent;
 use App\Model\Entity\Period;
 use App\Model\Entity\Shard;
 use App\Model\Entity\User;
+use App\ShardAwareTrait;
 use Cake\Controller\ComponentRegistry;
 use Cake\Database\Expression\FunctionExpression;
 use Cake\Datasource\ConnectionManager;
@@ -25,6 +26,7 @@ use Search\Manager;
 class UsersTable extends Table
 {
 
+    use ShardAwareTrait;
     use JobAwareTrait;
     use MailerAwareTrait;
 
@@ -88,7 +90,7 @@ class UsersTable extends Table
         $user = $this->patchEntity($user, [
             'shards' => [
                 [
-                    'id' => 1,
+                    'id' => $this->shard()->id,
                     '_joinData' => [
                         'role_id' => 1
                     ]
