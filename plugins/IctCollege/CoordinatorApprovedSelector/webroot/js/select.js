@@ -310,14 +310,18 @@ select.Positions = {
                         positions: positions
                     }));
 
-                    var template = Handlebars.compile($('#pagination').html());
+                    if (positions.length != 0) {
+                        var template = Handlebars.compile($('#pagination').html());
 
-                    $('.pagination').parent().html(template({
-                        pagination: {
-                            page: response.pagination.current_page,
-                            pageCount: response.pagination.page_count
-                        }
-                    }));
+                        $('.pagination').parent().css('display', '').html(template({
+                            pagination: {
+                                page: response.pagination.current_page,
+                                pageCount: response.pagination.page_count
+                            }
+                        }));
+                    } else {
+                        $('.pagination').parent().css('display', 'none');
+                    }
 
                     if (select.Selection.current.length == 4) {
                         $('[data-state="add"]').attr('disabled', 'disabled');
