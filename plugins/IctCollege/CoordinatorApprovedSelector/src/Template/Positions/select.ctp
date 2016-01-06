@@ -138,6 +138,7 @@
                             'VMBO' => 'VMBO',
                             'HBO' => 'HBO'
                         ],
+                        'value' => $loggedUser['learning_pathway'],
                         'label' => __('Learning pathway')
                     ]); ?>
 
@@ -314,6 +315,7 @@
                                 'VMBO' => 'VMBO',
                                 'HBO' => 'HBO'
                             ],
+                            'value' => $loggedUser['learning_pathway'],
                             'label' => __('Learning pathway')
                         ]); ?>
                         <?= $this->Form->input('company_id', [
