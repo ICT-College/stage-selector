@@ -192,7 +192,7 @@
             </tr>
         {{else}}
             <tr>
-                <td colspan="5"><?= __('No search results') ?></td>
+                <td colspan="5"><?= __('No search results, when you didn\'t find your company or internship you can create an internship below.') ?></td>
             </tr>
         {{/each}}
     </script>
