@@ -288,7 +288,19 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
-                <button type="button" class="btn btn-{{#if selected}}danger{{else}}success{{/if}} position-select" data-state="{{#if selected}}delete{{else}}add{{/if}}">{{#if selected}}<?= __('Remove') ?>{{else}}<?= __('Add') ?>{{/if}}</button>
+
+                {{#ifSame state 0}}
+                    <button type="button" class="btn btn-success position-select" data-state="add"><?= __('Add') ?></button>
+                {{/ifSame}}
+                {{#ifSame state 1}}
+                    <button type="button" class="btn btn-success position-select disabled" data-state="add" disabled="disabled"><?= __('Add') ?></button>
+                {{/ifSame}}
+                {{#ifSame state 2}}
+                    <button type="button" class="btn btn-danger position-select" data-state="delete"><?= __('Remove') ?></button>
+                {{/ifSame}}
+                {{#ifSame state 3}}
+                    <button type="button" class="btn btn-ok position-select disabled" data-state="accepted" disabled="disabled"><?= __('Accepted') ?></button>
+                {{/ifSame}}
             </div>
         </div>
     </div>

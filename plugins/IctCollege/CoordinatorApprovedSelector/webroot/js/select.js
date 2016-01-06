@@ -472,25 +472,27 @@ select.Details = {
             select.Request.get('/api/positions/' + id + '.json', function(success, response) {
                 if (success && response.success) {
 
-                    var selected = false;
-                    var disabled = false;
+                    var state = 0; // 0 = add, 1 = disabled add, 2 = remove, 3 = accepted
 
                     select.Selection.current.forEach(function (value, key) {
                         if (value.position.id == id) {
-                            selected = true;
+                            if (value.accepted_coordinator) {
+                                state = 3;
+                            } else {
+                                state = 2;
+                            }
                         }
                     });
 
-                    if (selected && select.Selection.current.length >= 4) {
-                        disabled = true;
+                    if (state == 0 && select.Selection.current.length >= 4) {
+                        state = 1;
                     }
 
                     var template = Handlebars.compile($('#position-modal').html());
 
                     $('.position-modal').html(template({
                         details: response.data,
-                        selected: selected,
-                        disabled: disabled
+                        state: state
                     }));
 
                     select.Loader.stop(function() {
@@ -573,6 +575,18 @@ Handlebars.registerHelper('to', function(to, context, options) {
     }
 
     return ret;
+});
+
+/**
+ * Add a ifSame helper to Handlebars.
+ *
+ * This helper will do a check if 2 variables are the same.
+ */
+Handlebars.registerHelper('ifSame', function(v1, v2, options) {
+    if(v1 === v2) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
 });
 
 /**
