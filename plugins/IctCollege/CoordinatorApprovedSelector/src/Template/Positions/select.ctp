@@ -180,11 +180,11 @@
                 </td>
                 <td>
                     <div class="pull-right">
-                        <a href="#" data-toggle="modal" class="btn btn-primary">
+                        <a data-toggle="modal" class="btn btn-primary">
                             <span class="glyphicon glyphicon-info-sign"></span>
                         </a>
                         &nbsp;
-                        <a href="#" data-toggle="selection" data-state="{{state}}" class="btn btn-{{color}}">
+                        <a data-toggle="selection" data-state="{{state}}" class="btn btn-{{color}}">
                             <span class="glyphicon glyphicon-{{icon}}"></span>
                         </a>
                     </div>
