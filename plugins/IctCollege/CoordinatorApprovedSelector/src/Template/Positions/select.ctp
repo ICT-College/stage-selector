@@ -26,6 +26,8 @@
             {{#to 4 selection}}
                 {{#if (side 'open' 4 index)}}
                     <div class="col-md-4">
+                        <span class="glyphicon glyphicon-refresh spinning" style="position: absolute; top: 50%; left: 50%; display: none;"></span>
+
                         <ul class="nav nav-pills nav-stacked nav-selection">
                 {{/if}}
 

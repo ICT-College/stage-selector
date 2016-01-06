@@ -108,6 +108,7 @@ select.Selection = {
      * Selection variables
      */
     current: [ ], // Holds the current set of selections
+    isLoading: false, // Holds the current state of the loader
 
     /**
      * Selection methods
@@ -182,6 +183,8 @@ select.Selection = {
 
                 if (typeof silence == 'unknown' || !silence) {
                     select.Loader.stop();
+                } else {
+                    select.Selection.stopLoading();
                 }
             });
         };
@@ -191,7 +194,9 @@ select.Selection = {
                 doRefresh();
             });
         } else {
-            doRefresh();
+            select.Selection.startLoading(function() {
+                doRefresh();
+            });
         }
     },
 
@@ -199,16 +204,18 @@ select.Selection = {
         // Update the button's content to a awesome rotating refresh icon and disable it
         $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
 
-        select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', {
-            'position_id': id
-        }, function(success, response) {
-            if (success && response.success) {
-                select.Selection.refresh(false, true);
+        select.Selection.startLoading(function() {
+            select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', {
+                'position_id': id
+            }, function(success, response) {
+                if (success && response.success) {
+                    select.Selection.refresh(false, true);
 
-                $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
-            } else {
-                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
-            }
+                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
+                } else {
+                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
+                }
+            });
         });
     },
 
@@ -216,16 +223,59 @@ select.Selection = {
         // Update the button's content to a awesome rotating refresh icon and disable it
         $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
 
-        select.Request.request('DELETE', '/api/coordinator_approved_selector/internship_applications/position-delete.json', {
-            'position_id': id
-        }, function(success, response) {
-            if (success && response.success) {
-                select.Selection.refresh(false, true);
+        select.Selection.startLoading(function() {
+            select.Request.request('DELETE', '/api/coordinator_approved_selector/internship_applications/position-delete.json', {
+                'position_id': id
+            }, function(success, response) {
+                if (success && response.success) {
+                    select.Selection.refresh(false, true);
 
-                $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'add').html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success');
-            } else {
-                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
+                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'add').html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success');
+                } else {
+                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
+                }
+            });
+        });
+    },
+
+    startLoading: function(callback) {
+        if (select.Selection.isLoading) {
+
+            if (typeof callback != 'undefined') {
+                callback();
             }
+
+            return;
+        }
+
+        select.Selection.isLoading = true;
+
+        $('.selection .glyphicon-refresh.spinning').show();
+        $('.selection').fadeTo('slow', 0.5, function() {
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+        });
+    },
+
+    stopLoading: function(callback) {
+        if (!select.Selection.isLoading) {
+
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+
+            return;
+        }
+
+        $('.selection').fadeTo('slow', 1, function() {
+            $('.selection .glyphicon-refresh.spinning').hide();
+
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+
+            select.Selection.isLoading = false;
         });
     }
 };
