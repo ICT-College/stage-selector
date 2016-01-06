@@ -1,4 +1,4 @@
-<?= $this->Html->script(['awesomplete.min.js', 'bootstrap-slider.min.js', 'IctCollege/CoordinatorApprovedSelector.select'], ['block' => true]) ?>
+<?= $this->Html->script(['handlebars.min-latest.js', 'awesomplete.min.js', 'bootstrap-slider.min.js', 'IctCollege/CoordinatorApprovedSelector.select'], ['block' => true]) ?>
 <?= $this->Html->css(['awesomplete.css', 'bootstrap-slider.min.css'], ['block' => true]) ?>
 <?= $this->start('header') ?>
 <div class="header clearfix">
@@ -7,25 +7,60 @@
             <h3 class="text-muted">Stage Selector</h3>
         </div>
 
-        <div class="col-md-4">
-            <ul class="nav nav-pills nav-stacked nav-selection">
-                <li><a href="#">1.</a></li>
-                <li><a href="#">2.</a></li>
-            </ul>
+        <div class="selection">
+            <div class="col-md-4">
+                <ul class="nav nav-pills nav-stacked nav-selection">
+                    <li><a href="#">1.</a></li>
+                    <li><a href="#">2.</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="nav nav-pills nav-stacked nav-selection">
+                    <li><a href="#">3.</a></li>
+                    <li><a href="#">4.</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="col-md-4">
-            <ul class="nav nav-pills nav-stacked nav-selection">
-                <li><a href="#">3.</a></li>
-                <li><a href="#">4.</a></li>
-            </ul>
-        </div>
+
+        <script id="selection" type="text/x-handlebars-template">
+            {{#to 4 selection}}
+                {{#if (side 'open' 4 index)}}
+                    <div class="col-md-4">
+                        <ul class="nav nav-pills nav-stacked nav-selection">
+                {{/if}}
+
+                {{#if exists}}
+                    {{#if accepted_coordinator}}
+                        <li class="disabled">
+                            <a href="#">
+                                {{current}}. {{position.company.name}} - {{position.study_program.description}}
+                            </a>
+                        </li>
+                    {{else}}
+                        <li data-position-id="{{position.id}}" class="active">
+                            <a href="#">
+                                {{current}}. {{position.company.name}} - {{position.study_program.description}}
+                                <button type="button" class="close" data-toggle="selection" data-state="delete" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </a>
+                        </li>
+                    {{/if}}
+                {{else}}
+                    <li><a href="#">{{current}}.</a></li>
+                {{/if}}
+
+                {{#if (side 'close' 4 index)}}
+                        </ul>
+                    </div>
+                {{/if}}
+            {{/to}}
+        </script>
 
         <div class="col-md-1">
             <?= $this->Form->button('<span class="glyphicon glyphicon-chevron-right"></span>', [
                 'type' => 'submit',
                 'escape' => false,
-                'disabled' => 'disabled',
                 'class' => 'btn btn-success pull-right',
+                'data-toggle' => 'continue',
                 'style' => 'height: 50px;'
             ]) ?>
         </div>
@@ -126,15 +161,71 @@
     </tr>
     </thead>
     <tbody>
-    <tr><td colspan="5">Geen zoekresultaten</td></tr>
+
     </tbody>
+
+    <script id="positions" type="text/x-handlebars-template">
+        {{#each positions}}
+            <tr data-position-id="{{id}}">
+                <th scope="row">{{availability}}</th>
+                <td>{{study_program.description}}</td>
+                <td>
+                    {{company.name}}<br/>
+                    Tel: {{company.telephone}}
+                </td>
+                <td>
+                    {{company.address}}<br/>
+                    {{company.postcode}} {{company.city}}
+                </td>
+                <td>
+                    <div class="pull-right">
+                        <a href="#" data-toggle="modal" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </a>
+                        &nbsp;
+                        <a href="#" data-toggle="selection" data-state="{{state}}" class="btn btn-{{color}}">
+                            <span class="glyphicon glyphicon-{{icon}}"></span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {{else}}
+            <tr>
+                <td colspan="5"><?= __('No search results') ?></td>
+            </tr>
+        {{/each}}
+    </script>
 </table>
 
-<div class="text-center" style="display: none;">
+<div class="text-center">
     <ul class="pagination">
 
     </ul>
 </div>
+
+<script id="pagination" type="text/x-handlebars-template">
+    <ul class="pagination">
+        {{#paginate pagination type="previous"}}
+            <li {{#if disabled}}class="disabled"{{/if}} data-page-number="{{n}}">
+                <a href="#page-{{n}}" onclick="select.Positions.load({{n}});" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {{/paginate}}
+
+        {{#paginate pagination type="middle" limit="7"}}
+            <li {{#if active}}class="active"{{/if}}><a href="#page-{{n}}" onclick="select.Positions.load({{n}});">{{n}}</a></li>
+        {{/paginate}}
+
+        {{#paginate pagination type="next"}}
+            <li {{#if disabled}}class="disabled"{{/if}} data-page-number="{{n}}">
+                <a href="#page-{{n}}" onclick="select.Positions.load({{n}});" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {{/paginate}}
+    </ul>
+</script>
 
 <div class="text-center">
     <?= $this->Form->button(__('Add own internship'), [
@@ -143,49 +234,64 @@
 </div>
 
 <div class="modal fade position-modal">
-    <div class="modal-dialog modal-lg">
+
+</div>
+
+<script id="position-modal" type="text/x-handlebars-template">
+    <div class="modal-dialog modal-lg" data-position-id="{{details.id}}">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title study-program-title"></h4>
+                <h4 class="modal-title study-program-title">{{details.study_program.description}} <?= __('at'); ?> {{details.company.name}}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <strong><?= __('Position') ?></strong>: <span class="study-program-description"></span><br/>
+                        <strong><?= __('Position') ?></strong>: <span class="study-program-description">{{details.study_program.description}}</span><br/>
                         <strong><?= __('Description') ?></strong>: <br/>
-                        <p class="position-description"></p>
+                        {{#if details.description}}
+                            <p class="position-description">{{details.description}}</p>
+                        {{else}}
+                            <i><?= __('No description available for this position.'); ?></i><br/><br/>
+                        {{/if}}
 
                         <address>
                             <strong><?= h(__('Adres')); ?></strong><br/>
-                            <span class="company-address-address"></span><br/>
-                            <span class="company-address-city"></span> <span class="company-address-postcode"></span>
+                            {{details.company.address}}<br/>
+                            {{details.company.city}} {{details.company.postcode}}
                         </address>
 
-                        <strong><?= __('E-mail') ?></strong>: <span class="company-email"></span><br/>
-                        <strong><?= __('Website') ?></strong>: <a class="company-website" target="_blank"></a><br/>
-                        <strong><?= __('Telephone') ?></strong>: <span class="company-telephone"></span>
+                        <strong><?= __('E-mail') ?></strong>: {{details.company.email}}<br/>
+                        <strong><?= __('Website') ?></strong>: <a target="_blank">{{details.company.website}}</a><br/>
+                        <strong><?= __('Telephone') ?></strong>: {{details.company.telephone}}
                     </div>
                     <div class="col-md-6">
-                        <iframe style="width: 100%;"></iframe>
+                        <iframe style="width: 100%;" src="https://www.google.com/maps/embed/v1/place?q={{details.company.address}} {{details.company.postcode}} {{details.company.city}}&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI"></iframe>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <ol class="qualification-parts"></ol>
-                    </div>
-                    <div class="col-md-6">
-                        <ol class="qualification-parts"></ol>
-                    </div>
+                    {{#each details.qualification_parts as |qualification_part current|}}
+                        {{#if (side 'open' ../details.qualification_parts.length current)}}
+                            <div class="col-md-6">
+                                <ol class="qualification-parts">
+                        {{/if}}
+
+                        <li value="{{qualification_part.number}}">{{qualification_part.description}}</li>
+
+                        {{#if (side 'close' ../details.qualification_parts.length current)}}
+                                </ol>
+                            </div>
+                        {{/if}}
+                    {{/each}}
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
-                <button type="button" class="btn btn-success position-select"><?= __('Add') ?></button>
+                <button type="button" class="btn btn-{{#if selected}}danger{{else}}success{{/if}} position-select" data-state="{{#if selected}}delete{{else}}add{{/if}}">{{#if selected}}<?= __('Remove') ?>{{else}}<?= __('Add') ?>{{/if}}</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</script>
 
 <div class="modal fade position-create-modal">
     <div class="modal-dialog modal-lg">
@@ -228,6 +334,46 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
                 <button type="button" class="btn btn-success position-create"><?= __('Add') ?></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade continue-success">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?= __('Successfully saved') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= __('We\'ve saved your internships, they will be reviewed by the coordinator and you\'ll receive an email when you\'re able to continue.'); ?>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade continue-error">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?= __('Error while saving') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= __('You haven\'t selected 4 internships yet. Please select 4 internships before continuing.'); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Close') ?></button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

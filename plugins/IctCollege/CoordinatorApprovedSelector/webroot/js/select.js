@@ -1,425 +1,526 @@
-var selected = [];
+/**
+ * Select array wich holds all classes.
+ *
+ * @constructor
+ */
+var select = [];
 
-$(function() {
+/**
+ * Loader class which controls the loading modal
+ *
+ * @type {{isLoading: boolean, start: Function, end: Function}}
+ */
+select.Loader = {
+    /**
+     * Loader variables
+     */
+    loadings: 0, // Holds how many times we're loading something.
 
-    // Update icon when toggling the #filters collapse
-    $('#filters').on('show.bs.collapse', function() {
-        $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-down');
-    });
+    /**
+     * Loader methods
+     */
+    start: function(callback) {
+        if (select.Loader.loadings > 0) { // If it's higher than zero, we don't want the modal to be shown again.
+            select.Loader.loadings++;
 
-    $('#filters').on('hide.bs.collapse', function() {
-        $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-up');
-    });
+            if (typeof callback != 'undefined') {
+                callback();
+            }
 
-    // Open/close a collapse when you click on the header
-    $('.panel-heading').on('click', function() {
-        $(this).parents('.panel').find('.panel-collapse').collapse('toggle');
-    });
-
-    // Catch filter form submit, we won't submit it through a normal GET but awesome AJAX request :-)
-    $('#filter').submit(function(e) {
-        e.preventDefault();
-
-        $('.positions').data('page', 1);
-
-        loadContent();
-
-        return false;
-    });
-
-    $(document).on('click', '.pagination > li > a', function() {
-        $('.positions').data('page', $(this).html());
-
-        loadContent();
-    });
-
-    // Did someone click a add or remove button? Catch it!
-    $(document).on('click', '[data-toggle="selection"]', function(e) {
-        // Make sure the button isn't disabled..
-        if ($(this).attr('disabled') == 'disabled') {
             return;
         }
 
-        var state = $(this).attr('data-state');
+        select.Loader.loadings++;
 
-        if (state == 'add') {
-            state = 'delete';
-        } else {
-            state = 'add';
-        }
-
-        updatePositionState($(this).closest('[data-position-id]').attr('data-position-id'), state);
-
-        e.stopImmediatePropagation();
-    });
-
-    $(document).on('click', '[data-position-id] td:not(:last-child), [data-toggle="modal"]', function (e) {
-        loadModalContent($(this).closest('[data-position-id]').data('position-id'));
-    });
-
-    $(document).on('click', '.nav-selection [data-position-id]', function (e) {
-        loadModalContent($(this).closest('[data-position-id]').data('position-id'));
-    });
-
-    $('.position-create-open-modal').click(function () {
-        $('.position-create-modal').modal('show');
-    });
-
-    $('.position-create').click(function () {
-        var map = {};
-        $('input, select', '.position-create-modal form').each(function() {
-            map[$(this).attr("name")] = $(this).val();
+        $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
+            if (typeof callback != 'undefined') {
+                callback();
+            }
         });
+    },
 
-        updatePositionState(null, 'delete', map);
-    });
+    stop: function(callback) {
+        if (select.Loader.loadings > 1) { // if it's higher than one, we don't want the modal to be hidden yet.
+            select.Loader.loadings--;
 
-    $('.position-modal .position-select').on('click', function() {
-        $('.position-modal').modal('hide');
-
-        var id = $(this).closest('[data-position-id]').attr('data-position-id');
-
-        var state = $(this).attr('data-state');
-
-        if (state == 'add') {
-            state = 'delete';
-        } else {
-            state = 'add';
-        }
-
-        updatePositionState(id, state);
-    });
-
-    $('#radius').slider({
-        formatter: function(value) {
-            return value + 'km';
-        }
-    });
-
-    // All tooltips are tooltips, dammit bootstrap!
-    $('[data-toggle="tooltip"]').tooltip();
-
-    // Open the filters collapse after 500ms has passed. This gives an awesome effect.
-    setTimeout(function() {
-        $('#filters').collapse('show');
-    }, 500);
-
-    // Startup behaviour
-    $('.loading-modal').modal('show').modal('lock');
-
-    updateSelected(true);
-});
-
-function updateSelected(load) {
-    $.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(data) {
-        if (data.success) {
-            selected = data.data;
-
-            $('.nav-selection li').remove();
-            for (var i = 0; i < 4; i++) {
-                var select = selected[i];
-                var count = i + 1;
-                var side = ((count <= 2) ? 'first' : 'last');
-
-                if (select) {
-                    if (!select.accepted_coordinator) {
-                        $('.nav-selection:' + side).append('<li data-position-id="' + select.position.id + '" class="active"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' <button type="button" class="close" data-toggle="selection" aria-label="Close"><span aria-hidden="true">×</span></button></a></li>');
-                    } else {
-                        $('.nav-selection:' + side).append('<li class="disabled"><a href="#">' + count + '. ' + select.position.company.name +  ' - ' + select.position.study_program.description + ' </a></li>');
-                    }
-                } else {
-                    $('.nav-selection:' + side).append('<li><a href="#">' + count + '.</a></li>');
-                }
+            // Maybe we should queue all callbacks for when the loading modal is really closed.
+            if (typeof callback != 'undefined') {
+                callback();
             }
 
-            if (selected.length >= 4) {
-                $('[data-state="add"]').attr('disabled', 'disabled');
-            } else {
-                $('[data-state="add"]').removeAttr('disabled');
-            }
-
-            if (load) {
-                loadContent();
-            }
+            return;
         }
-    });
-}
 
-function updatePositionState(id, state, positionData) {
-    if (state == 'add') {
-        var oldState = 'delete';
-    } else {
-        var oldState = 'add';
+        $('.loading-modal').modal('unlock').modal('hide').one('hidden.bs.modal', function() {
+            select.Loader.loadings--;
+
+            if (typeof callback != 'undefined') {
+                callback();
+            }
+        });
     }
+};
 
-    // Update the button's content to a awesome rotating refresh icon and disable it
-    $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
+/**
+ * Request class which handles all requests for us
+ *
+ * @type {{inRequest: boolean, get: Function, post: Function, request: Function}}
+ */
+select.Request = {
+    /**
+     * Request methods
+     */
+    get: function(uri, data, callback) {
+        this.request('GET', uri, data, callback);
+    },
 
-    $.ajax({
-        'url': '/api/coordinator_approved_selector/internship_applications' + ((oldState == 'add') ? '' : '/position-delete') + '.json',
-        'method': (oldState == 'add') ? 'POST' : 'DELETE',
-        'data': (typeof positionData === "undefined") ? {
-            'position_id': id
-        } : {
-            position: positionData
-        },
-        'success': function(data) {
-            console.log(data);
-            if (data.success) {
-                updateSelected(false);
+    post: function(uri, data, callback) {
+        this.request('POST', uri, data, callback);
+    },
+
+    request: function(method, uri, data, callback) {
+        if (typeof data == 'function') {
+            callback = data;
+            data = {};
+        }
+
+        $.ajax({
+            method: method,
+            url: uri,
+            data: data
+        }).done(function(response) {
+            callback(true, response);
+        }).fail(function(jqXHR, textStatus) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            callback(false, textStatus);
+        });
+    }
+};
+
+/**
+ * Selections class which handles everything to do with the selections.
+ *
+ * @type {{current: Array, refresh: Function, add: Function, remove: Function}}
+ */
+select.Selection = {
+    /**
+     * Selection variables
+     */
+    current: [ ], // Holds the current set of selections
+
+    /**
+     * Selection methods
+     */
+    initialize: function() {
+        select.Selection.bind();
+
+        select.Selection.refresh(true);
+    },
+
+    bind: function() {
+        $(document)
+            .on('click', '[data-toggle="selection"]', function(e) {
+                // Make sure the button isn't disabled..
+                if ($(this).attr('disabled') == 'disabled') {
+                    return;
+                }
+
+                var id = $(this).closest('[data-position-id]').attr('data-position-id');
+
+                var state = $(this).attr('data-state');
 
                 if (state == 'add') {
-                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'add').html('<span class="glyphicon glyphicon-plus"></span>').removeAttr('disabled').attr('class', 'btn btn-success');
+                    select.Selection.add(id);
+                } else if (state =='delete') {
+                    select.Selection.remove(id);
                 } else {
-                    $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
+
                 }
+
+                e.stopImmediatePropagation();
+            })
+            .on('click', '.position-modal .position-select', function() {
+                $('.position-modal').modal('hide');
+                console.log('hide');
+                var id = $(this).closest('[data-position-id]').attr('data-position-id');
+
+                var state = $(this).attr('data-state');
+                console.log(id);
+                if (state == 'add') {
+                    select.Selection.add(id);
+                } else if (state =='delete') {
+                    select.Selection.remove(id);
+                } else {
+
+                }
+            });
+    },
+
+    refresh: function(initialize, silence) {
+        var doRefresh = function() {
+            select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, response) {
+                if (success && response.success) {
+                    select.Selection.current = response.data;
+
+                    if (select.Selection.current.length >= 4) {
+                        $('[data-state="add"]').attr('disabled', 'disabled');
+                    } else {
+                        $('[data-state="add"]').removeAttr('disabled');
+                    }
+
+                    var template = Handlebars.compile($('#selection').html());
+
+                    $('.selection').html(template({
+                        selection: select.Selection.current
+                    }));
+
+                    if (typeof initialize != 'undefined' && initialize) {
+                        select.Positions.initialize();
+                    }
+                }
+
+                if (typeof silence == 'unknown' || !silence) {
+                    select.Loader.stop();
+                }
+            });
+        };
+
+        if (typeof silence == 'unknown' || !silence) {
+            select.Loader.start(function () {
+                doRefresh();
+            });
+        } else {
+            doRefresh();
+        }
+    },
+
+    add: function(id) {
+        // Update the button's content to a awesome rotating refresh icon and disable it
+        $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
+
+        select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', {
+            'position_id': id
+        }, function(success, response) {
+            if (success && response.success) {
+                select.Selection.refresh(false, true);
+
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'delete').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-danger');
+            } else {
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
             }
-        },
-        'error': function() {
-            $('[data-position-id=' + id + '] [data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').data('state', 'error');
-        }
-    });
-}
+        });
+    },
 
-function loadContent() {
-    //Hide collapse and set spinning icon
-    $('#filters').parents('.panel').find('.panel-title .glyphicon .spinning').last().remove();
-    $('#filters').parents('.panel').find('.panel-title').append('<span class="glyphicon glyphicon-refresh spinning pull-right"></span>');
+    remove: function(id) {
+        // Update the button's content to a awesome rotating refresh icon and disable it
+        $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
 
-    //Receive records and create an object with only usefull filters
-    var filters = {};
+        select.Request.request('DELETE', '/api/coordinator_approved_selector/internship_applications/position-delete.json', {
+            'position_id': id
+        }, function(success, response) {
+            if (success && response.success) {
+                select.Selection.refresh(false, true);
 
-    $('#filters').find('input[type!="submit"], select').each(function() {
-        var filter = $(this).attr('name');
-        var value = $(this).val();
-
-        if (value != undefined && value != '' && value != 0 && value != null) {
-            filters[filter] = value;
-        }
-    });
-
-    if (filters['study_program_id']) {
-        filters['study_program_id'] = filters['study_program_id'].split('-')[0].replace(/\D/g,'');
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').attr('data-state', 'add').html('<span class="glyphicon glyphicon-remove"></span>').removeAttr('disabled').attr('class', 'btn btn-success');
+            } else {
+                $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-question-sign"></span>').attr('class', 'btn btn-default').attr('data-state', 'error');
+            }
+        });
     }
+};
 
-    if (!filters['company_address'] && !filters['company_postcode'] && !filters['company_city']) {
-        delete filters['radius'];
-    }
+/**
+ * Positions class which handles everything to do with positions
+ *
+ * @type {{load: Function}}
+ */
+select.Positions = {
 
-    filters['page'] = $('.positions').data('page');
+    /**
+     * Positions variables
+     */
+    current: {}, // Current set of loaded positions
 
-    $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
-        $.get('/api/positions.json', filters, function (data) {
-            $('#filters').parents('.panel').find('.panel-title .glyphicon').last().remove();
-            $('.pagination').parent().hide();
+    /**
+     * Positions methods
+     */
+    initialize: function() {
+        select.Positions.load();
+        select.Positions.bind();
+    },
 
-            $('.positions > tbody').hide(50, function () {
-                $('.positions > tbody > tr').remove();
+    bind: function() {
+        $('.position-create-open-modal').click(function () {
+            $('.position-create-modal').modal('show');
+        });
 
-                data.data.forEach(function (value, key) {
-                    var state = 'add';
-                    var color = 'success';
-                    var icon = 'plus';
+        $('.position-create').click(function () {
+            select.Positions.create();
+        });
 
-                    selected.forEach(function (selectValue, selectKey) {
-                        if (selectValue.position.id == value.id) {
-                            if (selectValue.accepted_coordinator) {
-                                state = 'accepted';
-                                color = 'default disabled';
-                                icon = 'ok';
-                            } else {
-                                state = 'delete';
-                                color = 'danger';
-                                icon = 'remove';
+        $('[data-toggle="continue"]').click(function() {
+            if (select.Selection.current.length >= 4) {
+                $('.continue-success').modal('show');
+            } else {
+                $('.continue-error').modal('show');
+            }
+        });
+    },
+
+    load: function(page) {
+        if (typeof page != 'undefined') {
+            select.Filters.page = page;
+        }
+
+        select.Loader.start(function() {
+            var filters = select.Filters.get();
+
+            select.Request.get('/api/positions.json', filters, function(success, response) {
+                if (success && response.success) {
+                    select.Positions.current = response.data;
+
+                    var positions = [];
+
+                    response.data.forEach(function (value, key) {
+                        value.state = 'add';
+                        value.color = 'success';
+                        value.icon = 'plus';
+
+                        select.Selection.current.forEach(function (selectValue, selectKey) {
+                            if (selectValue.position.id == value.id) {
+                                if (selectValue.accepted_coordinator) {
+                                    value.state = 'accepted';
+                                    value.color = 'default disabled';
+                                    value.icon = 'ok';
+                                } else {
+                                    value.state = 'delete';
+                                    value.color = 'danger';
+                                    value.icon = 'remove';
+                                }
                             }
+                        });
+
+                        positions.push(value);
+                    });
+
+                    var template = Handlebars.compile($('#positions').html());
+
+                    $('.positions > tbody').html(template({
+                        positions: positions
+                    }));
+
+                    var template = Handlebars.compile($('#pagination').html());
+
+                    $('.pagination').parent().html(template({
+                        pagination: {
+                            page: response.pagination.current_page,
+                            pageCount: response.pagination.page_count
+                        }
+                    }));
+
+                    if (select.Selection.current.length == 4) {
+                        $('[data-state="add"]').attr('disabled', 'disabled');
+                    } else {
+                        $('[data-state="add"]').removeAttr('disabled');
+                    }
+                }
+
+                select.Loader.stop();
+            });
+        });
+    },
+
+    create: function() {
+        $('.position-create-modal').modal('hide').one('hidden.bs.modal', function () {
+            select.Loader.start(function() {
+                var position = {};
+
+                $('input, select', '.position-create-modal form').each(function() {
+                    position[$(this).attr('name')] = $(this).val();
+                });
+
+                select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', { position: position }, function(success, response) {
+                    if (success && response.success) {
+                        select.Selection.refresh();
+
+                        select.Loader.stop();
+                    } else {
+                        select.Loader.stop(function() {
+                            $('.position-create-modal').modal('show');
+                        });
+                    }
+                });
+            });
+        });
+    }
+};
+
+/**
+ * Filters class which handles mostly things to do with the filters
+ *
+ * @type {{initialize: Function}}
+ */
+select.Filters = {
+
+    /**
+     * Positions variables
+     */
+    page: 1,
+
+    /**
+     * Filters methods
+     */
+    initialize: function() {
+        select.Filters.bind();
+
+        // Initialize slider
+        $('#radius').slider({
+            formatter: function(value) {
+                return value + 'km';
+            }
+        });
+
+        // Collapse the filters to show
+        $('#filters').collapse('show');
+    },
+
+    bind: function() {
+        $('#filters')
+            // Update arrow when collapses
+            .on('show.bs.collapse', function() {
+                $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-down');
+            })
+            .on('hide.bs.collapse', function() {
+                $(this).parents('.panel').find('.panel-title .glyphicon').first().attr('class', 'glyphicon glyphicon-chevron-up');
+            })
+            // Catch filter form submit, we won't submit it using a default GET but through a fancy AJAX request.
+            .on('submit', function(e) {
+                e.preventDefault();
+
+                select.Filters.page = 1;
+
+                select.Positions.load();
+
+                return false;
+            });
+
+        // Open/close a collapse when you click on the header
+        $('.panel-heading').on('click', function() {
+            $(this).parents('.panel').find('.panel-collapse').collapse('toggle');
+        });
+    },
+
+    get: function() {
+        var filters = {};
+
+        $('#filters').find('input[type!="submit"], select').each(function() {
+            var filter = $(this).attr('name');
+            var value = $(this).val();
+
+            if (value != undefined && value != '' && value != 0 && value != null) {
+                filters[filter] = value;
+            }
+        });
+
+        if (filters['study_program_id']) {
+            filters['study_program_id'] = filters['study_program_id'].split('-')[0].replace(/\D/g,'');
+        }
+
+        if (!filters['company_address'] && !filters['company_postcode'] && !filters['company_city']) {
+            delete filters['radius'];
+        }
+
+        filters['page'] = select.Filters.page;
+
+        return filters;
+    }
+};
+
+/**
+ * Details class which handles all the things to do with the details modal
+ *
+ * @type {{initialize: Function, bind: Function, load: Function}}
+ */
+select.Details = {
+
+    initialize: function() {
+        select.Details.bind();
+    },
+
+    bind: function() {
+        $(document)
+            // Click handlers to open the details box
+            .on('click', '[data-position-id] td:not(:last-child), [data-toggle="modal"]', function (e) {
+                var id = $(this).closest('[data-position-id]').data('position-id');
+
+                select.Details.load(id);
+            })
+            .on('click', '.nav-selection [data-position-id]', function (e) {
+                var id = $(this).closest('[data-position-id]').data('position-id');
+
+                select.Details.load(id);
+            });
+    },
+
+    load: function(id) {
+        select.Loader.start(function() {
+            select.Request.get('/api/positions/' + id + '.json', function(success, response) {
+                if (success && response.success) {
+
+                    var selected = false;
+                    var disabled = false;
+
+                    select.Selection.current.forEach(function (value, key) {
+                        if (value.position.id == id) {
+                            selected = true;
                         }
                     });
 
-                    var content = '<tr data-position-id="' + value.id + '">';
-                        content += '<th scope="row">' + value.available + '</th>';
-                        content += '<td>' + value.study_program.description + '</td>';
-                        content += '<td>' + value.company.name + '<br/>Tel: ' + value.company.telephone + '</td>';
-                        content += '<td>' + value.company.address + '<br/>' + value.company.postcode + ' ' + value.company.city + '</td>';
-                        content += '<td>';
-                            content += '<div class="pull-right">';
-                                content += '<a href="#' + value.id + '" data-toggle="modal" class="btn btn-primary">';
-                                    content += '<span class="glyphicon glyphicon-info-sign"></span>';
-                                content +='</a>&nbsp;';
-                                content += '<a href="#' + value.id + '" data-toggle="selection" data-state="' + state + '" class="btn btn-' + color + '">';
-                                    content += '<span class="glyphicon glyphicon-' + icon + '"></span>';
-                                content +='</a>';
-                            content += '</div>';
-                        content += '</td>';
-                    content += '</tr>';
-
-                    $('.positions > tbody').append(content);
-                });
-
-                if (data.data.length == 0) {
-                    $('.positions > tbody').append('<tr><td colspan="5">Geen zoekresultaten</td></tr>')
-                }
-
-                var currentPage = data.pagination.current_page;
-                var number = data.pagination.current_page - 4;
-                var lastSetPage = (data.pagination.page_count - 3);
-                if (number < 1) {
-                    number = 1;
-                }
-                if (lastSetPage < 1) {
-                    lastSetPage = 1;
-                }
-                if (currentPage <= data.pagination.page_count && currentPage >= lastSetPage) {
-                    number = currentPage - (8 - (data.pagination.page_count - currentPage));
-                }
-                if (number < 1) {
-                    number = 1;
-                }
-
-                $('.pagination li').remove();
-
-                if (data.pagination.page_count > 1 && data.data.length != 0) {
-                    for (var i = 1; i <= 9; i++) {
-                        if (number > data.pagination.page_count) {
-                            break;
-                        }
-
-                        $('.pagination').append('<li class="' + ((currentPage == number) ? 'active' : '') + '"><a href="javascript:;">' + number + '</a></li>');
-
-                        number++;
+                    if (selected && select.Selection.current.length >= 4) {
+                        disabled = true;
                     }
 
-                    $('.pagination').parent().show();
-                }
+                    var template = Handlebars.compile($('#position-modal').html());
 
-                if (selected.length == 4) {
-                    $('[data-state="add"]').attr('disabled', 'disabled');
+                    $('.position-modal').html(template({
+                        details: response.data,
+                        selected: selected,
+                        disabled: disabled
+                    }));
+
+                    select.Loader.stop(function() {
+                        $('.position-modal').modal('show').one('shown.bs.modal', function() {
+                            $('.position-modal').find('iframe').height($('.position-modal').find('.col-md-6').first().height());
+                        });
+                    });
                 } else {
-                    $('[data-state="add"]').removeAttr('disabled');
+                    select.Loader.stop();
                 }
-
-                $('.loading-modal').modal('unlock').modal('hide');
-
-                $('.positions > tbody').show(50);
             });
         });
-    });
-}
-
-function loadModalContent(id) {
-    var modalBody = $('.position-modal');
-
-    $('.loading-modal').modal('show').modal('lock').one('shown.bs.modal', function() {
-        $.get('/api/positions/' + id + '.json', function (data) {
-            modalBody.attr('data-position-id', id);
-
-            modalBody.find('.study-program-title').text(data.data.study_program.description + ' at ' + data.data.company.name);
-            modalBody.find('.study-program-description').text(data.data.study_program.description);
-            modalBody.find('.company-name').text(data.data.company.name);
-            modalBody.find('.position-description').text(((data.data.description == '') ? 'No description' : data.data.description));
-
-            modalBody.find('.qualification-parts').html('');
-            modalBody.find('.qualification-parts').last().attr('start', 0);
-            var count = 1;
-
-            for (var qualificationPartIndex in data.data.qualification_parts) {
-                var qualificationPart = data.data.qualification_parts[qualificationPartIndex];
-
-                var listItem = $('<li>', {
-                    'text': qualificationPart.description + '.'
-                });
-
-                if ((data.data.qualification_parts.length/2) >= count) {
-                    console.log('links');
-                    modalBody.find('.qualification-parts').first().append(listItem);
-                } else {
-                    console.log('rechts');
-                    if (modalBody.find('.qualification-parts').last().attr('start') == 0) {
-                        modalBody.find('.qualification-parts').last().attr('start', count);
-                    }
-
-                    modalBody.find('.qualification-parts').last().append(listItem)
-                }
-
-                count++;
-            }
-
-            modalBody.find('.company-address-address').text(data.data.company.address);
-            modalBody.find('.company-address-postcode').text(data.data.company.city);
-            modalBody.find('.company-address-city').text(data.data.company.postcode);
-            //modalBody.find('.company-correspondence-address-address').text(data.data.company.address);
-            //modalBody.find('.company-correspondence-address-city').text(data.data.company.city);
-            //modalBody.find('.company-correspondence-address-postcode').text(data.data.company.postcode);
-
-            modalBody.find('.company-email').text(data.data.company.email);
-            modalBody.find('.company-website').text(data.data.company.website);
-            modalBody.find('.company-website').attr('href', data.data.company.website);
-            modalBody.find('.company-telephone').text(data.data.company.telephone);
-
-            modalBody.find('iframe').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + data.data.company.address + ' ' + data.data.company.postcode + ' ' + data.data.company.city + '&key=AIzaSyA62DHgWRaIuWaS4CtWAwePExLX_-5j7UI');
-
-            var state = 'add';
-
-            selected.forEach(function (value, key) {
-                if (value.position.id == id) {
-                    state = 'delete';
-                }
-            });
-
-            if (state == 'add') {
-                modalBody.find('.position-select').attr('data-state', 'add').removeClass('btn-danger').addClass('btn-success').text('Add to selection');
-
-                if (selected.length >= 4) {
-                    modalBody.find('.position-select').attr('disabled', 'disabled');
-                }
-            } else {
-                modalBody.find('.position-select').attr('data-state', 'delete').addClass('btn-danger').removeClass('btn-success').text('Delete from selection');
-            }
-
-            if (selected.length < 4) {
-                modalBody.find('.position-select').removeAttr('disabled');
-            }
-
-            $('.loading-modal').modal('unlock').modal('hide').one('hidden.bs.modal', function() {
-                $('.position-modal').modal('show').one('shown.bs.modal', function() {
-                    modalBody.find('iframe').height(modalBody.find('.col-md-6').first().height());
-                });
-            });
-        });
-    });
-}
+    }
+};
 
 /**
- * Adds a parameter to a given URL
- *
- * Copyright to that awesome guy from Stackoverflow: http://stackoverflow.com/a/10997390/2391566
- *
- * @param url URL to be modified
- * @param param Param key to be added
- * @param paramVal Param value to be added
- * @returns baseuRL The modified base url
+ * Initialize method for starting the page
  */
-function setParameter (url, param, paramVal){
-    var parts = url.split('?');
-    var baseUrl = parts[0];
-    var oldQueryString = parts[1];
-    var newParameters = [];
-    if (oldQueryString) {
-        var oldParameters = oldQueryString.split('&');
-        for (var i = 0; i < oldParameters.length; i++) {
-            if(oldParameters[i].split('=')[0] != param) {
-                newParameters.push(oldParameters[i]);
-            }
-        }
-    }
-    if (paramVal !== '' && paramVal !== null && typeof paramVal !== 'undefined') {
-        newParameters.push(param + '=' + encodeURI(paramVal));
-    }
-    if (newParameters.length > 0) {
-        return baseUrl + '?' + newParameters.join('&');
-    } else {
-        return baseUrl;
-    }
-}
+select.initialize = function() {
+    // All tooltips are tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+    select.Filters.initialize();
+    select.Selection.initialize();
+    // select.Positions.initialize() done in the selection initialize
+    select.Details.initialize();
+};
+
+/**
+ * Initialize when DOM is ready
+ */
+$(function() {
+    select.initialize();
+});
 
 /**
  * Add ability to lock a modal
@@ -438,4 +539,174 @@ $.extend($.fn.modal.Constructor.prototype, {
 
         _hide.apply(this, arguments);
     }
+});
+
+/**
+ * Add to helper to Handlebars.
+ *
+ * This helper will count to the first defined int
+ * and it will pass the same index from the context.
+ */
+Handlebars.registerHelper('to', function(to, context, options) {
+    var ret = "";
+
+    for(var i=0; i < to; i++) {
+        var data = context[i];
+
+        if (typeof data == 'undefined') {
+            data = {exists: false};
+        } else {
+            data.exists = true;
+        }
+
+        data.index = i;
+        data.first = i === 0;
+        data.last = i === (to - 1);
+        data.count = context.length;
+        data.current = i + 1;
+
+        ret = ret + options.fn(data);
+    }
+
+    return ret;
+});
+
+/**
+ * Add side helper to Handlebars.
+ *
+ * This helper will calculate which side and what to happen
+ * and it will return true or false when something needs to happen.
+ */
+Handlebars.registerHelper('side', function(state, totalItems, currentItem, sides) {
+    if (typeof sides == 'object' || typeof sides == 'undefined') {
+        sides = 2;
+    }
+
+    var itemsPerSlide = Math.ceil(totalItems / sides);
+
+    var array = [];
+
+    for (var i = 0; i<= totalItems; i++) {
+        array.push(i * itemsPerSlide);
+    }
+
+    if (state === 'open') {
+        if (currentItem == 0) {
+            return true;
+        }
+
+        var isFirst = false;
+
+        array.forEach(function(item, index) {
+            if (currentItem == item) {
+                isFirst = true;
+                return false;
+            }
+        });
+
+        return isFirst;
+    } else if(state == 'close') {
+        if ((currentItem + 1) == totalItems) {
+            return true;
+        }
+
+        var isLast = false;
+
+        array.forEach(function(item, index) {
+            if (currentItem+1 == item) {
+                isLast = true;
+                return false;
+            }
+        });
+
+        return isLast;
+    } else {
+        return false;
+    }
+});
+
+/**
+ * Add paginate helper to Handlebars.
+ *
+ * Thanks to https://github.com/olalonde/handlebars-paginate for creating
+ * this awesome pagination helper.
+ */
+Handlebars.registerHelper('paginate', function(pagination, options) {
+    var type = options.hash.type || 'middle';
+    var ret = '';
+    var pageCount = Number(pagination.pageCount);
+    var page = Number(pagination.page);
+    var limit;
+    if (options.hash.limit) limit = +options.hash.limit;
+
+    //page pageCount
+    var newContext = {};
+    switch (type) {
+        case 'middle':
+            if (typeof limit === 'number') {
+                var i = 0;
+                var leftCount = Math.ceil(limit / 2) - 1;
+                var rightCount = limit - leftCount - 1;
+                if (page + rightCount > pageCount)
+                    leftCount = limit - (pageCount - page) - 1;
+                if (page - leftCount < 1)
+                    leftCount = page - 1;
+                var start = page - leftCount;
+
+                while (i < limit && i < pageCount) {
+                    newContext = { n: start };
+                    if (start === page) newContext.active = true;
+                    ret = ret + options.fn(newContext);
+                    start++;
+                    i++;
+                }
+            }
+            else {
+                for (var i = 1; i <= pageCount; i++) {
+                    newContext = { n: i };
+                    if (i === page) newContext.active = true;
+                    ret = ret + options.fn(newContext);
+                }
+            }
+            break;
+        case 'previous':
+            if (page === 1) {
+                newContext = { disabled: true, n: 1 }
+            }
+            else {
+                newContext = { n: page - 1 }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+        case 'next':
+            newContext = {};
+            if (page === pageCount) {
+                newContext = { disabled: true, n: pageCount }
+            }
+            else {
+                newContext = { n: page + 1 }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+        case 'first':
+            if (page === 1) {
+                newContext = { disabled: true, n: 1 }
+            }
+            else {
+                newContext = { n: 1 }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+        case 'last':
+            if (page === pageCount) {
+                newContext = { disabled: true, n: pageCount }
+            }
+            else {
+                newContext = { n: pageCount }
+            }
+            ret = ret + options.fn(newContext);
+            break;
+    }
+
+    return ret;
 });
