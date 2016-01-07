@@ -91,8 +91,11 @@ select.Request = {
         }).done(function(response) {
             callback(true, response);
         }).fail(function(jqXHR, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
+            if (jqXHR.status == 403) {
+                location.reload(true);
+                return;
+            }
+
             callback(false, textStatus);
         });
     }
