@@ -313,11 +313,7 @@ select.Positions = {
         });
 
         $('[data-toggle="continue"]').click(function() {
-            if (select.Selection.current.length >= 4) {
-                $('.continue-success').modal('show');
-            } else {
-                $('.continue-error').modal('show');
-            }
+            select.Positions.continue();
         });
     },
 
@@ -401,6 +397,25 @@ select.Positions = {
                         });
                     }
                 });
+            });
+        });
+    },
+
+    continue: function() {
+        if (select.Selection.current.length < 4) {
+            $('.continue-error').modal('show');
+            return;
+        }
+
+        select.Loader.start(function() {
+            select.Request.post('/', {}, function(success, response) { // Request to set flash and send e-mail
+                if (success) { // success && response.success
+                    window.location = '/positions';
+                } else {
+                    select.Loader.stop(function() {
+                        $('.continue-error').modal('show');
+                    });
+                }
             });
         });
     }
