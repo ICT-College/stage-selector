@@ -30,9 +30,12 @@ trait ShardAwareTrait
             $connection = ConnectionManager::get('default');
 
             $shardTable = TableRegistry::get('Shards');
-            return $shardTable->find()->where([
-                'datasource' => $connection->config()['name']
-            ])->first();
+            return $shardTable
+                ->find()->where([
+                    'datasource' => $connection->config()['name']
+                ])
+                ->cache('shard_' . $connection->config()['name'])
+                ->first();
         } catch (MissingDatasourceConfigException $e) {
         }
 

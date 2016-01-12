@@ -157,6 +157,16 @@ class CompaniesTable extends Table
         return $query;
     }
 
+    public function findSearch(Query $query, array $options)
+    {
+        $query = $this->behaviors()->get('Search')->findSearch($query, $options);
+        if ((isset($options['search']['q'])) && (strlen($options['search']['q']) <= 3)) {
+            $query->cache('companies_q_' . $options['search']['q']);
+        }
+
+        return $query;
+    }
+
     /**
      * Updates coordinates or details when needed
      *
