@@ -30,6 +30,7 @@ class InternshipApplicationMailer extends Mailer
         $this->to($user->email)
             ->domain($shard->subdomain . '.stage-selector.localhost')
             ->template('IctCollege/CoordinatorApprovedSelector.submit', 'student')
+            ->subject(__('Internship applications has been submitted'))
             ->set([
                 'user' => $user,
                 'internship' => $internship,

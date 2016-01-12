@@ -40,11 +40,12 @@ class InternshipApplicationsController extends AppController
             throw new InternalErrorException();
         }
 
-        $this->Flash->success(__('Thank you for submitting your applications'));
+        $this->Flash->success(__('Thank you for submitting your applications, you\'ve received an e-mail with further information.'));
 
         $this->set('internship', $internship);
         $this->set('internshipApplications', $internshipApplications);
-        $this->set('_serialize', ['internship', 'internshipApplications']);
+        $this->set('success', true);
+        $this->set('_serialize', ['internship', 'internshipApplications', 'success']);
     }
 
     public function deletePosition()

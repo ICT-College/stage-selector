@@ -409,7 +409,7 @@ select.Positions = {
 
         select.Loader.start(function() {
             select.Request.post('/api/coordinator_approved_selector/internship_applications/submit.json', {}, function(success, response) { // Request to set flash and send e-mail
-                if (success) { // success && response.success
+                if (success && response.success) {
                     window.location = '/coordinator-approved-selector/internship-applications';
                 } else {
                     select.Loader.stop(function() {
