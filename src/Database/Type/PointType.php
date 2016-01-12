@@ -73,13 +73,10 @@ class PointType extends Type
             return null;
         }
 
-        $expression = new FunctionExpression('ASTEXT', [$value]);
+        list (,, $lat, $lon) = array_values(unpack('x/x/x/x/corder/Ltype/dlat/dlon', $value));
 
-        $result = ConnectionManager::get('default')->newQuery()->select($expression)->execute()->fetch()[0];
-
-        return Point::fromText($result);
+        return new Point($lat, $lon);
     }
-
 
     /**
      * @param mixed $value
