@@ -32,10 +32,12 @@ class PositionsTable extends Table
 
         $this->belongsTo('Companies');
         $this->belongsTo('StudyPrograms', [
-            'strategy' => Association::STRATEGY_SELECT
+            'strategy' => Association::STRATEGY_SELECT,
+            'finder' => 'cachedAssociation'
         ]);
         $this->belongsToMany('QualificationParts', [
-            'through' => 'PositionQualificationParts'
+            'through' => 'PositionQualificationParts',
+            'finder' => 'cachedAssociation'
         ]);
     }
 

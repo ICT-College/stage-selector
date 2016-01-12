@@ -24,5 +24,6 @@ class QualificationPartsTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('CachedAssociation');
     }
 }

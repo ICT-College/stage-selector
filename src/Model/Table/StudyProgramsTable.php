@@ -16,7 +16,9 @@ class StudyProgramsTable extends Table
         parent::initialize($config);
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('CachedAssociation');
         $this->addBehavior('Search.Search');
+
         $this->hasMany('QualificationParts');
     }
 
