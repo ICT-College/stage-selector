@@ -4,12 +4,48 @@ namespace IctCollege\CoordinatorApprovedSelector\Controller;
 
 use Cake\Event\Event;
 use Cake\Network\Exception\BadRequestException;
+use Cake\Network\Exception\InternalErrorException;
 
 /**
  * @property \IctCollege\CoordinatorApprovedSelector\Model\Table\InternshipApplicationsTable InternshipApplications
  */
 class InternshipApplicationsController extends AppController
 {
+
+    public function submit()
+    {
+        $this->loadModel('Users');
+
+        $internship = $this->InternshipApplications->Periods->Internships
+            ->find('active', [
+                'student' => $this->Auth->user('student_id')
+            ])
+            ->contain([
+                'Users',
+                'Periods'
+            ])
+            ->firstOrFail();
+
+        $internshipApplications = $this->InternshipApplications->find('all')->where([
+            'student_id' => $internship->user->student_id,
+            'period_id' => $internship->period->id
+        ])->contain([
+            'Positions' => [
+                'Companies',
+                'StudyPrograms'
+            ],
+        ])->toArray();
+
+        if (!$this->InternshipApplications->submit($internship->user, $internship, $internshipApplications)) {
+            throw new InternalErrorException();
+        }
+
+        $this->Flash->success(__('Thank you for submitting your applications'));
+
+        $this->set('internship', $internship);
+        $this->set('internshipApplications', $internshipApplications);
+        $this->set('_serialize', ['internship', 'internshipApplications']);
+    }
 
     public function deletePosition()
     {
