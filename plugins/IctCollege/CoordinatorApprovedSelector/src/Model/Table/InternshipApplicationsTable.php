@@ -2,7 +2,10 @@
 
 namespace IctCollege\CoordinatorApprovedSelector\Model\Table;
 
+use App\Model\Entity\Internship;
+use App\Model\Entity\User;
 use Cake\Event\Event;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Entity;
 use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\RulesChecker;
@@ -18,6 +21,8 @@ use Search\Manager;
 class InternshipApplicationsTable extends Table
 {
 
+    use MailerAwareTrait;
+
     /**
      * @inheritDoc
      */
@@ -29,6 +34,8 @@ class InternshipApplicationsTable extends Table
 
         $this->belongsTo('Positions');
         $this->belongsTo('Periods');
+
+        $this->eventManager()->on($this->getMailer('IctCollege/CoordinatorApprovedSelector.InternshipApplication'));
     }
 
     /**
@@ -62,6 +69,17 @@ class InternshipApplicationsTable extends Table
         }
 
         return $internship;
+    }
+
+    public function submit(User $user, Internship $internship, array $internshipApplications)
+    {
+        $event = $this->dispatchEvent('Model.InternshipApplication.submit', [
+            'user' => $user,
+            'internship' => $internship,
+            'internshipApplications' => $internshipApplications
+        ], $this);
+
+        return !$event->isStopped();
     }
 
     /**
