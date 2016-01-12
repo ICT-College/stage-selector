@@ -72,9 +72,12 @@ class ShardFilter extends DispatcherFilter
 
         /* @var ShardsTable $shardsTable */
         $shardsTable = TableRegistry::get('Shards');
-        $shard = $shardsTable->find()->where([
-            'subdomain' => $subdomains[0]
-        ])->firstOrFail();
+        $shard = $shardsTable
+            ->find()->where([
+                'subdomain' => $subdomains[0]
+            ])
+            ->cache('shard_subdomain_' . $subdomains[0])
+            ->firstOrFail();
 
         $className = App::className($shard->selector, 'Selector', 'Selector');
 

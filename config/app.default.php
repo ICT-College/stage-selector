@@ -345,7 +345,8 @@ return [
     ],
 
     'Acl' => [
-        'database' => 'main'
+        'database' => 'main',
+        'classname' => 'CachedDbAcl'
     ],
 
     /**
