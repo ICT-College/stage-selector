@@ -3,9 +3,12 @@
 namespace App;
 
 use App\Model\Entity\Shard;
+use Cake\Cache\Cache;
+use Cake\Core\App;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\ORM\TableRegistry;
+use DebugKit\DebugTimer;
 
 trait ShardAwareTrait
 {
@@ -14,6 +17,11 @@ trait ShardAwareTrait
      * @var \App\Model\Entity\Shard
      */
     protected $_shard;
+
+    /**
+     * @var Object
+     */
+    protected $_selector;
 
     /**
      * @return \App\Model\Entity\Shard|null|$this
@@ -26,16 +34,29 @@ trait ShardAwareTrait
             return $this;
         }
 
-        try {
-            $connection = ConnectionManager::get('default');
+        if ($this->_shard) {
+            return $this->_shard;
+        }
 
-            $shardTable = TableRegistry::get('Shards');
-            return $shardTable
-                ->find()->where([
-                    'datasource' => $connection->config()['name']
-                ])
-                ->cache('shard_' . $connection->config()['name'])
-                ->first();
+        try {
+            $connectionName = ConnectionManager::get('default')->config()['name'];
+
+            $shard = Cache::read('shard_' . $connectionName);
+            if ($shard === false) {
+                DebugTimer::start('ShardAwareTrait: Looking up shard - ' . $connectionName);
+
+                $shard = TableRegistry::get('Shards')
+                    ->find()->where([
+                        'datasource' => $connectionName
+                    ])
+                    ->first();
+
+                DebugTimer::stop('ShardAwareTrait: Looking up shard - ' . $connectionName);
+
+                Cache::write('shard_' . $connectionName, $shard);
+            }
+
+            return $this->_shard = $shard;
         } catch (MissingDatasourceConfigException $e) {
         }
 
@@ -55,8 +76,30 @@ trait ShardAwareTrait
         return 'main';
     }
 
+    public function shardSelector()
+    {
+        if ($this->_selector) {
+            return $this->_selector;
+        }
+        if (!$this->shard()) {
+            return false;
+        }
+
+        DebugTimer::start('ShardAwareTrait: ' . __FUNCTION__);
+
+        $className = App::className($this->shard()->selector, 'Selector', 'Selector');
+
+        $selector = new $className;
+
+        DebugTimer::stop('ShardAwareTrait: ' . __FUNCTION__);
+
+        return $this->_selector = $selector;
+    }
+
     public function useShardDatabase()
     {
+        DebugTimer::start('ShardAwareTrait: ' . __FUNCTION__);
+
         $shard = $this->shard();
 
         ConnectionManager::dropAlias('default');
@@ -66,5 +109,7 @@ trait ShardAwareTrait
         ConnectionManager::alias($shard->secured_datasource, 'secured');
 
         TableRegistry::clear();
+
+        DebugTimer::stop('ShardAwareTrait: ' . __FUNCTION__);
     }
 }

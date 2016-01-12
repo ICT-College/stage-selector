@@ -2,17 +2,15 @@
 
 namespace App\Routing\Filter;
 
-use App\Model\Table\ShardsTable;
 use App\ShardAwareTrait;
-use Cake\Core\App;
+use Cake\Cache\Cache;
 use Cake\Datasource\ConnectionManager;
-use Cake\Error\Debugger;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Network\Request;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\DispatcherFilter;
-use Cake\Routing\RouteBuilder;
+use DebugKit\DebugTimer;
 
 class ShardFilter extends DispatcherFilter
 {
@@ -25,8 +23,6 @@ class ShardFilter extends DispatcherFilter
      * @var int
      */
     protected $_priority = 9;
-
-    protected $_selector;
 
     /**
      * {@inheritDoc}
@@ -47,9 +43,13 @@ class ShardFilter extends DispatcherFilter
      */
     public function selectorRoute(Event $event)
     {
-        if($this->_selector != null) {
-            $this->_selector->setupRoutes($event->subject());
+        DebugTimer::start('ShardFilter: ' . __FUNCTION__);
+
+        if ($this->shardSelector()) {
+            $this->shardSelector()->setupRoutes($event->subject());
         }
+
+        DebugTimer::stop('ShardFilter: ' . __FUNCTION__);
     }
 
     /**
@@ -61,6 +61,8 @@ class ShardFilter extends DispatcherFilter
      */
     public function beforeDispatch(Event $event)
     {
+        DebugTimer::start('ShardFilter: ' . __FUNCTION__);
+
         /* @var Request $request */
         $request = $event->data['request'];
 
@@ -70,19 +72,20 @@ class ShardFilter extends DispatcherFilter
             return;
         }
 
-        /* @var ShardsTable $shardsTable */
-        $shardsTable = TableRegistry::get('Shards');
-        $shard = $shardsTable
-            ->find()->where([
-                'subdomain' => $subdomains[0]
-            ])
-            ->cache('shard_subdomain_' . $subdomains[0])
-            ->firstOrFail();
+        $shard = Cache::read('shard_subdomain_' . $subdomains[0]);
+        if ($shard === false) {
+            $shard = TableRegistry::get('Shards')
+                ->find()->where([
+                    'subdomain' => $subdomains[0]
+                ])
+                ->firstOrFail();
 
-        $className = App::className($shard->selector, 'Selector', 'Selector');
+            Cache::write('shard_subdomain_' . $subdomains[0], $shard);
+        }
 
-        $this->_selector = new $className();
+        $this->shard($shard);
+        $this->useShardDatabase();
 
-        ConnectionManager::alias($shard->datasource, 'default');
+        DebugTimer::stop('ShardFilter: ' . __FUNCTION__);
     }
 }
