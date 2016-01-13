@@ -13,6 +13,8 @@ class Position extends Entity
         applyResource as protected _applyResource;
     }
 
+    protected $_virtual = ['name'];
+
     /**
      * {@inheritDoc}
      */
@@ -33,5 +35,10 @@ class Position extends Entity
         if ($resource->has('study_program')) {
             $this->set('study_program_id', $resource->study_program->id);
         }
+    }
+
+    protected function _getName()
+    {
+        return $this->study_program->description . ' - ' . $this->company->name;
     }
 }

@@ -6,6 +6,9 @@ namespace App\Controller;
 use Cake\Event\Event;
 use Cake\ORM\Query;
 
+/**
+ * @property \App\Model\Table\InternshipsTable Internships
+ */
 class InternshipsController extends AppController
 {
 
@@ -33,6 +36,40 @@ class InternshipsController extends AppController
         $this->Flash->success(__('Your internship has been accepted'));
 
         return $this->redirect(['action' => 'view', $id]);
+    }
+
+    public function interview($id)
+    {
+        $internship = $this->Internships->get($id);
+
+        $this->set('internship', $internship);
+
+        if (!$this->request->is('put')) {
+            return;
+        }
+
+        if (!$internship = $this->Internships->markInterviewed($internship, $this->request->data())) {
+            $this->Flash->error(__('Could not save your report.'));
+
+            return;
+        }
+
+        $this->Flash->success(__('Your report has been saved.'));
+
+        $this->redirect([
+            'action' => 'view',
+            $id
+        ]);
+    }
+
+    public function report($id)
+    {
+        $internship = $this->Internships->get($id);
+
+        $this->response->file(dirname(APP) . DS . $internship->report_dir . $internship->report);
+        $this->response->type($internship->report_type);
+
+        return $this->response;
     }
 
     public function select()

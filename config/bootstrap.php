@@ -190,6 +190,7 @@ Plugin::load('Migrations');
 Plugin::load('Crud');
 Plugin::load('BootstrapUI');
 Plugin::load('Search');
+Plugin::load('Josegonzalez/Upload');
 
 Plugin::load('CvoTechnologies/Gearman', ['bootstrap' => true]);
 

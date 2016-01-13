@@ -34,6 +34,15 @@ class InternshipsTable extends Table
                 ]
             ],
         ]);
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'report' => [
+                'fields' => [
+                    'dir' => 'report_dir',
+                    'size' => 'report_size',
+                    'type' => 'report_type',
+                ],
+            ],
+        ]);
 
         try {
             // We only need to set the students relation when the secured alias is set.
@@ -96,6 +105,18 @@ class InternshipsTable extends Table
         $internship->accepted_by_company_date = Time::now();
 
         $this->dispatchEvent('Model.Internship.acceptedByCompany', [$internship], $this);
+
+        return $this->save($internship);
+    }
+
+    public function markInterviewed(Internship $internship, $data)
+    {
+        $internship = $this->patchEntity($internship, $data, [
+            'fieldList' => [
+                'report'
+            ]
+        ]);
+        $internship->interviewed = true;
 
         return $this->save($internship);
     }

@@ -97,3 +97,7 @@ body {
 
     margin-top: -1px;
 }
+
+.table-head {
+    width: 20%;
+}

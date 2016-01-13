@@ -17,7 +17,8 @@
         "ictcollege/cakephp-stagemarkt": "~1.0.0",
         "friendsofcake/search": "dev-expression-support as 1.2.0",
         "cakephp/acl": "dev-patch-2",
-        "sameer-shelavale/php-countries-array": "dev-master"
+        "sameer-shelavale/php-countries-array": "dev-master",
+        "josegonzalez/cakephp-upload": "^3.0"
     },
     "require-dev": {
         "psy/psysh": "@stable",
