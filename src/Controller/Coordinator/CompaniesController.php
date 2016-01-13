@@ -2,6 +2,8 @@
 namespace App\Controller\Coordinator;
 
 use Cake\Datasource\ConnectionManager;
+use Cake\Event\Event;
+use Cake\ORM\Query;
 use CvoTechnologies\Gearman\JobAwareTrait;
 
 class CompaniesController extends AppController
@@ -12,6 +14,39 @@ class CompaniesController extends AppController
     public function initialize()
     {
         parent::initialize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function implementedEvents()
+    {
+        return parent::implementedEvents() + [
+            'Crud.beforeFind' => 'beforeFindQuery',
+            'Crud.beforePaginate' => 'beforeFindQuery',
+            'Crud.beforeSave' => 'beforeSave'
+        ];
+    }
+
+    /**
+     * Adds contain to the query to get relations
+     *
+     * @param Event $event Event that was dispatched
+     *
+     * @return void
+     */
+    public function beforeFindQuery(Event $event)
+    {
+        /* @var Query $query */
+        $query = $event->subject()->query;
+
+        $query->contain([
+            'Positions' => [
+                'Internships' => [
+                    'Users'
+                ]
+            ]
+        ]);
     }
 
     public function updateDetails($id)

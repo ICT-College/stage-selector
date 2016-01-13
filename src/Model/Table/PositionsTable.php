@@ -39,6 +39,8 @@ class PositionsTable extends Table
             'through' => 'PositionQualificationParts',
             'finder' => 'cachedAssociation'
         ]);
+
+        $this->hasMany('Internships');
     }
 
     /**

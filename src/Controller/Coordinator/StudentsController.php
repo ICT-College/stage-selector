@@ -3,6 +3,7 @@ namespace App\Controller\Coordinator;
 
 use App\Form\InviteStudentForm;
 use App\Form\StudentsSyncForm;
+use App\ShardAwareTrait;
 use Cake\Cache\Cache;
 use Cake\Database\Expression\Comparison;
 use Cake\Event\Event;
@@ -12,11 +13,7 @@ use Cake\ORM\TableRegistry;
 class StudentsController extends AppController
 {
 
-    public $paginate = [
-        'conditions' => [
-            'student_id IS NOT' => null
-        ]
-    ];
+    use ShardAwareTrait;
 
     public function initialize()
     {
@@ -84,24 +81,31 @@ class StudentsController extends AppController
         /* @var \Cake\ORM\Query $query */
         $query = $event->subject()->query;
 
-        if (!$query->clause('where')) {
+        $hasWhere = $query->clause('where');
+
+        $query->matching('Shards', function ($q) {
+            return $q->where(['Shards.id' => $this->shard()->id]);
+        }) ->where([
+            'Users.student_id IS NOT' => null
+        ]);
+
+        if (!$hasWhere) {
             return;
         }
 
-        $comparisons = [];
+        $expressions = [];
         $studentId = false;
-        $query->clause('where')->traverse(function (Comparison $comparison) use ($comparisons, &$studentId) {
-            if ($comparison->getField() !== 'Users.id') {
-                $comparisons[] = $comparison;
-
+        $query->clause('where')->traverse(function ($expression) use ($expressions, &$studentId) {
+            if (!$expression instanceof Comparison || $expression->getField() !== 'Users.id') {
+                $expressions[] = $expression;
                 return;
             }
 
-            $studentId = $comparison->getValue();
+            $studentId = $expression->getValue();
         });
 
         if ($studentId) {
-            $query->where($comparisons, [], true);
+            $query->where($expressions, [], true);
             $query->andWhere([
                 'Users.student_id' => $studentId
             ]);
