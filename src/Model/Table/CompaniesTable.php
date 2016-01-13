@@ -34,6 +34,8 @@ class CompaniesTable extends Table
 
         $this->addBehavior('Timestamp');
         $this->addBehavior('Search.Search');
+
+        $this->hasMany('Positions');
     }
 
     public function searchConfiguration()
