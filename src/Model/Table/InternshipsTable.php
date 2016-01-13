@@ -1,9 +1,12 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\Internship;
 use Cake\Database\Expression\FunctionExpression;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\Exception\MissingDatasourceConfigException;
+use Cake\Event\Event;
+use Cake\I18n\Time;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Association;
 use Cake\ORM\Query;
@@ -13,6 +16,8 @@ use Search\Manager;
 
 class InternshipsTable extends Table
 {
+
+    use MailerAwareTrait;
 
     /**
      * {@inheritDoc}
@@ -48,6 +53,8 @@ class InternshipsTable extends Table
             'bindingKey' => 'student_id',
         ]);
         $this->belongsTo('Positions');
+
+        $this->eventManager()->on($this->getMailer('Internship'));
     }
 
     /**
@@ -61,6 +68,36 @@ class InternshipsTable extends Table
         ]);
 
         return $query;
+    }
+
+    public function acceptStudent(Internship $internship)
+    {
+        $internship->accepted_by_student = true;
+        $internship->accepted_by_student_date = Time::now();
+
+        $this->dispatchEvent('Model.Internship.acceptedByStudent', [$internship], $this);
+
+        return $this->save($internship);
+    }
+
+    public function acceptCoordinator(Internship $internship)
+    {
+        $internship->accepted_by_coordinator = true;
+        $internship->accepted_by_coordinator_date = Time::now();
+
+        $this->dispatchEvent('Model.Internship.acceptedByCoordinator', [$internship], $this);
+
+        return $this->save($internship);
+    }
+
+    public function acceptCompany(Internship $internship)
+    {
+        $internship->accepted_by_company = true;
+        $internship->accepted_by_company_date = Time::now();
+
+        $this->dispatchEvent('Model.Internship.acceptedByCompany', [$internship], $this);
+
+        return $this->save($internship);
     }
 
     /**
@@ -98,5 +135,39 @@ class InternshipsTable extends Table
             ]);
 
         return $search;
+    }
+
+    public function beforeSave(Event $event, Internship $internship)
+    {
+        if (($internship->accepted_by_student) && ($internship->accepted_by_coordinator) && ($internship->accepted_by_company)) {
+            $internship->accepted = true;
+            $internship->accepted_on = Time::now();
+        }
+    }
+
+    public function afterSave(Event $event, Internship $internship)
+    {
+        if ($internship->dirty('accepted')) {
+            $filledInternship = $this->loadInto($internship, [
+                'Positions' => [
+                    'Companies',
+                    'StudyPrograms',
+                ],
+                'Users'
+            ]);
+
+            $this->dispatchEvent('Model.Internship.accepted', [$filledInternship], $this);
+        }
+    }
+
+    /**
+     * Validation for internships table
+     *
+     * @param Validator $validator
+     * @return Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        return $validator;
     }
 }
