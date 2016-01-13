@@ -89,6 +89,16 @@ class StudentsController extends AppController
             'Users.student_id IS NOT' => null
         ]);
 
+        $query->contain([
+            'Internships' => [
+                'Periods',
+                'Positions' => [
+                    'Companies',
+                    'StudyPrograms'
+                ]
+            ]
+        ]);
+
         if (!$hasWhere) {
             return;
         }
