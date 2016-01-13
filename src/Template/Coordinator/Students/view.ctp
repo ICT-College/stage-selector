@@ -85,7 +85,13 @@
     <?php foreach ($student->internships as $internship): ?>
         <tr>
             <td><?= h($internship->period->title); ?></td>
-            <td><?= $this->Html->link($internship->position->study_program->description . ' - ' . $internship->position->company->name, ['controller' => 'Internships', 'action' => 'view', $internship->id]); ?></td>
+            <td>
+                <?php if ($internship->position): ?>
+                <?= $this->Html->link($internship->position->study_program->description . ' - ' . $internship->position->company->name, ['controller' => 'Internships', 'action' => 'view', $internship->id]); ?>
+                <?php else: ?>
+                    <?= h(__('None')); ?>
+                <?php endif; ?>
+            </td>
             <td class="<?= ($internship->accepted) ? 'success' : 'danger' ?>">
                 <?php if (!$internship->accepted): ?>
                     <em><?= h(__('Missing:')); ?></em>
