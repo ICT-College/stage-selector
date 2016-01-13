@@ -68,6 +68,19 @@ class InternshipApplicationsTable extends Table
             return false;
         }
 
+        $internship = $this->Periods->Internships->loadInto($internship, [
+            'Positions' => [
+                'Companies',
+                'StudyPrograms'
+            ],
+            'Users'
+        ]);
+        $this->dispatchEvent('Model.InternshipApplication.approved', [
+            'user' => $internship->user,
+            'internship' => $internship,
+            'internshipApplications' => $internshipApplication
+        ]);
+
         return $internship;
     }
 
