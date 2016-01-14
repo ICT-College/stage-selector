@@ -32,19 +32,21 @@
                 <?= $company->email ?>
             </td>
             <td>
-                <?= $this->Html->link(__('Edit'), [
-                    'action' => 'edit',
-                    $company->id
-                ], [
-                    'class' => 'btn btn-default'
-                ]) ?>
-                <?= $this->Html->link(__('Delete'), [
-                    'action' => 'delete',
-                    $company->id
-                ], [
-                    'confirm' => __('Are you sure?'),
-                    'class' => 'btn btn-danger'
-                ]) ?>
+                <div class="btn-group">
+                    <?= $this->Html->link(__('Edit'), [
+                        'action' => 'edit',
+                        $company->id
+                    ], [
+                        'class' => 'btn btn-default'
+                    ]) ?>
+                    <?= $this->Html->link(__('Delete'), [
+                        'action' => 'delete',
+                        $company->id
+                    ], [
+                        'confirm' => __('Are you sure?'),
+                        'class' => 'btn btn-danger'
+                    ]) ?>
+                </div>
             </td>
         </tr>
     <?php endforeach; ?>
