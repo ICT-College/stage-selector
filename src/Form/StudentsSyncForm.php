@@ -10,17 +10,23 @@ use CvoTechnologies\Gearman\JobAwareTrait;
 class StudentsSyncForm extends Form
 {
 
-    use ShardAwareTrait;
-
     use JobAwareTrait {
         execute as executeJob;
     }
 
+    use ShardAwareTrait;
+
+    /**
+     * {@inheritDoc}
+     */
     protected function _buildSchema(Schema $schema)
     {
         return $schema->addField('csv', 'file');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _buildValidator(Validator $validator)
     {
         return $validator
@@ -34,6 +40,9 @@ class StudentsSyncForm extends Form
             ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _execute(array $data)
     {
         $handle = fopen($data['csv']['tmp_name'], 'r');
@@ -72,6 +81,9 @@ class StudentsSyncForm extends Form
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function execute(array $data)
     {
         return parent::execute($data);

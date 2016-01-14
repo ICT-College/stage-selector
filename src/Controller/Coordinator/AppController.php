@@ -8,6 +8,9 @@ use Cake\ORM\TableRegistry;
 class AppController extends BaseController
 {
 
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         parent::initialize();
@@ -40,16 +43,18 @@ class AppController extends BaseController
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
 
         $this->set('periods', TableRegistry::get('Periods')->find('list')->toArray());
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function implementedEvents()
     {
         return parent::implementedEvents() + [
@@ -57,7 +62,11 @@ class AppController extends BaseController
         ];
     }
 
-    public function crudSetFlash(Event $event) {
+    /**
+     * {@inheritDoc}
+     */
+    public function crudSetFlash(Event $event)
+    {
         unset($event->subject()->params['class']);
 
         return $event;

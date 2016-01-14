@@ -26,9 +26,9 @@ use Search\Manager;
 class UsersTable extends Table
 {
 
-    use ShardAwareTrait;
     use JobAwareTrait;
     use MailerAwareTrait;
+    use ShardAwareTrait;
 
     /**
      * Connection name for this Table
@@ -41,7 +41,7 @@ class UsersTable extends Table
     }
 
     /**
-     * @param array $config
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {
@@ -69,7 +69,9 @@ class UsersTable extends Table
             $this->belongsTo('Students', [
                 'strategy' => Association::STRATEGY_SELECT
             ]);
-        }catch(MissingDatasourceConfigException $e) {}
+        } catch (MissingDatasourceConfigException $e) {
+
+        }
 
         $this->eventManager()->on($this->getMailer('User'));
 
@@ -77,6 +79,13 @@ class UsersTable extends Table
         $this->Acl = new AclComponent($registry);
     }
 
+    /**
+     * Execute job to get user from student
+     *
+     * @param int $studentNumber Student number
+     * @param Shard $shard Shard to search in
+     * @return mixed
+     */
     public function fromStudent($studentNumber, Shard $shard)
     {
         return $this->execute('get_user_from_student', [
@@ -85,6 +94,14 @@ class UsersTable extends Table
         ], false, Gearman::PRIORITY_HIGH);
     }
 
+    /**
+     * Invite user for a period
+     *
+     * @param User $user User to invite
+     * @param Shard $shard Shard to use
+     * @param Period $period Period to invite user for
+     * @return User|bool|\Cake\Datasource\EntityInterface|mixed
+     */
     public function invite(User $user, Shard $shard, Period $period)
     {
         $user = $this->patchEntity($user, [
@@ -127,6 +144,11 @@ class UsersTable extends Table
         return $user;
     }
 
+    /**
+     * Custom search, search on many possible fealds
+     *
+     * @return Manager
+     */
     public function searchConfiguration()
     {
         $concatWithoutInsertion = new FunctionExpression('CONCAT', [
@@ -161,12 +183,10 @@ class UsersTable extends Table
     }
 
     /**
-     * afterSave
-     *
-     * @param Event $event
-     * @param Entity $entity
+     * {@inheritDoc}
      */
-    public function afterSave(Event $event, Entity $entity) {
+    public function afterSave(Event $event, Entity $entity)
+    {
         // Set alias of the User's aco to his e-mail address
 
         /* @var \Acl\Model\Table\ArosTable $arosTable */
@@ -193,10 +213,7 @@ class UsersTable extends Table
     }
 
     /**
-     * Validation for users table
-     *
-     * @param Validator $validator
-     * @return Validator
+     * {@inheritDoc}
      */
     public function validationDefault(Validator $validator)
     {

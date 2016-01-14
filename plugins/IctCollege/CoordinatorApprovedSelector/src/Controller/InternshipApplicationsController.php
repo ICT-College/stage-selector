@@ -12,6 +12,9 @@ use Cake\Network\Exception\InternalErrorException;
 class InternshipApplicationsController extends AppController
 {
 
+    /**
+     * {@inheritDoc}
+     */
     public function submit()
     {
         $this->loadModel('Users');
@@ -48,6 +51,9 @@ class InternshipApplicationsController extends AppController
         $this->set('_serialize', ['internship', 'internshipApplications', 'success']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function deletePosition()
     {
         $application = $this->InternshipApplications->find()->where([
@@ -64,7 +70,7 @@ class InternshipApplicationsController extends AppController
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function implementedEvents()
     {
@@ -74,6 +80,9 @@ class InternshipApplicationsController extends AppController
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function beforePaginate(Event $event)
     {
         /* @var \Cake\ORM\Query $query */
@@ -97,6 +106,9 @@ class InternshipApplicationsController extends AppController
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function beforeSave(Event $event)
     {
         /* @var \Cake\ORM\Entity $entity */

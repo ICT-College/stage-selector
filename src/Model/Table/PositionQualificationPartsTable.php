@@ -9,7 +9,7 @@ class PositionQualificationPartsTable extends Table
 {
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {

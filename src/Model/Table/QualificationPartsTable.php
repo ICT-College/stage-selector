@@ -18,7 +18,7 @@ class QualificationPartsTable extends Table
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {

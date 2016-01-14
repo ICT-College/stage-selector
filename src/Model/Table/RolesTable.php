@@ -18,7 +18,7 @@ class RolesTable extends Table
     }
 
     /**
-     * @param array $config
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {

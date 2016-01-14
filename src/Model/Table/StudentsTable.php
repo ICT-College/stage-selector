@@ -9,7 +9,7 @@ class StudentsTable extends Table
 {
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {
@@ -19,7 +19,7 @@ class StudentsTable extends Table
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function _initializeSchema(Schema $table)
     {
@@ -39,7 +39,7 @@ class StudentsTable extends Table
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function defaultConnectionName()
     {

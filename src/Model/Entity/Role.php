@@ -16,7 +16,8 @@ class Role extends Entity
      *
      * @return array|null
      */
-    public function parentNode() {
+    public function parentNode()
+    {
         return null;
     }
 }

@@ -7,8 +7,8 @@ use App\Model\Entity\User;
 use Cake\Event\Event;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Entity;
-use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\RulesChecker;
+use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use IctCollege\CoordinatorApprovedSelector\Model\Entity\InternshipApplication;
@@ -24,7 +24,7 @@ class InternshipApplicationsTable extends Table
     use MailerAwareTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {
@@ -39,9 +39,7 @@ class InternshipApplicationsTable extends Table
     }
 
     /**
-     * @param InternshipApplication $internshipApplication
-     *
-     * @return bool|\App\Model\Entity\Internship|mixed
+     * {@inheritDoc}
      */
     public function approve(InternshipApplication $internshipApplication)
     {
@@ -84,6 +82,9 @@ class InternshipApplicationsTable extends Table
         return $internship;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function submit(User $user, Internship $internship, array $internshipApplications)
     {
         $event = $this->dispatchEvent('Model.InternshipApplication.submit', [
@@ -96,7 +97,7 @@ class InternshipApplicationsTable extends Table
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     public function searchConfiguration()
     {
@@ -106,7 +107,7 @@ class InternshipApplicationsTable extends Table
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function buildRules(RulesChecker $rules)
     {
@@ -118,6 +119,9 @@ class InternshipApplicationsTable extends Table
         return parent::buildRules($rules);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function beforeSave(Event $event, Entity $application)
     {
         if (!empty($application->position)) {
@@ -125,6 +129,9 @@ class InternshipApplicationsTable extends Table
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function afterDelete(Event $event, Entity $application)
     {
         $position = $this->Positions->get($application->position_id);

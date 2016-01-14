@@ -11,11 +11,6 @@ class CompaniesController extends AppController
 
     use JobAwareTrait;
 
-    public function initialize()
-    {
-        parent::initialize();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -48,6 +43,9 @@ class CompaniesController extends AppController
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function updateDetails($id)
     {
         $company = $this->Companies->get($id);
@@ -68,6 +66,9 @@ class CompaniesController extends AppController
         return $this->redirect($this->request->referer());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function updateCoordinates($id)
     {
         $company = $this->Companies->get($id);

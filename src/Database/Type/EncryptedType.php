@@ -10,7 +10,7 @@ class EncryptedType extends Type
 {
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toDatabase($value, Driver $driver)
     {
@@ -22,7 +22,7 @@ class EncryptedType extends Type
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toPHP($value, Driver $driver)
     {

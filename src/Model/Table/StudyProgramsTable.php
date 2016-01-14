@@ -11,6 +11,14 @@ class StudyProgramsTable extends Table
     /**
      * {@inheritDoc}
      */
+    public static function defaultConnectionName()
+    {
+        return 'main';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -22,6 +30,9 @@ class StudyProgramsTable extends Table
         $this->hasMany('QualificationParts');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function searchConfiguration()
     {
         $search = new Manager($this);
@@ -34,13 +45,5 @@ class StudyProgramsTable extends Table
             ]
         ]);
         return $search;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public static function defaultConnectionName()
-    {
-        return 'main';
     }
 }

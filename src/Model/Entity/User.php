@@ -20,6 +20,8 @@ class User extends Entity
 
     /**
      * Activates an user
+     *
+     * @return void
      */
     public function activate()
     {
@@ -53,7 +55,8 @@ class User extends Entity
      *
      * @return array|null
      */
-    public function parentNode() {
+    public function parentNode()
+    {
         if (!$this->id) {
             return null;
         }

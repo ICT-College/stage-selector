@@ -24,7 +24,7 @@ trait ShardAwareTrait
     protected $_selector;
 
     /**
-     * @return \App\Model\Entity\Shard|null|$this
+     * {@inheritDoc}
      */
     public function shard(Shard $shard = null)
     {
@@ -76,6 +76,9 @@ trait ShardAwareTrait
         return 'main';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function shardSelector()
     {
         if ($this->_selector) {
@@ -96,6 +99,9 @@ trait ShardAwareTrait
         return $this->_selector = $selector;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function useShardDatabase()
     {
         DebugTimer::start('ShardAwareTrait: ' . __FUNCTION__);

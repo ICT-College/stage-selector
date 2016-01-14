@@ -2,21 +2,28 @@
 
 namespace App\Model\Behavior;
 
-use Cake\Database\Expression\Comparison;
 use Cake\Database\ExpressionInterface;
+use Cake\Database\Expression\Comparison;
 use Cake\ORM\Behavior;
 use Cake\ORM\Query;
 
 class CachedAssociationBehavior extends Behavior
 {
 
+    /**
+     * Find a assosiation and cache
+     *
+     * @param Query $query Query to cache
+     * @param array $options Options
+     * @return Query
+     */
     public function findCachedAssociation(Query $query, array $options)
     {
         $query->cache(function (Query $query) {
             $comparedFields = [];
             $query->clause('where')->traverse(function (ExpressionInterface $expression) use (&$comparedFields) {
                 if (!$expression instanceof Comparison) {
-                    return;
+                    return null;
                 }
 
                 $comparedFields[$expression->getField() . ' ' . $expression->getOperator()] = $expression->getValue();

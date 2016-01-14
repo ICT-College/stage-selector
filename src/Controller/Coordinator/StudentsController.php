@@ -15,6 +15,9 @@ class StudentsController extends AppController
 
     use ShardAwareTrait;
 
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         parent::initialize();
@@ -22,6 +25,9 @@ class StudentsController extends AppController
         $this->modelClass = 'Users';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function synchronize()
     {
         $studentsSync = new StudentsSyncForm();
@@ -40,6 +46,9 @@ class StudentsController extends AppController
         return $this->redirect($this->referer());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function invite()
     {
         $inviteStudent = new InviteStudentForm();

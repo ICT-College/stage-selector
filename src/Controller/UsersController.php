@@ -17,7 +17,7 @@ class UsersController extends AppController
     use ShardAwareTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function initialize()
     {
@@ -68,6 +68,9 @@ class UsersController extends AppController
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function activate($activationToken)
     {
         /* @var \App\Model\Entity\User $user */

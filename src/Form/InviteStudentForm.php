@@ -13,17 +13,23 @@ use CvoTechnologies\Gearman\JobAwareTrait;
 class InviteStudentForm extends Form
 {
 
-    use ShardAwareTrait;
-
     use JobAwareTrait {
         execute as executeJob;
     }
 
+    use ShardAwareTrait;
+
+    /**
+     * {@inheritDoc}
+     */
     protected function _buildSchema(Schema $schema)
     {
         return $schema->addField('student_number', 'string');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _buildValidator(Validator $validator)
     {
         return $validator
@@ -31,6 +37,9 @@ class InviteStudentForm extends Form
             ->notEmpty('student_number');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _execute(array $data)
     {
         $shard = $this->shard();
@@ -58,6 +67,9 @@ class InviteStudentForm extends Form
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function execute(array $data)
     {
         return parent::execute($data);

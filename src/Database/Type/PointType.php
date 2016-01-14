@@ -73,14 +73,16 @@ class PointType extends Type
             return null;
         }
 
-        list (,, $lat, $lon) = array_values(unpack('x/x/x/x/corder/Ltype/dlat/dlon', $value));
+        list ($order, $type, $lat, $lon) = array_values(unpack('x/x/x/x/corder/Ltype/dlat/dlon', $value));
 
         return new Point($lat, $lon);
     }
 
     /**
-     * @param mixed $value
-     * @return mixed
+     * Marshal value into Point object
+     *
+     * @param string $value Value to marshal
+     * @return Point
      */
     public function marshal($value)
     {

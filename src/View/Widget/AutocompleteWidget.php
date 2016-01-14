@@ -10,7 +10,7 @@ class AutocompleteWidget extends BasicWidget
 {
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function render(array $data, ContextInterface $context)
     {
@@ -44,13 +44,13 @@ class AutocompleteWidget extends BasicWidget
 
         $data['type'] = 'text';
 
-        unset($data['autocompleteUrl'],$data['autocompleteKey'], $data['autocompleteValue'], $data['autocompleteStrict']);
+        unset($data['autocompleteUrl'], $data['autocompleteKey'], $data['autocompleteValue'], $data['autocompleteStrict']);
 
         return parent::render($data, $context) . $hiddenInput;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function secureFields(array $data)
     {

@@ -15,7 +15,7 @@ class InternshipsTable extends Table
 {
 
     /**
-     * @param array $config
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {
@@ -38,7 +38,9 @@ class InternshipsTable extends Table
             $this->belongsTo('Students', [
                 'strategy' => Association::STRATEGY_SELECT
             ]);
-        }catch(MissingDatasourceConfigException $e) {}
+        } catch (MissingDatasourceConfigException $e) {
+
+        }
 
         $this->belongsTo('Periods');
         $this->belongsTo('Users', [
@@ -48,6 +50,9 @@ class InternshipsTable extends Table
         $this->belongsTo('Positions');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function findActive(Query $query, array $options)
     {
         $query->where([
@@ -58,6 +63,9 @@ class InternshipsTable extends Table
         return $query;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function searchConfiguration()
     {
         $concatWithoutInsertion = new FunctionExpression('CONCAT', [
@@ -90,16 +98,5 @@ class InternshipsTable extends Table
             ]);
 
         return $search;
-    }
-
-    /**
-     * Validation for internships table
-     *
-     * @param Validator $validator
-     * @return Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        return $validator;
     }
 }

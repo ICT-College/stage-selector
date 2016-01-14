@@ -17,7 +17,7 @@ class PeriodsTable extends Table
 {
 
     /**
-     * @param array $config
+     * {@inheritDoc}
      */
     public function initialize(array $config)
     {
@@ -33,28 +33,22 @@ class PeriodsTable extends Table
             $this->belongsToMany('Students', [
                 'through' => 'Internships'
             ]);
-        }catch(MissingDatasourceConfigException $e) {}
+        } catch (MissingDatasourceConfigException $e) {
+
+        }
 
         $this->hasMany('Internships');
 
         $this->displayField('title');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function searchConfiguration()
     {
         $search = new Manager($this);
 
         return $search;
-    }
-
-    /**
-     * Validation for periods table
-     *
-     * @param Validator $validator
-     * @return Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        return $validator;
     }
 }

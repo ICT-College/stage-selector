@@ -11,7 +11,7 @@ class InternshipApplicationsController extends AppController
 {
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function beforeFilter(Event $event)
     {
@@ -34,7 +34,9 @@ class InternshipApplicationsController extends AppController
     }
 
     /**
-     * @param int $id
+     * Approve internship
+     *
+     * @param int $id Internship ID to approve
      *
      * @return \Cake\Network\Response|null
      */
@@ -81,7 +83,7 @@ class InternshipApplicationsController extends AppController
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function implementedEvents()
     {
@@ -89,7 +91,9 @@ class InternshipApplicationsController extends AppController
             'Crud.beforePaginate' => 'beforePaginate'
         ];
     }
-
+    /**
+     * {@inheritDoc}
+     */
     public function beforePaginate(Event $event)
     {
         /* @var \Cake\ORM\Query $query */
@@ -109,7 +113,7 @@ class InternshipApplicationsController extends AppController
     }
 
     /**
-     * @return \App\Model\Entity\Period
+     * {@inheritDoc}
      */
     protected function _getPeriod()
     {

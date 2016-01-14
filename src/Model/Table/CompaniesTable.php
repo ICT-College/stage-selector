@@ -38,6 +38,9 @@ class CompaniesTable extends Table
         $this->hasMany('Positions');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function searchConfiguration()
     {
         $search = new Manager($this);
@@ -159,6 +162,9 @@ class CompaniesTable extends Table
         return $query;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function findSearch(Query $query, array $options)
     {
         $query = $this->behaviors()->get('Search')->findSearch($query, $options);

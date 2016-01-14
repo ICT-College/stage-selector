@@ -10,7 +10,7 @@ use Cake\Mailer\Mailer;
 class UserMailer extends Mailer
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function implementedEvents()
     {
@@ -23,7 +23,7 @@ class UserMailer extends Mailer
      * Send an invite to an user
      *
      * @param User $user The user tp invite
-     * @param Shard $shard
+     * @param Shard $shard Shard to use
      *
      * @return void
      */
@@ -43,6 +43,9 @@ class UserMailer extends Mailer
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function onInvite(Event $event, User $user, Shard $shard)
     {
         $this->send('invite', [$user, $shard]);

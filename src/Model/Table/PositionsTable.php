@@ -3,9 +3,9 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\Position;
+use Cake\Database\ExpressionInterface;
 use Cake\Database\Expression\Comparison;
 use Cake\Database\Expression\QueryExpression;
-use Cake\Database\ExpressionInterface;
 use Cake\Event\Event;
 use Cake\ORM\Association;
 use Cake\ORM\Query;
@@ -44,7 +44,7 @@ class PositionsTable extends Table
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function validationDefault(Validator $validator)
     {
@@ -61,6 +61,9 @@ class PositionsTable extends Table
         return $validator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function searchConfiguration()
     {
         $search = new Manager($this);

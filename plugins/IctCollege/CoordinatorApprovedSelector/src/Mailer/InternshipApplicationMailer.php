@@ -17,7 +17,7 @@ class InternshipApplicationMailer extends Mailer
     use ShardAwareTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function implementedEvents()
     {
@@ -27,6 +27,9 @@ class InternshipApplicationMailer extends Mailer
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function submit(User $user, Internship $internship, Shard $shard, array $internshipApplications)
     {
         $this->to($user->email)
@@ -42,6 +45,9 @@ class InternshipApplicationMailer extends Mailer
             ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function approved(User $user, Internship $internship, Shard $shard, InternshipApplication $internshipApplication)
     {
         $this->to($user->email)
@@ -57,11 +63,17 @@ class InternshipApplicationMailer extends Mailer
             ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function onSubmit(Event $event, User $user, Internship $internship, array $internshipApplications)
     {
         $this->send('submit', [$user, $internship, $this->shard(), $internshipApplications]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function onApproved(Event $event, User $user, Internship $internship, InternshipApplication $internshipApplication)
     {
         $this->send('approved', [$user, $internship, $this->shard(), $internshipApplication]);
