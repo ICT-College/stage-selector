@@ -2,25 +2,39 @@
     <h2><?= $student->name; ?> <small><?= __('Student information'); ?></small></h2>
 </div>
 
-<div class="btn-group">
-    <?= $this->Html->link(__('Back'), 'javascript: window.history.back();', [
-        'class' => 'btn btn-danger'
-    ]); ?>&nbsp;
-    <?= $this->Form->postLink(__('Invite'), [
-        'controller' => 'Users',
-        'action' => 'invite',
-        $student->student_number
-    ], [
-        'class' => 'btn btn-default'
-    ]); ?>
-    <?= $this->Html->link(__('View applications'), [
-        'plugin' => 'IctCollege/CoordinatorApprovedSelector',
-        'controller' => 'InternshipApplications',
-        'action' => 'index',
-        'student_id' => $student->student_id
-    ], [
-        'class' => 'btn btn-default'
-    ]); ?>
+<div class="btn-toolbar">
+    <div class="btn-group">
+        <?= $this->Html->link(__('Back'), 'javascript: window.history.back();', [
+            'class' => 'btn btn-danger'
+        ]); ?>
+    </div>
+
+    <div class="btn-group">
+        <?= $this->Form->postLink(__('Invite'), [
+            'controller' => 'Users',
+            'action' => 'invite',
+            $student->student_number
+        ], [
+            'class' => 'btn btn-default'
+        ]); ?>
+        <?= $this->Html->link(__('Edit'), 'javascript: window.history.back();', [
+            'class' => 'btn btn-default'
+        ]); ?>
+        <?= $this->Html->link(__('Delete'), 'javascript: window.history.back();', [
+            'class' => 'btn btn-danger'
+        ]); ?>
+    </div>
+
+    <div class="btn-group">
+        <?= $this->Html->link(__('View applications'), [
+            'plugin' => 'IctCollege/CoordinatorApprovedSelector',
+            'controller' => 'InternshipApplications',
+            'action' => 'index',
+            'student_id' => $student->student_id
+        ], [
+            'class' => 'btn btn-default'
+        ]); ?>
+    </div>
 </div>
 
 <table class="table">

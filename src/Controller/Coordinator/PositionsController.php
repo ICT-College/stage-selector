@@ -16,8 +16,7 @@ class PositionsController extends AppController
     {
         return parent::implementedEvents() + [
             'Crud.beforeFind' => 'beforeFindQuery',
-            'Crud.beforePaginate' => 'beforeFindQuery',
-            'Crud.beforeSave' => 'beforeSave'
+            'Crud.beforePaginate' => 'beforeFindQuery'
         ];
     }
 

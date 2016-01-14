@@ -24,19 +24,21 @@
             </td>
             <td><?= $student->email ?></td>
             <td>
-                <?= $this->Html->link(__('Edit'), [
-                    'action' => 'edit',
-                    $student->student_id
-                ], [
-                    'class' => 'btn btn-default'
-                ]) ?>
-                <?= $this->Form->postLink(__('Delete'), [
-                    'action' => 'delete',
-                    $student->student_id
-                ], [
-                    'confirm' => __('Are you sure?'),
-                    'class' => 'btn btn-danger'
-                ]) ?>
+                <div class="btn-group">
+                    <?= $this->Html->link(__('Edit'), [
+                        'action' => 'edit',
+                        $student->student_id
+                    ], [
+                        'class' => 'btn btn-default'
+                    ]) ?>
+                    <?= $this->Form->postLink(__('Delete'), [
+                        'action' => 'delete',
+                        $student->student_id
+                    ], [
+                        'confirm' => __('Are you sure?'),
+                        'class' => 'btn btn-danger'
+                    ]) ?>
+                </div>
             </td>
         </tr>
     <?php endforeach; ?>

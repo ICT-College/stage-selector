@@ -24,19 +24,21 @@
             <td><?= $period->start ?></td>
             <td><?= $period->end ?></td>
             <td>
-                <?= $this->Html->link(__('Edit'), [
-                    'action' => 'edit',
-                    $period->id
-                ], [
-                    'class' => 'btn btn-default'
-                ]) ?>
-                <?= $this->Html->link(__('Delete'), [
-                    'action' => 'delete',
-                    $period->id
-                ], [
-                    'confirm' => __('Are you sure?'),
-                    'class' => 'btn btn-danger'
-                ]) ?>
+                <div class="btn-group">
+                    <?= $this->Html->link(__('Edit'), [
+                        'action' => 'edit',
+                        $period->id
+                    ], [
+                        'class' => 'btn btn-default'
+                    ]) ?>
+                    <?= $this->Html->link(__('Delete'), [
+                        'action' => 'delete',
+                        $period->id
+                    ], [
+                        'confirm' => __('Are you sure?'),
+                        'class' => 'btn btn-danger'
+                    ]) ?>
+                </div>
             </td>
         </tr>
     <?php endforeach; ?>
