@@ -15,3 +15,8 @@ script:
 
 notifications:
   email: false
+
+cache:
+  directories:
+  - vendor
+  - $HOME/.composer/config
