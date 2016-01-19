@@ -5,7 +5,7 @@
         </span>
     </div>
     <div class="col-md-2">
-        <?= $this->Html->link(__('Go to selector'), ['controller' => 'Positions', 'action' => 'select'], ['class' => 'btn btn-primary pull-right']); ?>
+        <?= $this->Html->link(__('Go to selector'), ['_name' => 'selector'], ['class' => 'btn btn-primary pull-right']); ?>
     </div>
 </div>
 <table class="table">

@@ -12,7 +12,7 @@ class CoordinatorApprovedSelector
      */
     public function setupRoutes(RouteBuilder $routeBuilder)
     {
-        $routeBuilder->connect('/', ['plugin' => 'IctCollege/CoordinatorApprovedSelector', 'controller' => 'Positions', 'action' => 'select'], ['_name' => 'selector']);
+        $routeBuilder->connect('/', ['plugin' => 'IctCollege/CoordinatorApprovedSelector', 'controller' => 'Pages', 'action' => 'display', 'select'], ['_name' => 'selector']);
 
         return $routeBuilder;
     }
