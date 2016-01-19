@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\ShardAwareTrait;
 use Cake\Datasource\ConnectionManager;
+use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -112,5 +113,33 @@ class UsersController extends AppController
         $this->Auth->setUser($user->toArray());
 
         return $this->redirect(['_name' => 'selector']);
+    }
+
+
+    public function implementedEvents()
+    {
+        return parent::implementedEvents() + [
+            'Auth.afterIdentify' => 'afterIdentify'
+        ];
+    }
+
+    public function afterIdentify(Event $event, array $identity)
+    {
+        /* @var \App\Model\Table\ShardsUsersTable $shardUsers */
+        $shardUsers = $this->loadModel('ShardsUsers');
+
+        $shardUser = $shardUsers->find()->where([
+            'user_id' => $identity['id'],
+            'shard_id' => $this->shard()->id
+        ])->contain([
+            'Roles'
+        ])->firstOrFail();
+
+        $this->Auth->redirectUrl([
+            'prefix' => $shardUser->role->prefix,
+            'controller' => 'Pages',
+            'action' => 'display',
+            'home'
+        ]);
     }
 }
