@@ -7,7 +7,6 @@ use Cake\ORM\TableRegistry;
 class PeriodsController extends AppController
 {
 
-
     /**
      * {@inheritDoc}
      */
