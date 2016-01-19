@@ -63,6 +63,7 @@ return [
      */
     'Security' => [
         'salt' => '__SALT__',
+        'encryptedTypeKey' => 'The is an example encryption key, please replace it'
     ],
 
     /**
