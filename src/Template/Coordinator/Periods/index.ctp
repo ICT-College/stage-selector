@@ -1,6 +1,12 @@
 <?= $this->start('search') ?>
     <?= $this->element('search') ?>
 <?= $this->end() ?>
+<div class="btn-toolbar">
+    <div class="btn-group">
+        <?= $this->Html->link(__('Add'), ['action' => 'add'], ['class' => 'btn btn-default']); ?>
+    </div>
+</div>
+
 <div class="text-center"><?= $this->Paginator->numbers() ?></div>
 
 <table class="table table-hover">
