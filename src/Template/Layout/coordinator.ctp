@@ -49,7 +49,7 @@ if (!$this->exists('header')) {
     </div>
 </div>
 
-<?= $this->element('invite') ?>
+<?= $this->cell('StudentsInvite::modal'); ?>
 
 </body>
 </html>
