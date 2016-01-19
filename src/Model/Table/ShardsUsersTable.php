@@ -16,4 +16,11 @@ class ShardsUsersTable extends Table
     {
         return 'main';
     }
+
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->belongsTo('Roles');
+    }
 }
