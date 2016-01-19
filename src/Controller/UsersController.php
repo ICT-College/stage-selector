@@ -115,7 +115,9 @@ class UsersController extends AppController
         return $this->redirect(['_name' => 'selector']);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public function implementedEvents()
     {
         return parent::implementedEvents() + [
@@ -123,6 +125,14 @@ class UsersController extends AppController
         ];
     }
 
+    /**
+     * Set the redirect url based on the prefix defined in the role
+     *
+     * @param Event $event Dispatched event
+     * @param array $identity User identity
+     *
+     * @return void
+     */
     public function afterIdentify(Event $event, array $identity)
     {
         /* @var \App\Model\Table\ShardsUsersTable $shardUsers */

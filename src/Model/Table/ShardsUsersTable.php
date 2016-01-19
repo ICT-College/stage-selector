@@ -17,6 +17,9 @@ class ShardsUsersTable extends Table
         return 'main';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
