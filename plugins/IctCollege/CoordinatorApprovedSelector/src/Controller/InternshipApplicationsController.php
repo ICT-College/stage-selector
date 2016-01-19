@@ -91,7 +91,11 @@ class InternshipApplicationsController extends AppController
         $studentId = $this->Auth->user('student_id');
         $internship = $this->InternshipApplications->Periods->Internships->find('active', [
             'student' => $studentId
+        ])->contain([
+            'Periods'
         ])->firstOrFail();
+
+        $this->set('period', $internship->period);
 
         $query->where([
             'student_id' => $studentId,
