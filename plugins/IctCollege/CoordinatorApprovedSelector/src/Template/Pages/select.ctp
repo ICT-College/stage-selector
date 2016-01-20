@@ -192,7 +192,7 @@
                             </a>
                         {{/ifSame}}
                         {{#ifSame state 1}}
-                            <a data-toggle="selection" data-state="add" class="btn btn-success disabled">
+                            <a data-toggle="selection" data-state="add" class="btn btn-success" disabled="disabled">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </a>
                         {{/ifSame}}
@@ -202,7 +202,7 @@
                             </a>
                         {{/ifSame}}
                         {{#ifSame state 3}}
-                            <a data-toggle="selection" data-state="accepted" class="btn btn-default disabled">
+                            <a data-toggle="selection" data-state="accepted" class="btn btn-default" disabled="disabled">
                                 <span class="glyphicon glyphicon-ok"></span>
                             </a>
                         {{/ifSame}}
