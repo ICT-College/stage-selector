@@ -146,11 +146,11 @@ select.Selection = {
             })
             .on('click', '.position-modal .position-select', function() {
                 $('.position-modal').modal('hide');
-                console.log('hide');
+
                 var id = $(this).closest('[data-position-id]').attr('data-position-id');
 
                 var state = $(this).attr('data-state');
-                console.log(id);
+
                 if (state == 'add') {
                     select.Selection.add(id);
                 } else if (state =='delete') {
