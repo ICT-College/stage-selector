@@ -71,46 +71,57 @@
     </tbody>
 </table>
 
-<table class="table">
-    <caption><?= h(__('Internships')); ?></caption>
-    <thead>
-    <tr>
-        <th><?= h(__('Period')); ?></th>
-        <th><?= h(__('Position')); ?></th>
-        <th><?= h(__('Accepted')); ?></th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($student->internships as $internship): ?>
-        <tr>
-            <td><?= h($internship->period->title); ?></td>
-            <td>
-                <?php if ($internship->position): ?>
-                <?= $this->Html->link($internship->position->study_program->description . ' - ' . $internship->position->company->name, ['controller' => 'Internships', 'action' => 'view', $internship->id]); ?>
-                <?php else: ?>
-                    <?= h(__('None')); ?>
-                <?php endif; ?>
-            </td>
-            <td class="<?= ($internship->accepted) ? 'success' : 'danger' ?>">
-                <?php if (!$internship->accepted): ?>
-                    <em><?= h(__('Missing:')); ?></em>
-                    <ul>
-                        <?php if (!$internship->accepted_by_student): ?>
-                            <li><?= h(__('Student')); ?></li>
-                        <?php endif; ?>
-                        <?php if (!$internship->accepted_by_coordinator): ?>
-                            <li><?= h(__('Coordinator')); ?></li>
-                        <?php endif; ?>
-                        <?php if (!$internship->accepted_by_company): ?>
-                            <li><?= h(__('Company')); ?></li>
-                        <?php endif; ?>
-                    </ul>
+<h3><?= __('Periods'); ?></h3>
 
-                <?php else: ?>
-                    <?= h(__('Yes')); ?>
-                <?php endif; ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<?php foreach ($periods as $period): ?>
+    <h4><?= __('Period {0}', $period->title); ?></h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th><?= h(__('Period')); ?></th>
+                <th><?= h(__('Position')); ?></th>
+                <th><?= h(__('Accepted')); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($student->internships as $internship): ?>
+            <?php
+            if ($internship->period->id != $period->id) {
+                continue;
+            }
+            ?>
+
+            <tr>
+                <td><?= h($internship->period->title); ?></td>
+                <td>
+                    <?php if ($internship->position): ?>
+                    <?= $this->Html->link($internship->position->study_program->description . ' - ' . $internship->position->company->name, ['controller' => 'Internships', 'action' => 'view', $internship->id]); ?>
+                    <?php else: ?>
+                        <?= h(__('None')); ?>
+                    <?php endif; ?>
+                </td>
+                <td class="<?= ($internship->accepted) ? 'success' : 'danger' ?>">
+                    <?php if (!$internship->accepted): ?>
+                        <em><?= h(__('Missing:')); ?></em>
+                        <ul>
+                            <?php if (!$internship->accepted_by_student): ?>
+                                <li><?= h(__('Student')); ?></li>
+                            <?php endif; ?>
+                            <?php if (!$internship->accepted_by_coordinator): ?>
+                                <li><?= h(__('Coordinator')); ?></li>
+                            <?php endif; ?>
+                            <?php if (!$internship->accepted_by_company): ?>
+                                <li><?= h(__('Company')); ?></li>
+                            <?php endif; ?>
+                        </ul>
+
+                    <?php else: ?>
+                        <?= h(__('Yes')); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endforeach; ?>

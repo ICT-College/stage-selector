@@ -8,6 +8,8 @@ use Cake\Cache\Cache;
 use Cake\Database\Expression\Comparison;
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\ORM\Association;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 class StudentsController extends AppController
@@ -74,12 +76,12 @@ class StudentsController extends AppController
     {
         return parent::implementedEvents() + [
             'Crud.beforeFind' => 'beforeFindQuery',
-            'Crud.beforePaginate' => 'beforeFindQuery'
+            'Crud.beforePaginate' => 'beforePaginateQuery'
         ];
     }
 
     /**
-     * Adds contain to the query to get relations
+     * When searching for id, switch it to the student_id
      *
      * @param Event $event Event that was dispatched
      *
@@ -90,25 +92,7 @@ class StudentsController extends AppController
         /* @var \Cake\ORM\Query $query */
         $query = $event->subject()->query;
 
-        $hasWhere = $query->clause('where');
-
-        $query->matching('Shards', function ($q) {
-            return $q->where(['Shards.id' => $this->shard()->id]);
-        }) ->where([
-            'Users.student_id IS NOT' => null
-        ]);
-
-        $query->contain([
-            'Internships' => [
-                'Periods',
-                'Positions' => [
-                    'Companies',
-                    'StudyPrograms'
-                ]
-            ]
-        ]);
-
-        if (!$hasWhere) {
+        if (!$query->clause('where')) {
             return;
         }
 
@@ -128,6 +112,42 @@ class StudentsController extends AppController
             $query->andWhere([
                 'Users.student_id' => $studentId
             ]);
+
+            $periods = $this->Users->Internships->Periods
+                ->find('forStudent', [
+                    'student_id' => $studentId
+                ]);
+
+            $this->set('periods', $periods);
         }
+    }
+
+    /**
+     * Adds contains to the query for paginate
+     *
+     * @param Event $event Event that was dispacted
+     *
+     * @return void
+     */
+    public function beforePaginateQuery(Event $event)
+    {
+        /* @var \Cake\ORM\Query $query */
+        $query = $event->subject()->query;
+
+        $query->matching('Shards', function ($q) {
+            return $q->where(['Shards.id' => $this->shard()->id]);
+        }) ->where([
+            'Users.student_id IS NOT' => null
+        ]);
+
+        $query->contain([
+            'Internships' => [
+                'Periods',
+                'Positions' => [
+                    'Companies',
+                    'StudyPrograms'
+                ]
+            ]
+        ]);
     }
 }
