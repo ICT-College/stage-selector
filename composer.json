@@ -13,7 +13,6 @@
         "phpunit/phpunit": "4.1.*",
         "friendsofcake/crud": "~4.2.4",
         "cvo-technologies/cakephp-gearman": "~3.0",
-        "muffin/webservice": "dev-feature-orm",
         "friendsofcake/bootstrap-ui": "~0.3",
         "ictcollege/cakephp-stagemarkt": "~1.0.0",
         "friendsofcake/search": "dev-expression-support as 1.2.0",
@@ -48,10 +47,6 @@
     },
     "repositories":
     [
-        {
-            "type": "vcs",
-            "url": "https://github.com/CVO-Technologies/cakephp-webservice.git"
-        },
         {
             "type": "vcs",
             "url": "https://github.com/Wouter0100/acl.git"

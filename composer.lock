@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "edd000ee074929f1b0708b07066cf3cf",
-    "content-hash": "faf150e47abf067db37e47370e0ffee1",
+    "hash": "fbc1c9b1c476f4424e1fc5bc0d040e57",
+    "content-hash": "66bdf312b55212ae7d923a3ab6a6d12b",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -590,22 +590,24 @@
         },
         {
             "name": "ictcollege/cakephp-stagemarkt",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ICT-College/cakephp-stagemarkt.git",
-                "reference": "af7d47872039eb8b4cd9727bbae7ff90144926c6"
+                "reference": "ec520b83442a84f5ab69cbe1e14bb572ca19712e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ICT-College/cakephp-stagemarkt/zipball/af7d47872039eb8b4cd9727bbae7ff90144926c6",
-                "reference": "af7d47872039eb8b4cd9727bbae7ff90144926c6",
+                "url": "https://api.github.com/repos/ICT-College/cakephp-stagemarkt/zipball/ec520b83442a84f5ab69cbe1e14bb572ca19712e",
+                "reference": "ec520b83442a84f5ab69cbe1e14bb572ca19712e",
                 "shasum": ""
+            },
+            "require": {
+                "muffin/webservice": "dev-master"
             },
             "require-dev": {
                 "cakephp/cakephp": "dev-master#d83ca687a340a385f9233574e2d606b8d95cc685",
                 "cakephp/cakephp-codesniffer": "2.*",
-                "muffin/webservice": "dev-feature-orm",
                 "phpunit/phpunit": "4.1.*"
             },
             "type": "cakephp-plugin",
@@ -625,7 +627,7 @@
                 }
             ],
             "description": "CakePHP webservice for Stagemarkt",
-            "time": "2016-01-05 18:06:43"
+            "time": "2016-01-25 21:45:13"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -725,16 +727,16 @@
         },
         {
             "name": "muffin/webservice",
-            "version": "dev-feature-orm",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cvo-technologies/cakephp-webservice.git",
-                "reference": "6bf3b21c52d5ec399c4681edc54f21ff9a2022a1"
+                "url": "https://github.com/UseMuffin/Webservice.git",
+                "reference": "724110821c9b59d612ac42a407101b1bd2b39146"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cvo-technologies/cakephp-webservice/zipball/6bf3b21c52d5ec399c4681edc54f21ff9a2022a1",
-                "reference": "6bf3b21c52d5ec399c4681edc54f21ff9a2022a1",
+                "url": "https://api.github.com/repos/UseMuffin/Webservice/zipball/724110821c9b59d612ac42a407101b1bd2b39146",
+                "reference": "724110821c9b59d612ac42a407101b1bd2b39146",
                 "shasum": ""
             },
             "require-dev": {
@@ -748,11 +750,7 @@
                     "Muffin\\Webservice\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Muffin\\Webservice\\Test\\": "tests"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -780,11 +778,7 @@
                 "muffin",
                 "webservice"
             ],
-            "support": {
-                "issues": "https://github.com/usemuffin/webservice/issues",
-                "source": "https://github.com/usemuffin/webservice"
-            },
-            "time": "2015-11-07 23:24:13"
+            "time": "2016-01-20 11:54:21"
         },
         {
             "name": "nesbot/carbon",
@@ -1830,16 +1824,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "49ff736bd5d41f45240cec77b44967d76e0c3d25"
+                "reference": "1289d16209491b584839022f29257ad859b8532d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/49ff736bd5d41f45240cec77b44967d76e0c3d25",
-                "reference": "49ff736bd5d41f45240cec77b44967d76e0c3d25",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/1289d16209491b584839022f29257ad859b8532d",
+                "reference": "1289d16209491b584839022f29257ad859b8532d",
                 "shasum": ""
             },
             "require": {
@@ -1851,7 +1845,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -1885,20 +1879,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2015-11-20 09:19:13"
+            "time": "2016-01-20 09:13:37"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.1",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "ac84cbb98b68a6abbc9f5149eb96ccc7b07b8966"
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/ac84cbb98b68a6abbc9f5149eb96ccc7b07b8966",
-                "reference": "ac84cbb98b68a6abbc9f5149eb96ccc7b07b8966",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/34c8a4b51e751e7ea869b8262f883d008a2b81b8",
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8",
                 "shasum": ""
             },
             "require": {
@@ -1934,7 +1928,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-12-26 13:37:56"
+            "time": "2016-01-13 10:28:07"
         }
     ],
     "packages-dev": [
@@ -2414,7 +2408,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "cakephp/cakephp": 20,
-        "muffin/webservice": 20,
         "friendsofcake/search": 20,
         "cakephp/acl": 20,
         "sameer-shelavale/php-countries-array": 20,
