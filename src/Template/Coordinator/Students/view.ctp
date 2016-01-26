@@ -11,7 +11,6 @@
 
     <div class="btn-group">
         <?= $this->Form->postLink(__('Invite'), [
-            'controller' => 'Users',
             'action' => 'invite',
             $student->student_number
         ], [
