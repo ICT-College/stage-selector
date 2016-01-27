@@ -109,11 +109,25 @@ class InternshipsTable extends Table
         return $this->save($internship);
     }
 
+    public function planInterview(Internship $internship, $date)
+    {
+        $internship = $this->patchEntity($internship, [
+            'planned_interview_date' => $date
+        ]);
+        $internship = $this->save($internship);
+        if (!$internship) {
+            return $internship;
+        }
+
+        return $internship;
+    }
+
     public function markInterviewed(Internship $internship, $data)
     {
         $internship = $this->patchEntity($internship, $data, [
             'fieldList' => [
-                'report'
+                'report',
+                'contact_email'
             ]
         ]);
         $internship->interviewed = true;

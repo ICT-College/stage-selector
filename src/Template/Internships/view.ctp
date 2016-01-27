@@ -52,33 +52,90 @@
     </tbody>
 </table>
 
+<?php
+$activeTab = 0;
+$disabledTabs = [];
+$tabs = [
+    [
+        'id' => 'plan-interview',
+        'title' => __('Step 1: Plan interview'),
+    ],
+    [
+        'id' => 'upload-report',
+        'title' => __('Step 2: Upload report'),
+    ],
+    [
+        'id' => 'report-review',
+        'title' => __('Step 3: Report review')
+    ]
+];
+if ($internship->planned_interview_date) {
+    $activeTab = 1;
+    $disabledTabs[] = 0;
+}
+if ($internship->interviewed) {
+    $activeTab = 2;
+    $disabledTabs[] = 1;
+}
+?>
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <?php foreach ($tabs as $tabIndex => $tab): ?>
+            <li role="presentation" class="<?= h(($tabIndex === $activeTab) ? 'active' : ''); ?> <?= h((in_array($tabIndex, $disabledTabs)) ? 'disabled' : ''); ?>"><a <?php if (!in_array($tabIndex, $disabledTabs)): ?>href="#<?= h($tab['id']); ?>" data-toggle="tab"<?php endif; ?> aria-controls="home" role="tab"><?= h($tab['title']); ?></a></li>
+        <?php endforeach; ?>
+    </ul>
 
-<table class="table">
-    <caption><?= h(__('Accepted by')); ?></caption>
-    <thead>
-    <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <th><?= h(__('Student')); ?></th>
-        <td><?= h(($internship->accepted_by_student) ? __('Yes') : __('No')); ?></td>
-        <td>
-            <?= $this->Form->postLink(__('Accept'), ['action' => 'accept', $internship->id], ['class' => 'btn btn-primary']); ?>
-        </td>
-    </tr>
-    <tr>
-        <th><?= h(__('Coordinator')); ?></th>
-        <td><?= h(($internship->accepted_by_coordinator) ? __('Yes') : __('No')); ?></td>
-        <td></td>
-    </tr>
-    <tr>
-        <th><?= h(__('Company')); ?></th>
-        <td><?= h(($internship->accepted_by_company) ? __('Yes') : __('No')); ?></td>
-        <td></td>
-    </tr>
-    </tbody>
-</table>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <?php $tabIndex = 0; ?>
+        <div role="tabpanel" class="tab-pane <?= h(($tabIndex++ === $activeTab) ? 'active' : ''); ?>" id="plan-interview">
+            <?= $this->Form->create($internship, [
+                'url' => [
+                    'action' => 'planInterview'
+                ]
+            ]); ?>
+            <?= $this->Form->input('planned_interview_date'); ?>
+            <?= $this->Form->submit(); ?>
+            <?= $this->Form->end(); ?>
+        </div>
+        <div role="tabpanel" class="tab-pane <?= h(($tabIndex++ === $activeTab) ? 'active' : ''); ?>" id="upload-report">
+            <?= $this->Form->create($internship, [
+                'url' => [
+                    'action' => 'interview'
+                ],
+                'type' => 'file'
+            ]); ?>
+            <?= $this->Form->input('report', ['type' => 'file']); ?>
+            <?= $this->Form->input('contact_email', [
+                'help' => __('You can use <strong>{0}</strong> as email address', h($internship->position->company->email))
+            ]); ?>
+            <?= $this->Form->submit(); ?>
+            <?= $this->Form->end(); ?>
+        </div>
+        <div role="tabpanel" class="tab-pane <?= h(($tabIndex++ === $activeTab) ? 'active' : ''); ?>" id="report-review">
+            <table class="table">
+                <caption><?= h(__('Accepted by')); ?></caption>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th><?= h(__('Coordinator')); ?></th>
+                    <td><?= h(($internship->accepted_by_coordinator) ? __('Yes') : __('No')); ?></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th><?= h(__('Company')); ?></th>
+                    <td><?= h(($internship->accepted_by_company) ? __('Yes') : __('No')); ?></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

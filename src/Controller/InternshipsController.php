@@ -38,6 +38,27 @@ class InternshipsController extends AppController
         return $this->redirect(['action' => 'view', $id]);
     }
 
+    public function planInterview($id)
+    {
+        $internship = $this->Internships->get($id);
+
+        if (!$this->Internships->planInterview($internship, $this->request->data('planned_interview_date'))) {
+            $this->Flash->error(__('Could not save your interview date'));
+
+            return $this->redirect([
+                'action' => 'view',
+                $id
+            ]);
+        }
+
+        $this->Flash->success(__('Thank you for planning your interview'));
+
+        $this->redirect([
+            'action' => 'view',
+            $id
+        ]);
+    }
+
     public function interview($id)
     {
         $internship = $this->Internships->get($id);
