@@ -61,9 +61,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
-    $routes->scope('/selector', function (RouteBuilder $routeBuilder) {
-        \Cake\Event\EventManager::instance()->dispatch(new \Cake\Event\Event('Router.selectorRoute', $routeBuilder));
-    });
+    \Cake\Event\EventManager::instance()->dispatch(new \Cake\Event\Event('Router.selectorRoute', $routes));
 
     /**
      * Connect catchall routes for all controllers.

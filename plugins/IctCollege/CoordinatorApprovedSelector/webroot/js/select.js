@@ -6,6 +6,13 @@
 var select = [];
 
 /**
+ * Holds the current Period object
+ *
+ * This object is being filled in the select view by the output of the Period entity.
+ */
+select.Period = {};
+
+/**
  * Loader class which controls the loading modal
  *
  * @type {{isLoading: boolean, start: Function, end: Function}}
@@ -163,7 +170,9 @@ select.Selection = {
 
     refresh: function(initialize, silence) {
         var doRefresh = function() {
-            select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {}, function(success, response) {
+            select.Request.get('/api/coordinator_approved_selector/internship_applications.json', {
+                period_id: select.Period.id
+            }, function(success, response) {
                 if (success && response.success) {
                     select.Selection.current = response.data;
 
@@ -208,8 +217,8 @@ select.Selection = {
         $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
 
         select.Selection.startLoading(function() {
-            select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', {
-                'position_id': id
+            select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json?period_id=' + select.Period.id, {
+                position_id: id
             }, function(success, response) {
                 if (success && response.success) {
                     select.Selection.refresh(false, true);
@@ -227,8 +236,8 @@ select.Selection = {
         $('[data-position-id=' + id + '] a[data-toggle="selection"]').html('<span class="glyphicon glyphicon-refresh spinning"></span>').attr('disabled', 'disabled').attr('data-state', 'load');
 
         select.Selection.startLoading(function() {
-            select.Request.request('DELETE', '/api/coordinator_approved_selector/internship_applications/position-delete.json', {
-                'position_id': id
+            select.Request.request('DELETE', '/api/coordinator_approved_selector/internship_applications/position-delete.json?period_id=' + select.Period.id, {
+                position_id: id
             }, function(success, response) {
                 if (success && response.success) {
                     select.Selection.refresh(false, true);
@@ -386,7 +395,7 @@ select.Positions = {
                     position[$(this).attr('name')] = $(this).val();
                 });
 
-                select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json', { position: position }, function(success, response) {
+                select.Request.request('POST', '/api/coordinator_approved_selector/internship_applications.json?period_id=' + select.Period.id, { position: position }, function(success, response) {
                     if (success && response.success) {
                         select.Selection.refresh();
 
@@ -408,9 +417,9 @@ select.Positions = {
         }
 
         select.Loader.start(function() {
-            select.Request.post('/api/coordinator_approved_selector/internship_applications/submit.json', {}, function(success, response) { // Request to set flash and send e-mail
+            select.Request.post('/api/coordinator_approved_selector/internship_applications/submit.json?period_id=' + select.Period.id, {}, function(success, response) { // Request to set flash and send e-mail
                 if (success && response.success) {
-                    window.location = '/coordinator-approved-selector/internship-applications';
+                    window.location = '/coordinator-approved-selector/periods/' + select.Period.id + '/internship-applications';
                 } else {
                     select.Loader.stop(function() {
                         $('.continue-error').modal('show');
