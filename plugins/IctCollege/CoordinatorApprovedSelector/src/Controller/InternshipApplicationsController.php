@@ -3,6 +3,7 @@
 namespace IctCollege\CoordinatorApprovedSelector\Controller;
 
 use Cake\Event\Event;
+use Cake\ORM\Query;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\InternalErrorException;
 
@@ -20,9 +21,15 @@ class InternshipApplicationsController extends AppController
         $this->loadModel('Users');
 
         $internship = $this->InternshipApplications->Periods->Internships
-            ->find('active', [
-                'student' => $this->Auth->user('student_id')
+            ->find()
+            ->where([
+                'Internships.student_id' => $this->Auth->user('student_id')
             ])
+            ->matching('Periods', function(Query $q) {
+                return $q->where([
+                    'Periods.id' => $this->getPeriodID()
+                ]);
+            })
             ->contain([
                 'Users',
                 'Periods'
@@ -59,6 +66,7 @@ class InternshipApplicationsController extends AppController
         $application = $this->InternshipApplications->find()->where([
             'position_id' => $this->request->data('position_id'),
             'student_id' => $this->Auth->user('student_id'),
+            'period_id' => $this->getPeriodID()
         ])->firstOrFail();
 
         if ($application->accepted_coordinator) {
@@ -89,17 +97,17 @@ class InternshipApplicationsController extends AppController
         $query = $event->subject()->query;
 
         $studentId = $this->Auth->user('student_id');
-        $internship = $this->InternshipApplications->Periods->Internships->find('active', [
-            'student' => $studentId
-        ])->contain([
-            'Periods'
+        $period = $this->InternshipApplications->Periods->find('forStudent', [
+            'student_id' => $studentId
+        ])->where([
+            'Periods.id' => $this->getPeriodID()
         ])->firstOrFail();
 
-        $this->set('period', $internship->period);
+        $this->set('period', $period);
 
         $query->where([
             'student_id' => $studentId,
-            'period_id' => $internship->period_id
+            'period_id' => $period->id
         ]);
 
         $query->contain([
@@ -119,11 +127,21 @@ class InternshipApplicationsController extends AppController
         $entity = $event->subject()->entity;
 
         $studentId = $this->Auth->user('student_id');
-        $internship = $this->InternshipApplications->Periods->Internships->find('active', [
-            'student' => $studentId
+        $period = $this->InternshipApplications->Periods->find('forStudent', [
+            'student_id' => $studentId
+        ])->where([
+            'Periods.id' => $this->getPeriodID()
         ])->firstOrFail();
 
-        $entity->period_id = $internship->period_id;
+        $entity->period_id = $period->id;
         $entity->student_id = $studentId;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getPeriodID()
+    {
+        return (($this->request->query('period_id') != null) ? $this->request->query('period_id') : $this->request->param('period_id'));
     }
 }

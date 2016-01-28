@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-10">
         <span>
-            <?= __('Here is a list with your current selection for your next internship period ({0}). You can change this at all times, except when a internship has been selected by the internship coordinator.', $period->title); ?>
+            <?= __('Here is a list with your current selection for your internship period {0}. You can change this at all times, except when a internship has been selected by the internship coordinator.', $period->title); ?>
         </span>
     </div>
     <div class="col-md-2">
-        <?= $this->Html->link(__('Go to selector'), ['_name' => 'selector'], ['class' => 'btn btn-primary pull-right']); ?>
+        <?= $this->Html->link(__('Go to selector'), ['_name' => 'selector', $period->id], ['class' => 'btn btn-primary pull-right']); ?>
     </div>
 </div>
 <table class="table">

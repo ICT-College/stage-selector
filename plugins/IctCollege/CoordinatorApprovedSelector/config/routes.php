@@ -24,8 +24,11 @@ Router::scope('/api/coordinator_approved_selector', ['plugin' => 'IctCollege/Coo
 
 Router::scope('/coordinator-approved-selector', ['plugin' => 'IctCollege/CoordinatorApprovedSelector'], function (RouteBuilder $routeBuilder) {
     $routeBuilder->scope('/internship-applications', ['controller' => 'InternshipApplications'], function (RouteBuilder $routeBuilder) {
-        $routeBuilder->connect('/', ['action' => 'index']);
         $routeBuilder->connect('/:action/*');
+    });
+
+    $routeBuilder->scope('/periods', [], function (RouteBuilder $routeBuilder) {
+        $routeBuilder->connect('/:period_id/internship-applications', ['controller' => 'InternshipApplications', 'action' => 'index']);
     });
 });
 

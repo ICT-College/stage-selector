@@ -1,5 +1,8 @@
 <?= $this->Html->script(['handlebars.min-latest.js', 'awesomplete.min.js', 'bootstrap-slider.min.js', 'IctCollege/CoordinatorApprovedSelector.select'], ['block' => true]) ?>
 <?= $this->Html->css(['awesomplete.css', 'bootstrap-slider.min.css'], ['block' => true]) ?>
+<script>
+    select.Period = <?= json_encode($period); ?>;
+</script>
 <?= $this->start('header') ?>
 <div class="header clearfix">
     <div class="row">
