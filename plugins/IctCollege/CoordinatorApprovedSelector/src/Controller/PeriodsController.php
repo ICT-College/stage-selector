@@ -2,7 +2,6 @@
 
 namespace IctCollege\CoordinatorApprovedSelector\Controller;
 
-
 /**
  * Class PeriodsController
  *
@@ -14,9 +13,12 @@ class PeriodsController extends AppController
     /**
      * The action for the selector
      *
-     * @param $id Period ID
+     * @param int $id Period ID
+     *
+     * @return void
      */
-    public function select($id = null) {
+    public function select($id = null)
+    {
         $period = $this->Periods->find()->where([
             'id' => $id
         ])->firstOrFail();

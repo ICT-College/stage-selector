@@ -3,9 +3,9 @@
 namespace IctCollege\CoordinatorApprovedSelector\Controller;
 
 use Cake\Event\Event;
-use Cake\ORM\Query;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\InternalErrorException;
+use Cake\ORM\Query;
 
 /**
  * @property \IctCollege\CoordinatorApprovedSelector\Model\Table\InternshipApplicationsTable InternshipApplications
@@ -25,9 +25,9 @@ class InternshipApplicationsController extends AppController
             ->where([
                 'Internships.student_id' => $this->Auth->user('student_id')
             ])
-            ->matching('Periods', function(Query $q) {
+            ->matching('Periods', function (Query $q) {
                 return $q->where([
-                    'Periods.id' => $this->getPeriodID()
+                    'Periods.id' => $this->__getPeriodId()
                 ]);
             })
             ->contain([
@@ -66,7 +66,7 @@ class InternshipApplicationsController extends AppController
         $application = $this->InternshipApplications->find()->where([
             'position_id' => $this->request->data('position_id'),
             'student_id' => $this->Auth->user('student_id'),
-            'period_id' => $this->getPeriodID()
+            'period_id' => $this->__getPeriodId()
         ])->firstOrFail();
 
         if ($application->accepted_coordinator) {
@@ -100,7 +100,7 @@ class InternshipApplicationsController extends AppController
         $period = $this->InternshipApplications->Periods->find('forStudent', [
             'student_id' => $studentId
         ])->where([
-            'Periods.id' => $this->getPeriodID()
+            'Periods.id' => $this->__getPeriodId()
         ])->firstOrFail();
 
         $this->set('period', $period);
@@ -130,7 +130,7 @@ class InternshipApplicationsController extends AppController
         $period = $this->InternshipApplications->Periods->find('forStudent', [
             'student_id' => $studentId
         ])->where([
-            'Periods.id' => $this->getPeriodID()
+            'Periods.id' => $this->__getPeriodId()
         ])->firstOrFail();
 
         $entity->period_id = $period->id;
@@ -138,9 +138,11 @@ class InternshipApplicationsController extends AppController
     }
 
     /**
-     * @return mixed
+     * Get the current period ID from the query or param
+     *
+     * @return string|null Period ID
      */
-    private function getPeriodID()
+    protected function __getPeriodId()
     {
         return (($this->request->query('period_id') != null) ? $this->request->query('period_id') : $this->request->param('period_id'));
     }
