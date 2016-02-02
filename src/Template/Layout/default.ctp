@@ -1,5 +1,5 @@
 <?php
-if (!$this->exists('header')) {
+if (!$this->exists('header')):
     $this->start('header');
         ?>
         <div class="header clearfix">
@@ -7,7 +7,7 @@ if (!$this->exists('header')) {
         </div>
         <?php
     $this->end();
-}
+endif;
 ?>
 <!DOCTYPE html>
 <html>
